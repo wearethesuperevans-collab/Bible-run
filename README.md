@@ -3,1745 +3,1016 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Spiritual Power: Shadowbound</title>
+<title>Shadowbound</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#02030a;color:white;font-family:Arial,sans-serif;min-height:100%;overflow-x:hidden}
+button{font:inherit;border:0;color:white;cursor:pointer;touch-action:manipulation}
+.hidden{display:none!important}
 
-html,body{
-  margin:0;
-  min-height:100%;
-  background:#02030a;
-  color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-  overflow-x:hidden;
-}
-
-button{
-  font:inherit;
-  touch-action:manipulation;
-}
-
-.hidden{
-  display:none!important;
-}
-
-/* =========================================================
-   MENU
-========================================================= */
+/* ================= MENU ================= */
 
 .screen{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+ min-height:100vh;display:flex;align-items:center;justify-content:center;
+ padding:18px;background:
+ radial-gradient(circle at 50% 20%,#18245c 0,#050713 55%,#010208 100%);
 }
 
-.menu,
-.customize{
-  width:min(650px,100%);
-  padding:30px;
-  border-radius:25px;
-  border:1px solid #526eff;
-  background:
-    linear-gradient(145deg,#111a3b,#050814 70%);
-  box-shadow:
-    0 0 35px #315cff55,
-    inset 0 0 35px #16265c55;
-  text-align:center;
+.panel{
+ width:min(650px,100%);padding:30px;border-radius:28px;
+ background:linear-gradient(145deg,#121d42,#050711);
+ border:1px solid #526eff;
+ box-shadow:0 0 60px #315cff55,inset 0 0 40px #1d347755;
+ text-align:center;
 }
 
 .title{
-  margin:0;
-  font-size:clamp(38px,9vw,72px);
-  letter-spacing:4px;
-  background:linear-gradient(90deg,#fff,#73aaff,#fff);
-  -webkit-background-clip:text;
-  color:transparent;
-  text-shadow:0 0 25px #4b7dff;
+ font-size:clamp(40px,10vw,76px);letter-spacing:5px;margin:0;
+ background:linear-gradient(#fff,#78aaff,#fff);
+ -webkit-background-clip:text;color:transparent;
+ text-shadow:0 0 30px #467bff;
 }
 
-.subtitle{
-  color:#aabaff;
-  margin:10px 0 28px;
-}
+.subtitle{color:#aabaff;margin:8px 0 28px;letter-spacing:3px}
 
-.saveGrid{
-  display:grid;
-  gap:12px;
-}
-
+.saveGrid{display:grid;gap:12px}
 .save{
-  padding:15px;
-  border-radius:15px;
-  background:#0b1229;
-  border:1px solid #344a89;
-  text-align:left;
+ padding:16px;border-radius:15px;background:#080e20;
+ border:1px solid #344b91;text-align:left;
+}
+.saveName{font-size:18px;font-weight:bold}
+.saveInfo{font-size:13px;color:#91a1cb;margin:5px 0 10px}
+
+.menuBtn,.createBtn{
+ padding:13px 20px;border-radius:13px;
+ background:linear-gradient(135deg,#527aff,#1939c4);
+ box-shadow:0 7px 20px #0009;
+ font-weight:bold;
 }
 
-.saveName{
-  font-size:18px;
-  font-weight:bold;
+.delete{background:#8d2436;margin-left:6px}
+
+/* ================= GAME ================= */
+
+#game{min-height:100vh;padding:7px}
+
+.top{
+ width:min(1280px,100%);margin:auto;
+ display:flex;justify-content:space-between;align-items:center;
+ padding:7px 10px;
 }
 
-.saveInfo{
-  margin-top:4px;
-  color:#91a1cb;
-  font-size:13px;
-}
-
-button{
-  border:0;
-  border-radius:12px;
-  padding:12px 18px;
-  background:linear-gradient(135deg,#416aff,#2142c8);
-  color:white;
-  font-weight:bold;
-  box-shadow:0 5px 15px #0008;
-}
-
-button:active{
-  transform:scale(.96);
-}
-
-.delete{
-  background:#8d2436;
-}
-
-.customize{
-  text-align:left;
-}
-
-.customize h2{
-  text-align:center;
-  font-size:30px;
-}
-
-.customize label{
-  display:block;
-  margin-top:15px;
-  color:#a9b9e8;
-}
-
-.customize input,
-.customize select{
-  display:block;
-  width:100%;
-  margin-top:6px;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #3f548c;
-  background:#050916;
-  color:white;
-}
-
-/* =========================================================
-   GAME
-========================================================= */
-
-#game{
-  min-height:100vh;
-  padding:8px;
-}
-
-.topBar{
-  width:min(1200px,100%);
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:8px 10px;
-}
-
-.levelText{
-  font-size:20px;
-  font-weight:bold;
-}
-
-.power{
-  color:#ffe45c;
-  text-shadow:0 0 10px #ffcf38;
-}
+.level{font-weight:bold;font-size:20px}
+.power{color:#ffe35b;text-shadow:0 0 12px #ffcf36}
 
 .arena{
-  position:relative;
-  width:min(1200px,100%);
-  height:min(690px,73vh);
-  min-height:470px;
-  margin:auto;
-  overflow:hidden;
-  border-radius:24px;
-  border:1px solid #354a86;
-  background:
-    radial-gradient(circle at 50% 35%,#202d70 0,#0b1230 32%,#03050d 75%);
-  box-shadow:
-    0 0 60px #142b77,
-    inset 0 0 80px #000;
+ position:relative;width:min(1280px,100%);
+ height:min(720px,76vh);min-height:470px;margin:auto;
+ overflow:hidden;border-radius:26px;
+ border:1px solid #405b9e;
+ background:
+ radial-gradient(circle at 50% 34%,#253a82 0,#111a40 28%,#050817 66%,#02030a 100%);
+ box-shadow:0 0 80px #183b9a55,inset 0 0 100px #000;
 }
 
-/* Stars */
+/* cinematic background */
 
 .arena:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  opacity:.6;
-  background-image:
-    radial-gradient(circle,#fff 1px,transparent 1.5px),
-    radial-gradient(circle,#7695ff 1px,transparent 1.5px),
-    radial-gradient(circle,#fff 1px,transparent 1.5px);
-  background-size:70px 70px,110px 110px,170px 170px;
-  background-position:0 0,30px 20px,60px 80px;
-  pointer-events:none;
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background-image:
+ radial-gradient(circle,#fff 1px,transparent 1.5px),
+ radial-gradient(circle,#7da0ff 1px,transparent 1.5px),
+ radial-gradient(circle,#fff 1px,transparent 1.5px);
+ background-size:73px 73px,121px 121px,193px 193px;
+ opacity:.42;
+ animation:stars 18s linear infinite;
 }
 
-/* Horizon */
+@keyframes stars{
+ from{background-position:0 0,30px 20px,70px 80px}
+ to{background-position:73px 73px,151px 141px,263px 180px}
+}
 
 .horizon{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:30%;
-  height:2px;
-  background:#5277ff;
-  box-shadow:0 0 20px #5277ff;
-  opacity:.6;
+ position:absolute;left:0;right:0;bottom:31%;
+ height:2px;background:#6f91ff;
+ box-shadow:0 0 25px #5277ff;opacity:.65;
 }
-
-/* Floor */
 
 .floor{
-  position:absolute;
-  left:-10%;
-  right:-10%;
-  bottom:-15%;
-  height:50%;
-  transform:perspective(500px) rotateX(60deg);
-  transform-origin:bottom;
-  background:
-    linear-gradient(#304a93 1px,transparent 1px),
-    linear-gradient(90deg,#304a93 1px,transparent 1px);
-  background-size:65px 45px;
-  opacity:.45;
-  pointer-events:none;
+ position:absolute;left:-10%;right:-10%;bottom:-18%;height:53%;
+ transform:perspective(550px) rotateX(61deg);
+ transform-origin:bottom;
+ background:
+ linear-gradient(#3b58a0 1px,transparent 1px),
+ linear-gradient(90deg,#3b58a0 1px,transparent 1px);
+ background-size:65px 45px;
+ opacity:.38;
 }
 
-/* =========================================================
-   HEALTH BARS
-========================================================= */
+.ambient{
+ position:absolute;left:50%;top:52%;width:50%;height:25%;
+ transform:translate(-50%,-50%);
+ background:#497bff18;filter:blur(35px);pointer-events:none;
+}
+
+/* ================= HEALTH ================= */
 
 .health{
-  position:absolute;
-  top:18px;
-  width:34%;
-  min-width:180px;
-  z-index:80;
+ position:absolute;top:17px;width:32%;min-width:175px;z-index:200;
 }
 
-.playerHealthArea{
-  left:3%;
-}
+.playerHealth{left:2.5%}
+.enemyHealth{right:2.5%;text-align:right}
 
-.enemyHealthArea{
-  right:3%;
-  text-align:right;
-}
-
-.name{
-  font-weight:bold;
-  font-size:17px;
-  margin-bottom:5px;
-  text-shadow:0 2px 6px #000;
-}
-
+.name{font-size:16px;font-weight:bold;text-shadow:0 2px 8px #000}
 .bar{
-  height:18px;
-  border:2px solid #647092;
-  background:#080b15;
-  border-radius:20px;
-  overflow:hidden;
+ height:19px;border-radius:20px;background:#050711;
+ border:2px solid #65729a;overflow:hidden;margin-top:4px;
 }
-
-.fill{
-  height:100%;
-  transition:width .3s ease;
-}
-
+.fill{height:100%;transition:width .35s cubic-bezier(.2,.8,.2,1)}
 .gold{
-  background:linear-gradient(90deg,#a96d00,#ffd83d,#fff5a0,#d99500);
-  box-shadow:0 0 18px #ffd83d;
+ background:linear-gradient(90deg,#9b6100,#ffd52e,#fff3a1,#d08a00);
+ box-shadow:0 0 22px #ffd62e;
 }
-
 .red{
-  background:linear-gradient(90deg,#690014,#e51f3e,#ff5369);
-  box-shadow:0 0 18px #ff263e;
+ background:linear-gradient(90deg,#680014,#e51e40,#ff7181);
+ box-shadow:0 0 22px #ff173e;
 }
-
-.hpText{
-  font-size:12px;
-  color:#aab6d7;
-}
-
-/* =========================================================
-   STATUS
-========================================================= */
+.hp{font-size:11px;color:#b9c4e4}
 
 .status{
-  position:absolute;
-  left:50%;
-  top:22px;
-  transform:translateX(-50%);
-  z-index:90;
-  padding:7px 15px;
-  border-radius:20px;
-  background:#03050ccc;
-  border:1px solid #5269a3;
-  color:#d8e1ff;
-  white-space:nowrap;
+ position:absolute;top:19px;left:50%;transform:translateX(-50%);
+ z-index:210;padding:7px 16px;border-radius:30px;
+ background:#02040ccc;border:1px solid #526aa7;
+ font-size:12px;white-space:nowrap;
 }
 
-/* =========================================================
-   PLAYER
-========================================================= */
+/* ================= FIGHTERS ================= */
 
 .fighter{
-  position:absolute;
-  bottom:105px;
-  width:220px;
-  height:320px;
-  z-index:30;
-  pointer-events:none;
+ position:absolute;bottom:84px;width:250px;height:340px;
+ z-index:100;pointer-events:none;
 }
 
 #player{
-  left:7%;
+ left:5%;
 }
 
-.playerGlow{
-  position:absolute;
-  width:190px;
-  height:190px;
-  left:15px;
-  top:75px;
-  border-radius:50%;
-  background:#4f8cff22;
-  filter:blur(25px);
-  animation:breath 2.5s infinite;
+#enemy{
+ right:5%;
 }
 
-@keyframes breath{
-  50%{transform:scale(1.18);opacity:.55}
+/* Never let the enemy cross to the player's side */
+#enemy{transform:none}
+
+/* ================= PLAYER ================= */
+
+.playerAura{
+ position:absolute;left:20px;top:75px;width:210px;height:210px;
+ border-radius:50%;background:#4285ff20;filter:blur(25px);
+ animation:aura 2s infinite;
 }
 
-.playerHead{
-  position:absolute;
-  width:72px;
-  height:78px;
-  left:74px;
-  top:0;
-  border-radius:46% 46% 42% 42%;
-  background:linear-gradient(145deg,#ffd0ad,#ae674d);
-  border:3px solid #623b37;
-  z-index:5;
+@keyframes aura{
+ 50%{transform:scale(1.17);opacity:.55}
+}
+
+.head{
+ position:absolute;left:87px;top:0;width:76px;height:82px;
+ border-radius:47%;background:linear-gradient(145deg,#ffd4b4,#a9634e);
+ border:3px solid #633c38;z-index:5;
 }
 
 .hair{
-  position:absolute;
-  width:76px;
-  height:34px;
-  left:-5px;
-  top:-4px;
-  border-radius:50% 50% 35% 35%;
-  background:#151822;
+ position:absolute;left:-4px;top:-5px;width:80px;height:37px;
+ border-radius:50% 50% 35% 35%;background:#161922;
 }
 
 .eye{
-  position:absolute;
-  top:34px;
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#111;
+ position:absolute;top:38px;width:7px;height:7px;border-radius:50%;background:#111
 }
-
-.eye.a{left:19px}
-.eye.b{right:19px}
+.eye1{left:20px}.eye2{right:20px}
 
 .mouth{
-  position:absolute;
-  left:25px;
-  top:57px;
-  width:20px;
-  height:5px;
-  border-bottom:2px solid #522b2b;
+ position:absolute;left:27px;top:61px;width:20px;height:5px;
+ border-bottom:2px solid #522b2b;
 }
 
 .neck{
-  position:absolute;
-  left:92px;
-  top:69px;
-  width:35px;
-  height:25px;
-  background:#a86650;
+ position:absolute;left:107px;top:74px;width:36px;height:24px;
+ background:#a7654f;
 }
 
 .chest{
-  position:absolute;
-  left:48px;
-  top:82px;
-  width:125px;
-  height:130px;
-  border-radius:35px 35px 20px 20px;
-  background:
-    linear-gradient(135deg,#6c88ff,#283aa7 50%,#11184d);
-  border:3px solid #b1c0ff;
-  box-shadow:
-    inset 0 0 25px #9db2ff66,
-    0 0 18px #426dff55;
-}
-
-.chest:after{
-  content:"";
-  position:absolute;
-  left:15px;
-  right:15px;
-  top:14px;
-  height:3px;
-  background:#b8c7ff;
-  box-shadow:0 80px #111a55;
-  opacity:.6;
+ position:absolute;left:56px;top:86px;width:138px;height:139px;
+ border-radius:37px 37px 22px 22px;
+ background:linear-gradient(145deg,#6685ff,#293ba5,#10174a);
+ border:3px solid #b8c7ff;
+ box-shadow:inset 0 0 30px #aec0ff44,0 0 22px #416eff55;
 }
 
 .core{
-  position:absolute;
-  left:47px;
-  top:40px;
-  width:31px;
-  height:31px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:
-    0 0 12px white,
-    0 0 25px #6bb5ff,
-    0 0 45px #377eff;
-  animation:corePulse 1.4s infinite;
+ position:absolute;left:52px;top:43px;width:34px;height:34px;border-radius:50%;
+ background:white;
+ box-shadow:0 0 14px white,0 0 30px #72c0ff,0 0 60px #3378ff;
+ animation:core 1.2s infinite;
 }
-
-@keyframes corePulse{
-  50%{transform:scale(1.12)}
-}
+@keyframes core{50%{transform:scale(1.13)}}
 
 .shoulder{
-  position:absolute;
-  top:86px;
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:linear-gradient(145deg,#8fa7ff,#28399c);
-  border:3px solid #b0c1ff;
+ position:absolute;top:89px;width:56px;height:54px;border-radius:50%;
+ background:linear-gradient(145deg,#9eb1ff,#26399d);
+ border:3px solid #b9c8ff;
 }
-
-.shoulder.a{left:20px}
-.shoulder.b{right:20px}
+.shoulder1{left:24px}.shoulder2{right:24px}
 
 .arm{
-  position:absolute;
-  top:124px;
-  width:32px;
-  height:95px;
-  border-radius:18px;
-  background:linear-gradient(#4c65cc,#18245e);
-  border:3px solid #8096ff;
+ position:absolute;top:128px;width:35px;height:104px;border-radius:20px;
+ background:linear-gradient(#536dd4,#111b4e);
+ border:3px solid #8298ff;
 }
-
-.arm.a{
-  left:20px;
-  transform:rotate(9deg);
-}
-
-.arm.b{
-  right:20px;
-  transform:rotate(-9deg);
-}
+.arm1{left:24px;transform:rotate(8deg)}
+.arm2{right:24px;transform:rotate(-8deg)}
 
 .leg{
-  position:absolute;
-  top:205px;
-  width:43px;
-  height:91px;
-  border-radius:13px;
-  background:linear-gradient(#3349a4,#121936);
-  border:3px solid #7086ef;
+ position:absolute;top:218px;width:47px;height:93px;border-radius:14px;
+ background:linear-gradient(#384eae,#10152e);
+ border:3px solid #7186ef;
 }
-
-.leg.a{left:70px}
-.leg.b{right:70px}
+.leg1{left:78px}.leg2{right:78px}
 
 .boot{
-  position:absolute;
-  top:287px;
-  width:56px;
-  height:23px;
-  border-radius:14px;
-  background:#080c1c;
-  border:2px solid #7389ef;
+ position:absolute;top:301px;width:60px;height:25px;border-radius:15px;
+ background:#080b18;border:2px solid #748aff;
 }
+.boot1{left:66px}.boot2{right:66px}
 
-.boot.a{left:59px}
-.boot.b{right:59px}
-
-/* =========================================================
-   BOSS BASE
-========================================================= */
+/* ================= BOSS SHARED ================= */
 
 .boss{
-  position:absolute;
-  inset:0;
+ position:absolute;inset:0;
 }
 
-/* =========================================================
-   LEVEL 1 — SHADOW DEMON
-========================================================= */
+/* ================= LEVEL 1 ================= */
 
-.boss.level1{
-  transform:scale(1);
+.l1head{
+ position:absolute;left:73px;top:28px;width:105px;height:94px;
+ border-radius:48% 48% 38% 38%;
+ background:linear-gradient(145deg,#512866,#08060d);
+ border:3px solid #a052c4;
+ box-shadow:0 0 35px #8b36b055;
 }
 
-.demonHead{
-  position:absolute;
-  left:66px;
-  top:22px;
-  width:100px;
-  height:90px;
-  border-radius:48% 48% 38% 38%;
-  background:linear-gradient(145deg,#442456,#08060d);
-  border:3px solid #9a4db8;
-  box-shadow:0 0 25px #7b35a655;
+.horn{
+ position:absolute;top:-49px;width:38px;height:61px;
+ background:linear-gradient(145deg,#9254ad,#160b1f);
+ border:3px solid #a95ac7;
+ clip-path:polygon(50% 0,100% 100%,0 100%);
 }
+.horn1{left:4px;transform:rotate(-17deg)}
+.horn2{right:4px;transform:rotate(17deg)}
 
-.demonHorn{
-  position:absolute;
-  top:-47px;
-  width:34px;
-  height:58px;
-  background:linear-gradient(145deg,#7e4b9c,#160c20);
-  border:3px solid #a95bc7;
-  clip-path:polygon(50% 0,100% 100%,0 100%);
+.redEye{
+ position:absolute;top:45px;width:26px;height:12px;border-radius:50%;
+ background:#ff173c;box-shadow:0 0 22px #ff1740;
 }
-
-.demonHorn.a{
-  left:7px;
-  transform:rotate(-18deg);
-}
-
-.demonHorn.b{
-  right:7px;
-  transform:rotate(18deg);
-}
-
-.demonEye{
-  position:absolute;
-  top:42px;
-  width:24px;
-  height:11px;
-  border-radius:50%;
-  background:#ff203f;
-  box-shadow:0 0 18px #ff1739;
-}
-
-.demonEye.a{left:18px}
-.demonEye.b{right:18px}
-
-.demonMouth{
-  position:absolute;
-  left:31px;
-  top:66px;
-  width:39px;
-  height:13px;
-  border-bottom:4px solid #ff2745;
-}
+.redEye1{left:18px}.redEye2{right:18px}
 
 .demonBody{
-  position:absolute;
-  left:47px;
-  top:110px;
-  width:138px;
-  height:125px;
-  border-radius:40px 40px 18px 18px;
-  background:linear-gradient(145deg,#49255d,#100817);
-  border:3px solid #793c91;
-  box-shadow:inset 0 0 25px #a14bc044;
+ position:absolute;left:51px;top:117px;width:150px;height:134px;
+ border-radius:42px 42px 20px 20px;
+ background:linear-gradient(145deg,#4b245c,#0e0714);
+ border:3px solid #793d91;
+ box-shadow:inset 0 0 28px #b74bd033;
 }
 
 .demonCore{
-  position:absolute;
-  left:50px;
-  top:38px;
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:#ff183d;
-  box-shadow:0 0 20px #ff183d,0 0 45px #a0002d;
+ position:absolute;left:54px;top:43px;width:42px;height:42px;border-radius:50%;
+ background:#ff163e;
+ box-shadow:0 0 20px #ff163e,0 0 55px #a0002d;
+ animation:demonCore 1s infinite;
 }
+@keyframes demonCore{50%{transform:scale(1.16)}}
 
 .demonArm{
-  position:absolute;
-  top:132px;
-  width:45px;
-  height:105px;
-  background:#21112d;
-  border:3px solid #743b8d;
-  border-radius:22px;
+ position:absolute;top:142px;width:48px;height:112px;border-radius:24px;
+ background:#1e1029;border:3px solid #753c8e;
 }
-
-.demonArm.a{
-  left:17px;
-  transform:rotate(13deg);
-}
-
-.demonArm.b{
-  right:17px;
-  transform:rotate(-13deg);
-}
+.demonArm1{left:20px;transform:rotate(13deg)}
+.demonArm2{right:20px;transform:rotate(-13deg)}
 
 .demonLeg{
-  position:absolute;
-  top:225px;
-  width:48px;
-  height:82px;
-  border-radius:15px;
-  background:#140b1c;
-  border:3px solid #633173;
+ position:absolute;top:242px;width:51px;height:82px;border-radius:15px;
+ background:#130a1b;border:3px solid #633172;
 }
+.demonLeg1{left:65px}.demonLeg2{right:65px}
 
-.demonLeg.a{left:58px}
-.demonLeg.b{right:58px}
+/* ================= LEVEL 2 ================= */
 
-/* =========================================================
-   LEVEL 2 — DARK ANGEL
-========================================================= */
-
-.boss.level2{
-  transform:scale(1.02);
+.wing{
+ position:absolute;top:48px;width:132px;height:205px;
+ background:linear-gradient(145deg,#e4eaff,#65729b 48%,#121625);
+ border:3px solid #b8c7ff;
+ clip-path:polygon(50% 0,75% 15%,100% 34%,76% 39%,100% 60%,66% 57%,83% 84%,49% 72%,50% 100%,30% 70%,0 83%,21% 56%,0 59%,25% 38%,0 34%,32% 17%);
+ filter:drop-shadow(0 0 15px #849cff66);
 }
+.wing1{left:-14px;transform:rotate(-16deg)}
+.wing2{right:-14px;transform:scaleX(-1) rotate(-16deg)}
 
-.angelGlow{
-  position:absolute;
-  left:15px;
-  top:30px;
-  width:190px;
-  height:230px;
-  border-radius:50%;
-  background:#7b7cff18;
-  filter:blur(28px);
+.halo{
+ position:absolute;left:73px;top:4px;width:105px;height:105px;
+ border:7px solid #ffe66b;border-radius:50%;
+ box-shadow:0 0 25px #ffe66b,0 0 55px #ffc928;
+ animation:halo 2s infinite;
 }
-
-.angelWing{
-  position:absolute;
-  top:50px;
-  width:120px;
-  height:190px;
-  background:
-    linear-gradient(145deg,#dce4ff,#6978a9 45%,#161b31);
-  border:3px solid #aebeff;
-  clip-path:polygon(
-    50% 0,
-    75% 16%,
-    100% 38%,
-    76% 40%,
-    100% 60%,
-    65% 58%,
-    82% 82%,
-    48% 72%,
-    50% 100%,
-    30% 70%,
-    0 82%,
-    20% 55%,
-    0 58%,
-    25% 38%,
-    0 35%,
-    32% 18%
-  );
-  box-shadow:0 0 25px #8da4ff55;
-}
-
-.angelWing.a{
-  left:-8px;
-  transform:rotate(-18deg);
-}
-
-.angelWing.b{
-  right:-8px;
-  transform:scaleX(-1) rotate(-18deg);
-}
-
-.angelHalo{
-  position:absolute;
-  left:58px;
-  top:3px;
-  width:104px;
-  height:104px;
-  border:7px solid #ffe86b;
-  border-radius:50%;
-  box-shadow:0 0 20px #ffe86b,0 0 50px #ffcc3a;
-}
+@keyframes halo{50%{transform:rotate(180deg) scale(1.05)}}
 
 .angelHead{
-  position:absolute;
-  left:73px;
-  top:30px;
-  width:76px;
-  height:80px;
-  border-radius:50%;
-  background:linear-gradient(145deg,#d7d8df,#555b72);
-  border:3px solid #bbc7eb;
-  z-index:4;
+ position:absolute;left:86px;top:32px;width:78px;height:82px;
+ border-radius:50%;background:linear-gradient(145deg,#dfe4ef,#555d75);
+ border:3px solid #c3d0f2;z-index:4;
 }
-
-.angelVisor{
-  position:absolute;
-  left:9px;
-  top:29px;
-  width:52px;
-  height:18px;
-  border-radius:5px;
-  background:#101525;
-  border:2px solid #7188ff;
-  box-shadow:0 0 14px #5e7cff;
+.visor{
+ position:absolute;left:10px;top:31px;width:54px;height:18px;
+ border-radius:5px;background:#0c1120;border:2px solid #8298ff;
+ box-shadow:0 0 15px #6480ff;
 }
 
 .angelBody{
-  position:absolute;
-  left:48px;
-  top:102px;
-  width:124px;
-  height:135px;
-  border-radius:30px;
-  background:linear-gradient(145deg,#b7c4df,#343d58 45%,#111625);
-  border:3px solid #cbd7ff;
-  box-shadow:inset 0 0 30px #d5e0ff44;
+ position:absolute;left:58px;top:107px;width:134px;height:143px;
+ border-radius:31px;background:linear-gradient(145deg,#c4cee2,#374059,#111625);
+ border:3px solid #d2dcff;
+ box-shadow:inset 0 0 35px #dbe5ff44;
 }
-
 .angelCore{
-  position:absolute;
-  left:44px;
-  top:42px;
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 0 20px #fff,0 0 55px #aebaff;
+ position:absolute;left:48px;top:45px;width:38px;height:38px;border-radius:50%;
+ background:white;box-shadow:0 0 20px white,0 0 60px #9eafff;
+ animation:core 1.1s infinite;
 }
 
 .angelArm{
-  position:absolute;
-  top:130px;
-  width:35px;
-  height:105px;
-  border-radius:20px;
-  background:#3d465e;
-  border:3px solid #8998bd;
+ position:absolute;top:139px;width:39px;height:108px;border-radius:20px;
+ background:#39435c;border:3px solid #8c9abd;
 }
-
-.angelArm.a{
-  left:25px;
-  transform:rotate(8deg);
-}
-
-.angelArm.b{
-  right:25px;
-  transform:rotate(-8deg);
-}
+.angelArm1{left:30px;transform:rotate(8deg)}
+.angelArm2{right:30px;transform:rotate(-8deg)}
 
 .angelLeg{
-  position:absolute;
-  top:235px;
-  width:43px;
-  height:80px;
-  background:#202638;
-  border:3px solid #68789d;
-  border-radius:13px;
+ position:absolute;top:244px;width:46px;height:82px;border-radius:13px;
+ background:#202638;border:3px solid #68789d;
+}
+.angelLeg1{left:73px}.angelLeg2{right:73px}
+
+/* ================= LEVEL 3 ================= */
+
+.colWing{
+ position:absolute;top:8px;width:175px;height:245px;
+ background:linear-gradient(145deg,#292d49,#070912);
+ border:4px solid #59618d;
+ clip-path:polygon(50% 0,72% 14%,100% 9%,78% 34%,100% 31%,70% 53%,91% 66%,58% 63%,68% 92%,45% 70%,34% 100%,30% 65%,0 77%,25% 51%,0 48%,27% 30%,3% 25%,32% 14%);
+ box-shadow:0 0 30px #252b55;
+}
+.colWing1{left:-34px;transform:rotate(-12deg)}
+.colWing2{right:-34px;transform:scaleX(-1) rotate(-12deg)}
+
+.colHead{
+ position:absolute;left:64px;top:38px;width:125px;height:108px;
+ border-radius:45% 45% 34% 34%;
+ background:linear-gradient(145deg,#2c304b,#06070d);
+ border:4px solid #606992;z-index:5;
 }
 
-.angelLeg.a{left:66px}
-.angelLeg.b{right:66px}
+.colHorn{
+ position:absolute;top:-62px;width:45px;height:77px;
+ background:#11131f;border:4px solid #59628b;
+ clip-path:polygon(50% 0,100% 100%,0 100%);
+}
+.colHorn1{left:3px;transform:rotate(-16deg)}
+.colHorn2{right:3px;transform:rotate(16deg)}
 
-/* =========================================================
-   LEVEL 3 — SHADOW COLOSSUS
-========================================================= */
+.colEye{
+ position:absolute;top:53px;width:33px;height:14px;border-radius:50%;
+ background:#ff143e;box-shadow:0 0 25px #ff143e;
+}
+.colEye1{left:21px}.colEye2{right:21px}
 
-.boss.level3{
-  transform:scale(1.35);
-  transform-origin:bottom center;
+.colBody{
+ position:absolute;left:35px;top:140px;width:184px;height:184px;
+ border-radius:50px 50px 26px 26px;
+ background:linear-gradient(145deg,#363b56,#090b14 65%);
+ border:4px solid #5d668f;
+ box-shadow:inset 0 0 40px #6c78aa44,0 0 30px #11152e;
+}
+.plate{
+ position:absolute;left:25px;top:21px;width:126px;height:86px;
+ border:3px solid #737da9;border-radius:25px;background:#141725;
+}
+.colCore{
+ position:absolute;left:62px;top:38px;width:54px;height:54px;border-radius:50%;
+ background:#ff153d;
+ box-shadow:0 0 25px #ff153d,0 0 70px #ae002d;
+ animation:demonCore .8s infinite;
 }
 
-.colossusWing{
-  position:absolute;
-  top:15px;
-  width:150px;
-  height:220px;
-  background:
-    linear-gradient(145deg,#24263f,#090a13);
-  border:4px solid #525a85;
-  clip-path:polygon(
-    50% 0,
-    70% 15%,
-    100% 10%,
-    78% 34%,
-    100% 31%,
-    70% 52%,
-    90% 65%,
-    57% 62%,
-    68% 90%,
-    45% 70%,
-    35% 100%,
-    30% 65%,
-    0 76%,
-    25% 51%,
-    0 48%,
-    27% 30%,
-    3% 25%,
-    32% 14%
-  );
-  box-shadow:0 0 30px #252b55;
+.colArm{
+ position:absolute;top:174px;width:61px;height:151px;border-radius:30px;
+ background:linear-gradient(#272c42,#090b14);border:4px solid #59628a;
+}
+.colArm1{left:-2px;transform:rotate(8deg)}
+.colArm2{right:-2px;transform:rotate(-8deg)}
+
+.colLeg{
+ position:absolute;top:311px;width:63px;height:91px;border-radius:16px;
+ background:#10121d;border:4px solid #50597e;
+}
+.colLeg1{left:51px}.colLeg2{right:51px}
+
+/* ================= ATTACK EFFECTS ================= */
+
+.fx{
+ position:absolute;z-index:500;pointer-events:none;
 }
 
-.colossusWing.a{
-  left:-28px;
-  transform:rotate(-12deg);
+.projectile{
+ width:30px;height:30px;border-radius:50%;background:#fff;
+ box-shadow:0 0 15px #fff,0 0 35px #6cc5ff,0 0 70px #327aff;
 }
 
-.colossusWing.b{
-  right:-28px;
-  transform:scaleX(-1) rotate(-12deg);
+.projectile:after{
+ content:"";position:absolute;width:100px;height:9px;right:15px;top:10px;
+ background:linear-gradient(90deg,transparent,#69bdff,#fff);
+ filter:blur(4px);
 }
 
-.colossusHead{
-  position:absolute;
-  left:61px;
-  top:35px;
-  width:120px;
-  height:105px;
-  border-radius:45% 45% 35% 35%;
-  background:linear-gradient(145deg,#262a44,#06070d);
-  border:4px solid #59618d;
-  z-index:5;
+.beam{
+ left:2%;right:2%;top:44%;height:42px;border-radius:50%;
+ background:linear-gradient(90deg,#fff,#83c9ff,#fff);
+ box-shadow:0 0 25px #fff,0 0 65px #55aaff,0 0 120px #3477ff;
+ transform-origin:left center;
+ animation:beam .55s ease-out;
 }
 
-.colossusHorn{
-  position:absolute;
-  top:-60px;
-  width:42px;
-  height:75px;
-  background:#11131f;
-  border:4px solid #565e87;
-  clip-path:polygon(50% 0,100% 100%,0 100%);
-}
-
-.colossusHorn.a{
-  left:5px;
-  transform:rotate(-16deg);
-}
-
-.colossusHorn.b{
-  right:5px;
-  transform:rotate(16deg);
-}
-
-.colossusEye{
-  position:absolute;
-  top:50px;
-  width:32px;
-  height:14px;
-  background:#9f102b;
-  box-shadow:0 0 22px #ff143c;
-  border-radius:50%;
-}
-
-.colossusEye.a{left:20px}
-.colossusEye.b{right:20px}
-
-.colossusBody{
-  position:absolute;
-  left:35px;
-  top:130px;
-  width:172px;
-  height:175px;
-  border-radius:48px 48px 25px 25px;
-  background:
-    linear-gradient(145deg,#343852,#0b0d17 60%);
-  border:4px solid #555d87;
-  box-shadow:
-    inset 0 0 35px #6672a544,
-    0 0 30px #181d3e;
-}
-
-.colossusPlate{
-  position:absolute;
-  left:24px;
-  top:20px;
-  width:116px;
-  height:80px;
-  border:3px solid #707ba9;
-  border-radius:25px;
-  background:#151827;
-}
-
-.colossusCore{
-  position:absolute;
-  left:58px;
-  top:35px;
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:#ff183f;
-  box-shadow:
-    0 0 20px #ff183f,
-    0 0 55px #ff002e,
-    0 0 90px #6b0020;
-}
-
-.colossusArm{
-  position:absolute;
-  top:160px;
-  width:58px;
-  height:145px;
-  border-radius:30px;
-  background:linear-gradient(#24283e,#090b14);
-  border:4px solid #555e89;
-}
-
-.colossusArm.a{
-  left:-2px;
-  transform:rotate(8deg);
-}
-
-.colossusArm.b{
-  right:-2px;
-  transform:rotate(-8deg);
-}
-
-.colossusLeg{
-  position:absolute;
-  top:292px;
-  width:60px;
-  height:100px;
-  background:#10121d;
-  border:4px solid #4c557d;
-  border-radius:16px;
-}
-
-.colossusLeg.a{left:49px}
-.colossusLeg.b{right:49px}
-
-/* =========================================================
-   EFFECTS
-========================================================= */
-
-.effect{
-  position:absolute;
-  pointer-events:none!important;
-  z-index:100;
-}
-
-.lightOrb{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:
-    0 0 15px white,
-    0 0 35px #66b8ff,
-    0 0 70px #3377ff;
-}
-
-.lightBeam{
-  left:5%;
-  right:5%;
-  top:43%;
-  height:38px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:
-    0 0 20px #fff,
-    0 0 50px #5eb5ff,
-    0 0 90px #336dff;
-  animation:beam .55s ease-out;
-}
-
-.bigBeam{
-  left:-5%;
-  right:-5%;
-  top:35%;
-  height:100px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:
-    0 0 30px #fff,
-    0 0 80px #6abaff,
-    0 0 150px #3375ff;
-  animation:bigBeam .8s ease-out;
+.superBeam{
+ left:-10%;right:-10%;top:35%;height:110px;border-radius:50%;
+ background:#fff;
+ box-shadow:0 0 35px #fff,0 0 90px #63baff,0 0 170px #2d6fff;
+ animation:superbeam .8s ease-out;
 }
 
 @keyframes beam{
-  from{transform:scaleX(.05);opacity:0}
-  to{transform:scaleX(1);opacity:1}
+ from{transform:scaleX(.01);opacity:0}
+ to{transform:scaleX(1);opacity:1}
 }
-
-@keyframes bigBeam{
-  from{transform:scaleX(.05);opacity:0}
-  to{transform:scaleX(1);opacity:1}
+@keyframes superbeam{
+ from{transform:scaleX(.01);opacity:0}
+ to{transform:scaleX(1);opacity:1}
 }
 
 .shield{
-  width:290px;
-  height:290px;
-  left:0;
-  top:25%;
-  border:6px solid #65c7ff;
-  border-radius:50%;
-  box-shadow:
-    0 0 25px #65c7ff,
-    inset 0 0 50px #258cff55;
-  animation:shield .8s ease;
+ left:1%;top:25%;width:305px;height:305px;border-radius:50%;
+ border:6px solid #64caff;
+ background:#48aaff0b;
+ box-shadow:0 0 30px #63caff,inset 0 0 55px #3d9cff44;
+ animation:shield .7s ease-out;
+}
+@keyframes shield{
+ from{transform:scale(.35);opacity:0}
+ 55%{transform:scale(1);opacity:1}
+ to{transform:scale(1.08);opacity:.4}
 }
 
-@keyframes shield{
-  0%{transform:scale(.45);opacity:0}
-  50%{transform:scale(1);opacity:1}
-  100%{transform:scale(1.12);opacity:.3}
+.impact{
+ width:25px;height:25px;border-radius:50%;
+ border:4px solid white;
+ box-shadow:0 0 20px white,0 0 55px #52aaff;
+ animation:impact .5s ease-out forwards;
 }
+@keyframes impact{
+ from{transform:scale(.2);opacity:1}
+ to{transform:scale(5);opacity:0}
+}
+
+/* hit shakes */
 
 .hit{
-  animation:hit .42s ease;
+ animation:hit .42s ease;
 }
-
 @keyframes hit{
-  20%{transform:translateX(15px)}
-  40%{transform:translateX(-17px)}
-  60%{transform:translateX(12px)}
-  80%{transform:translateX(-6px)}
+ 20%{transform:translateX(18px)}
+ 40%{transform:translateX(-18px)}
+ 60%{transform:translateX(13px)}
+ 80%{transform:translateX(-7px)}
 }
 
 .playerDash{
-  animation:dash .6s ease;
+ animation:playerDash .55s cubic-bezier(.2,.8,.2,1);
 }
-
-@keyframes dash{
-  50%{transform:translateX(135px) scale(1.06)}
+@keyframes playerDash{
+ 45%{transform:translateX(155px) scale(1.06)}
 }
 
 .enemyDash{
-  animation:enemyDash .6s ease;
+ animation:enemyDash .55s cubic-bezier(.2,.8,.2,1);
 }
-
 @keyframes enemyDash{
-  50%{transform:translateX(-125px) scale(1.06)}
+ 45%{transform:translateX(-155px) scale(1.06)}
 }
 
-/* =========================================================
-   CONTROLS
-========================================================= */
+/* ================= CONTROLS ================= */
 
 .controls{
-  position:relative;
-  z-index:500;
-  width:min(1200px,100%);
-  margin:12px auto;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
+ width:min(1280px,100%);margin:10px auto;
+ display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+ position:relative;z-index:900;
 }
 
 .controls button{
-  min-height:64px;
-  border:2px solid #4668e9;
-  background:
-    linear-gradient(145deg,#1b2d68,#080e27);
-  box-shadow:
-    0 7px 18px #0009,
-    inset 0 0 15px #5376ff22;
+ min-height:64px;border-radius:14px;
+ border:2px solid #4669ec;
+ background:linear-gradient(145deg,#1b2e6d,#070e29);
+ box-shadow:0 7px 20px #0009,inset 0 0 18px #567cff22;
+ font-weight:bold;
+ transition:.12s;
 }
+.controls button:active{transform:translateY(3px) scale(.97)}
+.controls button:disabled{opacity:.35}
+.special{border-color:#ffe05a!important;color:#ffe66d}
 
-.controls button:disabled{
-  opacity:.42;
-}
-
-.controls .special{
-  border-color:#ffd84a;
-  color:#ffe76d;
-}
-
-/* =========================================================
-   LOG
-========================================================= */
+/* ================= LOG ================= */
 
 .log{
-  position:relative;
-  z-index:500;
-  width:min(1200px,100%);
-  min-height:55px;
-  max-height:100px;
-  overflow-y:auto;
-  margin:auto;
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid #2e4071;
-  background:#050914;
-  color:#b9c7ed;
+ width:min(1280px,100%);margin:auto;min-height:48px;max-height:95px;
+ overflow-y:auto;padding:9px 13px;border-radius:12px;
+ background:#050914;border:1px solid #2f4277;color:#bac8ec;
+ font-size:13px;
 }
 
-/* =========================================================
-   OVERLAY
-========================================================= */
+/* ================= OVERLAY ================= */
 
 .overlay{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:#000b;
+ position:fixed;inset:0;z-index:2000;background:#000c;
+ display:flex;align-items:center;justify-content:center;padding:20px;
 }
 
 .overlayBox{
-  width:min(550px,100%);
-  padding:30px;
-  text-align:center;
-  border-radius:24px;
-  border:2px solid #5876ff;
-  background:linear-gradient(145deg,#111b3c,#050815);
-  box-shadow:0 0 60px #315cff77;
+ width:min(560px,100%);padding:32px;text-align:center;
+ border-radius:25px;background:linear-gradient(145deg,#121d42,#050711);
+ border:2px solid #5d7cff;
+ box-shadow:0 0 70px #315cff77;
 }
 
-.overlayBox h1{
-  font-size:40px;
-  margin-top:0;
-}
+.overlayBox h1{font-size:42px;margin:0 0 10px}
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* ================= MOBILE ================= */
 
 @media(max-width:700px){
 
-  .arena{
-    height:55vh;
-    min-height:410px;
-  }
+ .arena{height:57vh;min-height:415px}
 
-  .fighter{
-    transform:scale(.68);
-    transform-origin:bottom center;
-  }
+ .fighter{
+   transform:scale(.66);
+   transform-origin:bottom center;
+ }
 
-  #player{
-    left:-20px;
-  }
+ #player{left:-28px}
+ #enemy{right:-28px}
 
-  #enemy{
-    right:-20px;
-  }
+ .health{width:43%;min-width:0}
+ .status{top:64px;font-size:10px}
 
-  .boss.level3{
-    transform:scale(.95);
-    transform-origin:bottom center;
-  }
+ .controls{grid-template-columns:repeat(2,1fr)}
+ .controls button{min-height:60px;font-size:12px;padding:7px}
 
-  .health{
-    width:43%;
-    min-width:0;
-  }
+ .log{font-size:12px}
 
-  .status{
-    top:67px;
-    font-size:11px;
-  }
+}
 
-  .controls{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .controls button{
-    min-height:58px;
-    padding:8px;
-    font-size:13px;
-  }
+/* Very small screens */
+@media(max-width:430px){
+ .fighter{transform:scale(.57)}
+ #player{left:-42px}
+ #enemy{right:-42px}
+ .arena{min-height:390px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     SAVE SCREEN
-===================================================== -->
+<!-- ================= SAVE ================= -->
 
 <div id="saveScreen" class="screen">
+<div class="panel">
 
-  <div class="menu">
+<h1 class="title">SHADOWBOUND</h1>
+<div class="subtitle">SPIRITUAL POWER</div>
 
-    <h1 class="title">SHADOWBOUND</h1>
+<div id="saveGrid" class="saveGrid"></div>
 
-    <div class="subtitle">
-      SPIRITUAL POWER
-    </div>
+<br>
 
-    <div id="saveGrid" class="saveGrid"></div>
+<button class="menuBtn" onclick="newSave()">
+CREATE NEW SAVE
+</button>
 
-    <button onclick="newSave()">
-      CREATE NEW SAVE
-    </button>
-
-  </div>
-
+</div>
 </div>
 
 
-<!-- =====================================================
-     CHARACTER CREATION
-===================================================== -->
+<!-- ================= CREATE ================= -->
 
 <div id="customScreen" class="screen hidden">
+<div class="panel">
 
-  <div class="customize">
+<h2>Create Your Warrior</h2>
 
-    <h2>Create Your Warrior</h2>
+<input id="nameInput" placeholder="Warrior name"
+ maxlength="20"
+ style="width:100%;padding:13px;margin:8px 0;border-radius:10px">
 
-    <label>
-      Warrior Name
-      <input id="nameInput" maxlength="20" placeholder="Warrior">
-    </label>
+<select id="genderInput"
+ style="width:100%;padding:13px;margin:8px 0;border-radius:10px">
+<option>Male</option>
+<option>Female</option>
+</select>
 
-    <label>
-      Gender
-      <select id="genderInput">
-        <option>Male</option>
-        <option>Female</option>
-      </select>
-    </label>
+<label>Armor Color</label>
+<input id="armorInput" type="color" value="#315cff">
 
-    <label>
-      Armor Color
-      <input id="armorInput" type="color" value="#315cff">
-    </label>
+<label>Hair / Helmet Color</label>
+<input id="helmetInput" type="color" value="#171822">
 
-    <label>
-      Hair / Helmet Color
-      <input id="helmetInput" type="color" value="#171822">
-    </label>
+<br><br>
 
-    <br>
+<button class="createBtn" onclick="createCharacter()">
+BEGIN JOURNEY
+</button>
 
-    <button onclick="createCharacter()">
-      BEGIN JOURNEY
-    </button>
-
-  </div>
-
+</div>
 </div>
 
 
-<!-- =====================================================
-     GAME
-===================================================== -->
+<!-- ================= GAME ================= -->
 
 <div id="game" class="hidden">
 
-  <div class="topBar">
-
-    <div class="levelText">
-      LEVEL <span id="level">1</span>
-    </div>
-
-    <div class="power">
-      SPIRITUAL POWER:
-      <span id="power">0</span>
-    </div>
-
-  </div>
+<div class="top">
+<div class="level">LEVEL <span id="level">1</span></div>
+<div class="power">SPIRITUAL POWER: <span id="power">0</span></div>
+</div>
 
 
-  <div class="arena" id="arena">
+<div class="arena" id="arena">
 
-    <div class="horizon"></div>
-
-    <div class="floor"></div>
-
-
-    <!-- PLAYER HEALTH -->
-
-    <div class="health playerHealthArea">
-
-      <div class="name" id="playerName">
-        Warrior
-      </div>
-
-      <div class="bar">
-        <div id="playerHealth"
-             class="fill gold"
-             style="width:100%">
-        </div>
-      </div>
-
-      <div class="hpText" id="playerHpText">
-        100 / 100
-      </div>
-
-    </div>
+<div class="ambient"></div>
+<div class="horizon"></div>
+<div class="floor"></div>
 
 
-    <!-- ENEMY HEALTH -->
+<!-- PLAYER HEALTH -->
 
-    <div class="health enemyHealthArea">
-
-      <div class="name" id="enemyName">
-        Shadow Demon
-      </div>
-
-      <div class="bar">
-        <div id="enemyHealth"
-             class="fill red"
-             style="width:100%">
-        </div>
-      </div>
-
-      <div class="hpText" id="enemyHpText">
-        100 / 100
-      </div>
-
-    </div>
+<div class="health playerHealth">
+<div class="name" id="playerName">Warrior</div>
+<div class="bar">
+<div id="playerBar" class="fill gold" style="width:100%"></div>
+</div>
+<div class="hp" id="playerHP">100 / 100</div>
+</div>
 
 
-    <div class="status" id="status">
-      YOUR TURN
-    </div>
+<!-- ENEMY HEALTH -->
+
+<div class="health enemyHealth">
+<div class="name" id="enemyName">Shadow Demon</div>
+<div class="bar">
+<div id="enemyBar" class="fill red" style="width:100%"></div>
+</div>
+<div class="hp" id="enemyHP">100 / 100</div>
+</div>
 
 
-    <!-- PLAYER -->
-
-    <div id="player" class="fighter">
-
-      <div class="playerGlow"></div>
-
-      <div class="playerHead">
-
-        <div class="hair"></div>
-
-        <div class="eye a"></div>
-        <div class="eye b"></div>
-
-        <div class="mouth"></div>
-
-      </div>
-
-      <div class="neck"></div>
-
-      <div class="chest">
-        <div class="core"></div>
-      </div>
-
-      <div class="shoulder a"></div>
-      <div class="shoulder b"></div>
-
-      <div class="arm a"></div>
-      <div class="arm b"></div>
-
-      <div class="leg a"></div>
-      <div class="leg b"></div>
-
-      <div class="boot a"></div>
-      <div class="boot b"></div>
-
-    </div>
+<div class="status" id="status">YOUR TURN</div>
 
 
-    <!-- =================================================
-         ENEMY
-         Completely rebuilt depending on level
-    ================================================= -->
+<!-- PLAYER -->
 
-    <div id="enemy" class="fighter">
+<div id="player" class="fighter">
 
-      <div id="bossVisual" class="boss level1">
+<div class="playerAura"></div>
 
-        <!-- Level 1 is inserted by JavaScript -->
+<div class="head">
+<div class="hair"></div>
+<div class="eye eye1"></div>
+<div class="eye eye2"></div>
+<div class="mouth"></div>
+</div>
 
-      </div>
+<div class="neck"></div>
 
-    </div>
+<div class="chest">
+<div class="core"></div>
+</div>
 
-  </div>
+<div class="shoulder shoulder1"></div>
+<div class="shoulder shoulder2"></div>
 
+<div class="arm arm1"></div>
+<div class="arm arm2"></div>
 
-  <!-- ATTACK BUTTONS -->
+<div class="leg leg1"></div>
+<div class="leg leg2"></div>
 
-  <div id="attackControls" class="controls">
-
-    <button onclick="attack('strike')">
-      ✨ SPIRIT STRIKE
-    </button>
-
-    <button onclick="attack('shield')">
-      🛡 SHIELD OF FATE
-    </button>
-
-    <button onclick="attack('truth')">
-      ☀ WORD OF TRUTH
-    </button>
-
-    <button id="specialButton"
-            class="special"
-            onclick="attack('burst')"
-            disabled>
-      ⚡ LIGHT BURST
-    </button>
-
-  </div>
-
-
-  <div id="log" class="log">
-    Your journey begins...
-  </div>
+<div class="boot boot1"></div>
+<div class="boot boot2"></div>
 
 </div>
 
 
-<!-- OVERLAY -->
+<!-- ENEMY -->
+
+<div id="enemy" class="fighter">
+
+<div id="boss"></div>
+
+</div>
+
+</div>
+
+
+<!-- CONTROLS -->
+
+<div class="controls" id="controls">
+
+<button onclick="attack('strike')">
+✨<br>SPIRIT STRIKE
+</button>
+
+<button onclick="attack('shield')">
+🛡<br>SHIELD OF FATE
+</button>
+
+<button onclick="attack('truth')">
+☀<br>WORD OF TRUTH
+</button>
+
+<button id="burst" class="special"
+ onclick="attack('burst')" disabled>
+⚡<br>LIGHT BURST
+</button>
+
+</div>
+
+
+<div class="log" id="log">
+Your journey begins...
+</div>
+
+</div>
+
+
+<!-- ================= OVERLAY ================= -->
 
 <div id="overlay" class="overlay hidden">
-
-  <div class="overlayBox">
-
-    <h1 id="overlayTitle">
-      Victory
-    </h1>
-
-    <p id="overlayText"></p>
-
-    <button onclick="continueOverlay()">
-      CONTINUE
-    </button>
-
-  </div>
-
+<div class="overlayBox">
+<h1 id="overlayTitle"></h1>
+<p id="overlayText"></p>
+<button class="menuBtn" onclick="overlayContinue()">CONTINUE</button>
+</div>
 </div>
 
 
 <script>
 
 /* =========================================================
-   SAVE DATA
+   DATA
 ========================================================= */
 
-const SAVE_KEY =
-  "spiritualPowerShadowboundUltra";
+const SAVE_KEY="ShadowboundMaximumEdition";
 
-let saves =
-  JSON.parse(localStorage.getItem(SAVE_KEY) || "[]");
+let saves=JSON.parse(
+ localStorage.getItem(SAVE_KEY)||"[]"
+);
 
-let currentSave = null;
+let slot=null;
+
+let state={
+ name:"Warrior",
+ gender:"Male",
+ armor:"#315cff",
+ helmet:"#171822",
+ level:1,
+ power:0,
+ hp:100,
+ turns:0,
+ spirit:0,
+ special:false
+};
+
+let enemy={
+ name:"",
+ hp:0,
+ max:0
+};
+
+let busy=false;
+let shield=false;
 
 
 /* =========================================================
-   GAME DATA
+   LEVELS
 ========================================================= */
 
-const levels = [
-
-  {
-    name:"SHADOW DEMON",
-    hp:100,
-    verse:"Ephesians 6:11",
-    verseText:
-      "Put on the whole armour of God, that ye may be able to stand against the wiles of the devil."
-  },
-
-  {
-    name:"DARK ANGEL",
-    hp:220,
-    verse:"Psalm 18:2",
-    verseText:
-      "The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust."
-  },
-
-  {
-    name:"SHADOW COLOSSUS",
-    hp:420,
-    verse:"1 John 4:4",
-    verseText:
-      "Greater is he that is in you, than he that is in the world."
-  }
-
+const levels=[
+ {
+  name:"SHADOW DEMON",
+  hp:100,
+  verse:"Ephesians 6:11",
+  text:"Put on the whole armour of God, that ye may be able to stand against the wiles of the devil."
+ },
+ {
+  name:"DARK ANGEL",
+  hp:220,
+  verse:"Psalm 18:2",
+  text:"The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust."
+ },
+ {
+  name:"SHADOW COLOSSUS",
+  hp:420,
+  verse:"1 John 4:4",
+  text:"Greater is he that is in you, than he that is in the world."
+ }
 ];
 
 
 /* =========================================================
-   STATE
+   HELPERS
 ========================================================= */
 
-let state = {
+function esc(x){
+ return String(x||"")
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+}
 
-  name:"Warrior",
+function save(){
+ localStorage.setItem(SAVE_KEY,JSON.stringify(saves));
+}
 
-  gender:"Male",
-
-  armor:"#315cff",
-
-  helmet:"#171822",
-
-  level:1,
-
-  power:0,
-
-  hp:100,
-
-  spirit:0,
-
-  turns:0,
-
-  specialUnlocked:false
-
-};
-
-let enemy = {
-
-  name:"",
-
-  hp:0,
-
-  maxHp:0
-
-};
-
-let busy = false;
-
-let shieldActive = false;
+function gameSave(){
+ if(slot!==null){
+  saves[slot]=JSON.parse(JSON.stringify(state));
+  save();
+ }
+}
 
 
 /* =========================================================
-   SAVE FUNCTIONS
+   SAVES
 ========================================================= */
-
-function saveAll(){
-
-  localStorage.setItem(
-    SAVE_KEY,
-    JSON.stringify(saves)
-  );
-
-}
-
-function safe(text){
-
-  return String(text || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
 
 function showSaves(){
 
-  const grid =
-    document.getElementById("saveGrid");
+ const grid=document.getElementById("saveGrid");
+ grid.innerHTML="";
 
-  grid.innerHTML="";
+ for(let i=0;i<3;i++){
 
-  for(let i=0;i<3;i++){
+  const s=saves[i];
+  const box=document.createElement("div");
+  box.className="save";
 
-    const save = saves[i];
+  if(s){
 
-    const box =
-      document.createElement("div");
+   box.innerHTML=`
+   <div class="saveName">${esc(s.name)}</div>
+   <div class="saveInfo">
+   Level ${s.level} • Power ${s.power}
+   </div>
+   <button class="menuBtn" onclick="load(${i})">
+   CONTINUE
+   </button>
+   <button class="delete" onclick="del(${i})">
+   DELETE
+   </button>
+   `;
 
-    box.className="save";
+  }else{
 
-    if(save){
-
-      box.innerHTML=`
-
-        <div class="saveName">
-          ${safe(save.name)}
-        </div>
-
-        <div class="saveInfo">
-          Level ${save.level}
-          • Power ${save.power}
-        </div>
-
-        <button onclick="loadSave(${i})">
-          CONTINUE
-        </button>
-
-        <button class="delete"
-                onclick="deleteSave(${i})">
-          DELETE
-        </button>
-      `;
-
-    }else{
-
-      box.innerHTML=`
-
-        <div class="saveName">
-          EMPTY SAVE SLOT ${i+1}
-        </div>
-
-        <button onclick="newSave(${i})">
-          CREATE
-        </button>
-      `;
-
-    }
-
-    grid.appendChild(box);
+   box.innerHTML=`
+   <div class="saveName">EMPTY SAVE ${i+1}</div>
+   <button class="menuBtn" onclick="newSave(${i})">
+   CREATE
+   </button>
+   `;
 
   }
 
+  grid.appendChild(box);
+ }
 }
 
+function newSave(i){
 
-function newSave(slot){
+ if(i===undefined){
+  i=saves.findIndex(x=>!x);
+  if(i<0){alert("All save slots are full.");return}
+ }
 
-  if(slot === undefined){
+ slot=i;
 
-    slot =
-      saves.findIndex(x=>!x);
+ document.getElementById("saveScreen")
+ .classList.add("hidden");
 
-    if(slot === -1){
-
-      alert(
-        "All three save slots are full."
-      );
-
-      return;
-    }
-
-  }
-
-  currentSave=slot;
-
-  document
-    .getElementById("saveScreen")
-    .classList.add("hidden");
-
-  document
-    .getElementById("customScreen")
-    .classList.remove("hidden");
-
+ document.getElementById("customScreen")
+ .classList.remove("hidden");
 }
 
+function load(i){
 
-function deleteSave(slot){
+ slot=i;
 
-  if(!confirm("Delete this save?"))
-    return;
+ state=JSON.parse(
+  JSON.stringify(saves[i])
+ );
 
-  saves[slot]=null;
+ document.getElementById("saveScreen")
+ .classList.add("hidden");
 
-  saveAll();
+ start();
+}
 
+function del(i){
+
+ if(confirm("Delete this save?")){
+  saves[i]=null;
+  save();
   showSaves();
-
-}
-
-
-function loadSave(slot){
-
-  currentSave=slot;
-
-  state =
-    JSON.parse(
-      JSON.stringify(saves[slot])
-    );
-
-  document
-    .getElementById("saveScreen")
-    .classList.add("hidden");
-
-  startGame();
-
+ }
 }
 
 
 /* =========================================================
-   CHARACTER CREATION
+   CREATE
 ========================================================= */
 
 function createCharacter(){
 
-  state.name =
-    document.getElementById("nameInput")
-      .value.trim() || "Warrior";
+ state.name=
+ document.getElementById("nameInput").value.trim()
+ ||"Warrior";
 
-  state.gender =
-    document.getElementById("genderInput")
-      .value;
+ state.gender=
+ document.getElementById("genderInput").value;
 
-  state.armor =
-    document.getElementById("armorInput")
-      .value;
+ state.armor=
+ document.getElementById("armorInput").value;
 
-  state.helmet =
-    document.getElementById("helmetInput")
-      .value;
+ state.helmet=
+ document.getElementById("helmetInput").value;
 
-  state.level=1;
-  state.power=0;
-  state.hp=100;
-  state.spirit=0;
-  state.turns=0;
-  state.specialUnlocked=false;
+ state.level=1;
+ state.power=0;
+ state.hp=100;
+ state.turns=0;
+ state.spirit=0;
+ state.special=false;
 
-  saveGame();
+ gameSave();
 
-  document
-    .getElementById("customScreen")
-    .classList.add("hidden");
+ document.getElementById("customScreen")
+ .classList.add("hidden");
 
-  startGame();
-
+ start();
 }
 
 
 /* =========================================================
-   START GAME
+   START
 ========================================================= */
 
-function startGame(){
+function start(){
 
-  document
-    .getElementById("game")
-    .classList.remove("hidden");
+ document.getElementById("game")
+ .classList.remove("hidden");
 
-  busy=false;
-  shieldActive=false;
+ busy=false;
+ shield=false;
 
-  loadLevel();
+ loadLevel();
 
-  applyAppearance();
+ applyPlayer();
 
-  updateUI();
+ update();
 
-  log(
-    levels[0].verse +
-    ": " +
-    levels[0].verseText
-  );
-
+ log(
+ levels[0].verse+" — "+
+ levels[0].text
+ );
 }
 
 
@@ -1751,188 +1022,133 @@ function startGame(){
 
 function loadLevel(){
 
-  const data =
-    levels[state.level-1];
+ const l=levels[state.level-1];
 
-  enemy.name=data.name;
+ enemy.name=l.name;
+ enemy.max=l.hp;
+ enemy.hp=l.hp;
 
-  enemy.maxHp=data.hp;
+ state.hp=100+(state.level-1)*35;
+ state.turns=0;
+ state.spirit=0;
+ state.special=false;
 
-  enemy.hp=data.hp;
+ busy=false;
+ shield=false;
 
-  state.hp =
-    100 + (state.level-1)*35;
-
-  state.spirit=0;
-
-  state.turns=0;
-
-  state.specialUnlocked=false;
-
-  busy=false;
-
-  shieldActive=false;
-
-  document
-    .getElementById("specialButton")
-    .disabled=true;
-
-  buildBoss();
-
-  updateUI();
-
+ buildBoss();
+ update();
 }
 
 
 /* =========================================================
-   BOSS BUILDER
+   BOSS GRAPHICS
 ========================================================= */
 
 function buildBoss(){
 
-  const boss =
-    document.getElementById("bossVisual");
+ const b=document.getElementById("boss");
 
-  boss.className =
-    "boss level" + state.level;
+ b.className="boss";
 
+ if(state.level===1){
 
-  /* LEVEL 1 */
+  b.classList.add("level1");
 
-  if(state.level===1){
+  b.innerHTML=`
+   <div class="l1head">
+    <div class="horn horn1"></div>
+    <div class="horn horn2"></div>
+    <div class="redEye redEye1"></div>
+    <div class="redEye redEye2"></div>
+   </div>
 
-    boss.innerHTML=`
+   <div class="demonBody">
+    <div class="demonCore"></div>
+   </div>
 
-      <div class="demonHead">
+   <div class="demonArm demonArm1"></div>
+   <div class="demonArm demonArm2"></div>
 
-        <div class="demonHorn a"></div>
-        <div class="demonHorn b"></div>
+   <div class="demonLeg demonLeg1"></div>
+   <div class="demonLeg demonLeg2"></div>
+  `;
 
-        <div class="demonEye a"></div>
-        <div class="demonEye b"></div>
+ }
 
-        <div class="demonMouth"></div>
+ else if(state.level===2){
 
-      </div>
+  b.classList.add("level2");
 
-      <div class="demonBody">
+  b.innerHTML=`
+   <div class="wing wing1"></div>
+   <div class="wing wing2"></div>
+   <div class="halo"></div>
 
-        <div class="demonCore"></div>
+   <div class="angelHead">
+    <div class="visor"></div>
+   </div>
 
-      </div>
+   <div class="angelBody">
+    <div class="angelCore"></div>
+   </div>
 
-      <div class="demonArm a"></div>
-      <div class="demonArm b"></div>
+   <div class="angelArm angelArm1"></div>
+   <div class="angelArm angelArm2"></div>
 
-      <div class="demonLeg a"></div>
-      <div class="demonLeg b"></div>
+   <div class="angelLeg angelLeg1"></div>
+   <div class="angelLeg angelLeg2"></div>
+  `;
 
-    `;
+ }
 
-  }
+ else{
 
+  b.classList.add("level3");
 
-  /* LEVEL 2 */
+  b.innerHTML=`
+   <div class="colWing colWing1"></div>
+   <div class="colWing colWing2"></div>
 
-  else if(state.level===2){
+   <div class="colHead">
+    <div class="colHorn colHorn1"></div>
+    <div class="colHorn colHorn2"></div>
+    <div class="colEye colEye1"></div>
+    <div class="colEye colEye2"></div>
+   </div>
 
-    boss.innerHTML=`
+   <div class="colBody">
+    <div class="plate"></div>
+    <div class="colCore"></div>
+   </div>
 
-      <div class="angelGlow"></div>
+   <div class="colArm colArm1"></div>
+   <div class="colArm colArm2"></div>
 
-      <div class="angelWing a"></div>
-      <div class="angelWing b"></div>
-
-      <div class="angelHalo"></div>
-
-      <div class="angelHead">
-
-        <div class="angelVisor"></div>
-
-      </div>
-
-      <div class="angelBody">
-
-        <div class="angelCore"></div>
-
-      </div>
-
-      <div class="angelArm a"></div>
-      <div class="angelArm b"></div>
-
-      <div class="angelLeg a"></div>
-      <div class="angelLeg b"></div>
-
-    `;
-
-  }
-
-
-  /* LEVEL 3 */
-
-  else{
-
-    boss.innerHTML=`
-
-      <div class="colossusWing a"></div>
-      <div class="colossusWing b"></div>
-
-      <div class="colossusHead">
-
-        <div class="colossusHorn a"></div>
-        <div class="colossusHorn b"></div>
-
-        <div class="colossusEye a"></div>
-        <div class="colossusEye b"></div>
-
-      </div>
-
-      <div class="colossusBody">
-
-        <div class="colossusPlate"></div>
-
-        <div class="colossusCore"></div>
-
-      </div>
-
-      <div class="colossusArm a"></div>
-      <div class="colossusArm b"></div>
-
-      <div class="colossusLeg a"></div>
-      <div class="colossusLeg b"></div>
-
-    `;
-
-  }
-
+   <div class="colLeg colLeg1"></div>
+   <div class="colLeg colLeg2"></div>
+  `;
+ }
 }
 
 
 /* =========================================================
-   PLAYER APPEARANCE
+   PLAYER CUSTOMIZATION
 ========================================================= */
 
-function applyAppearance(){
+function applyPlayer(){
 
-  const chest =
-    document.querySelector(".chest");
+ document.querySelector(".chest").style.background=
+ `linear-gradient(145deg,
+ ${state.armor},
+ #293ca7,
+ #10174a)`;
 
-  chest.style.background =
-    `linear-gradient(145deg,
-      ${state.armor},
-      #283aa7 55%,
-      #11184d)`;
+ document.querySelector(".hair")
+ .style.background=state.helmet;
 
-  document
-    .querySelector(".hair")
-    .style.background =
-      state.helmet;
-
-  document
-    .getElementById("playerName")
-    .textContent =
-      state.name;
-
+ document.getElementById("playerName")
+ .textContent=state.name;
 }
 
 
@@ -1940,69 +1156,39 @@ function applyAppearance(){
    UI
 ========================================================= */
 
-function updateUI(){
+function update(){
 
-  const maxPlayer =
-    100 + (state.level-1)*35;
+ const max=100+(state.level-1)*35;
 
-  document
-    .getElementById("level")
-    .textContent =
-      state.level;
+ document.getElementById("level")
+ .textContent=state.level;
 
-  document
-    .getElementById("power")
-    .textContent =
-      state.power;
+ document.getElementById("power")
+ .textContent=state.power;
 
-  document
-    .getElementById("playerName")
-    .textContent =
-      state.name;
+ document.getElementById("playerName")
+ .textContent=state.name;
 
-  document
-    .getElementById("enemyName")
-    .textContent =
-      enemy.name;
+ document.getElementById("enemyName")
+ .textContent=enemy.name;
 
-  document
-    .getElementById("playerHealth")
-    .style.width =
-      Math.max(
-        0,
-        state.hp/maxPlayer*100
-      )+"%";
+ document.getElementById("playerBar")
+ .style.width=Math.max(0,state.hp/max*100)+"%";
 
-  document
-    .getElementById("enemyHealth")
-    .style.width =
-      Math.max(
-        0,
-        enemy.hp/enemy.maxHp*100
-      )+"%";
+ document.getElementById("enemyBar")
+ .style.width=Math.max(0,enemy.hp/enemy.max*100)+"%";
 
-  document
-    .getElementById("playerHpText")
-    .textContent =
-      `${Math.max(0,state.hp)} / ${maxPlayer}`;
+ document.getElementById("playerHP")
+ .textContent=`${Math.max(0,state.hp)} / ${max}`;
 
-  document
-    .getElementById("enemyHpText")
-    .textContent =
-      `${Math.max(0,enemy.hp)} / ${enemy.maxHp}`;
+ document.getElementById("enemyHP")
+ .textContent=`${Math.max(0,enemy.hp)} / ${enemy.max}`;
 
-  document
-    .getElementById("specialButton")
-    .disabled =
-      !state.specialUnlocked || busy;
+ document.getElementById("burst").disabled=
+ !state.special||busy;
 
-  document
-    .getElementById("status")
-    .textContent =
-      busy
-      ? "ENEMY TURN..."
-      : "YOUR TURN";
-
+ document.getElementById("status")
+ .textContent=busy?"ENEMY TURN...":"YOUR TURN";
 }
 
 
@@ -2010,713 +1196,461 @@ function updateUI(){
    LOG
 ========================================================= */
 
-function log(message){
+function log(x){
 
-  const box =
-    document.getElementById("log");
+ const l=document.getElementById("log");
 
-  box.innerHTML +=
-    `<div>${safe(message)}</div>`;
-
-  box.scrollTop =
-    box.scrollHeight;
-
+ l.innerHTML+=`<div>${esc(x)}</div>`;
+ l.scrollTop=l.scrollHeight;
 }
 
 
 /* =========================================================
-   ATTACK SYSTEM
+   COMBAT
 ========================================================= */
 
 function attack(type){
 
-  if(busy)
-    return;
+ if(busy)return;
 
-  if(
-    type==="burst" &&
-    !state.specialUnlocked
-  )
-    return;
+ if(type==="burst"&&!state.special)return;
 
-  busy=true;
+ busy=true;
+ update();
 
-  updateUI();
+ if(type==="strike")strike();
+ if(type==="shield")shieldAttack();
+ if(type==="truth")truth();
+ if(type==="burst")burst();
+}
 
 
-  if(type==="strike")
-    spiritStrike();
+/* ================= STRIKE ================= */
 
-  if(type==="shield")
-    shieldOfFate();
+function strike(){
 
-  if(type==="truth")
-    wordOfTruth();
+ log("✨ SPIRIT STRIKE!");
 
-  if(type==="burst")
-    lightBurst();
+ const p=document.getElementById("player");
 
+ p.classList.add("playerDash");
+
+ setTimeout(()=>{
+
+  p.classList.remove("playerDash");
+
+  projectile();
+
+  enemy.hp=Math.max(
+   0,
+   enemy.hp-(20+state.level*5)
+  );
+
+  state.spirit+=12;
+
+  impact();
+
+  enemyHit();
+  update();
+
+ },300);
+
+ finish(850);
+}
+
+
+/* ================= SHIELD ================= */
+
+function shieldAttack(){
+
+ log("🛡 SHIELD OF FATE!");
+
+ shield=true;
+ state.spirit+=20;
+
+ makeShield();
+
+ update();
+
+ finish(750);
+}
+
+
+/* ================= TRUTH ================= */
+
+function truth(){
+
+ log("☀ WORD OF TRUTH!");
+
+ makeBeam();
+
+ enemy.hp=Math.max(
+  0,
+  enemy.hp-(32+state.level*6)
+ );
+
+ state.spirit+=24;
+
+ impact();
+ enemyHit();
+
+ update();
+
+ finish(900);
+}
+
+
+/* ================= BURST ================= */
+
+function burst(){
+
+ log("⚡ LIGHT BURST!");
+
+ makeSuperBeam();
+
+ enemy.hp=Math.max(
+  0,
+  enemy.hp-(100+state.level*25)
+ );
+
+ state.spirit=0;
+ state.special=false;
+
+ impact();
+ enemyHit();
+
+ update();
+
+ finish(1150);
 }
 
 
 /* =========================================================
-   SPIRIT STRIKE
+   FINISH PLAYER MOVE
 ========================================================= */
 
-function spiritStrike(){
+function finish(ms){
 
-  log("SPIRIT STRIKE!");
+ setTimeout(()=>{
 
-  const player =
-    document.getElementById("player");
-
-  player.classList.add("playerDash");
-
-  setTimeout(()=>{
-
-    player.classList.remove("playerDash");
-
-    createLightOrb();
-
-    const damage =
-      20 + state.level*5;
-
-    enemy.hp =
-      Math.max(
-        0,
-        enemy.hp-damage
-      );
-
-    state.spirit+=12;
-
-    hitEnemy();
-
-    updateUI();
-
-  },350);
-
-  finishAttack(900);
-
-}
-
-
-/* =========================================================
-   SHIELD
-========================================================= */
-
-function shieldOfFate(){
-
-  log("SHIELD OF FATE!");
-
-  shieldActive=true;
-
-  state.spirit+=20;
-
-  createShield();
-
-  updateUI();
-
-  finishAttack(850);
-
-}
-
-
-/* =========================================================
-   WORD OF TRUTH
-========================================================= */
-
-function wordOfTruth(){
-
-  log("WORD OF TRUTH!");
-
-  createBeam();
-
-  const damage =
-    32 + state.level*6;
-
-  enemy.hp =
-    Math.max(
-      0,
-      enemy.hp-damage
-    );
-
-  state.spirit+=24;
-
-  hitEnemy();
-
-  updateUI();
-
-  finishAttack(950);
-
-}
-
-
-/* =========================================================
-   LIGHT BURST
-========================================================= */
-
-function lightBurst(){
-
-  log("LIGHT BURST!");
-
-  createBigBeam();
-
-  const damage =
-    100 + state.level*25;
-
-  enemy.hp =
-    Math.max(
-      0,
-      enemy.hp-damage
-    );
-
-  state.spirit=0;
-
-  state.specialUnlocked=false;
-
-  hitEnemy();
-
-  updateUI();
-
-  finishAttack(1100);
-
-}
-
-
-/* =========================================================
-   FINISH PLAYER ATTACK
-========================================================= */
-
-function finishAttack(delay){
-
-  setTimeout(()=>{
-
-    if(enemy.hp<=0){
-
-      enemyDefeated();
-
-      return;
-
-    }
-
-    enemyAttack();
-
-  },delay);
-
-}
-
-
-/* =========================================================
-   ENEMY ATTACK
-========================================================= */
-
-function enemyAttack(){
-
-  document
-    .getElementById("status")
-    .textContent =
-      "ENEMY TURN...";
-
-
-  /* SHIELD */
-
-  if(shieldActive){
-
-    log(
-      "Shield of Fate blocked the attack!"
-    );
-
-    createShieldBlock();
-
-    shieldActive=false;
-
-    setTimeout(()=>{
-
-      finishEnemyTurn();
-
-    },700);
-
-    return;
-
+  if(enemy.hp<=0){
+   defeated();
+  }else{
+   enemyTurn();
   }
 
-
-  log(enemy.name+" attacks!");
-
-  const boss =
-    document.getElementById("enemy");
-
-  boss.classList.add("enemyDash");
+ },ms);
+}
 
 
-  /* DIFFERENT ATTACK EFFECT BY LEVEL */
+/* =========================================================
+   ENEMY TURN
+========================================================= */
 
-  if(state.level===1){
+function enemyTurn(){
 
-    createShadowAttack();
+ document.getElementById("status")
+ .textContent="ENEMY TURN...";
 
+ const e=document.getElementById("enemy");
+
+ if(shield){
+
+  log("🛡 Shield of Fate blocked the attack!");
+
+  shield=false;
+
+  makeShield();
+
+  setTimeout(endEnemyTurn,700);
+
+  return;
+ }
+
+ log(enemy.name+" attacks!");
+
+ e.classList.add("enemyDash");
+
+ enemyEffect();
+
+ setTimeout(()=>{
+
+  e.classList.remove("enemyDash");
+
+  state.hp=Math.max(
+   0,
+   state.hp-(12+state.level*5)
+  );
+
+  playerHit();
+  update();
+
+ },320);
+
+ setTimeout(()=>{
+
+  if(state.hp<=0){
+   defeatedPlayer();
+  }else{
+   endEnemyTurn();
   }
 
-  else if(state.level===2){
-
-    createAngelAttack();
-
-  }
-
-  else{
-
-    createColossusAttack();
-
-  }
-
-
-  setTimeout(()=>{
-
-    boss.classList.remove("enemyDash");
-
-    const damage =
-      12 + state.level*5;
-
-    state.hp =
-      Math.max(
-        0,
-        state.hp-damage
-      );
-
-    hitPlayer();
-
-    updateUI();
-
-  },350);
-
-
-  setTimeout(()=>{
-
-    if(state.hp<=0){
-
-      playerDefeated();
-
-      return;
-
-    }
-
-    finishEnemyTurn();
-
-  },900);
-
+ },850);
 }
 
 
 /* =========================================================
-   ENEMY TURN FINISH — COMBAT FIX
+   CRITICAL BUTTON FIX
 ========================================================= */
 
-function finishEnemyTurn(){
+function endEnemyTurn(){
 
-  state.turns++;
+ state.turns++;
 
-  if(state.turns>=3){
+ if(state.turns>=3){
 
-    state.specialUnlocked=true;
+  state.special=true;
 
-    log(
-      "Your spiritual power has awakened!"
-    );
+  log("⚡ Your spiritual power is fully charged!");
 
-  }
+ }
 
-  saveGame();
+ gameSave();
 
-  busy=false;
+ shield=false;
 
-  shieldActive=false;
+ busy=false;
 
+ /*
+  Explicitly restore every button.
+ */
+ document.querySelectorAll("#controls button")
+ .forEach(b=>{
+  b.style.pointerEvents="auto";
+  b.style.opacity="1";
+ });
 
-  /*
-   FORCE THE CONTROLS BACK ON.
-  */
+ document.getElementById("burst").disabled=
+ !state.special;
 
-  const controls =
-    document.getElementById(
-      "attackControls"
-    );
+ document.getElementById("controls")
+ .style.pointerEvents="auto";
 
-  controls.style.pointerEvents="auto";
+ update();
 
-  controls.style.opacity="1";
-
-
-  document
-    .querySelectorAll(
-      "#attackControls button"
-    )
-    .forEach(button=>{
-
-      button.style.pointerEvents="auto";
-
-      button.disabled=false;
-
-    });
-
-
-  document
-    .getElementById("specialButton")
-    .disabled =
-      !state.specialUnlocked;
-
-
-  updateUI();
-
-  document
-    .getElementById("status")
-    .textContent =
-      "YOUR TURN";
-
-  log(
-    "Your turn — choose an attack."
-  );
-
+ log("YOUR TURN — choose an attack.");
 }
 
 
 /* =========================================================
-   VISUAL ATTACKS
+   EFFECTS
 ========================================================= */
 
-function createLightOrb(){
+function projectile(){
 
-  const arena =
-    document.getElementById("arena");
+ const a=document.getElementById("arena");
 
-  const orb =
-    document.createElement("div");
+ const x=document.createElement("div");
 
-  orb.className =
-    "effect lightOrb";
+ x.className="fx projectile";
 
-  orb.style.left="28%";
-  orb.style.top="50%";
+ x.style.left="25%";
+ x.style.top="49%";
 
-  arena.appendChild(orb);
+ a.appendChild(x);
 
-  orb.animate(
-
-    [
-      {
-        transform:"translateX(0) scale(.3)",
-        opacity:0
-      },
-      {
-        transform:"translateX(300px) scale(1)",
-        opacity:1
-      },
-      {
-        transform:"translateX(550px) scale(.2)",
-        opacity:0
-      }
-    ],
-
-    {
-      duration:650,
-      easing:"ease-out"
-    }
-
-  ).onfinish=()=>{
-    orb.remove();
-  };
-
+ x.animate([
+  {transform:"translateX(0) scale(.3)",opacity:0},
+  {transform:"translateX(250px) scale(1)",opacity:1},
+  {transform:"translateX(540px) scale(.15)",opacity:0}
+ ],{
+  duration:620,
+  easing:"cubic-bezier(.2,.8,.2,1)"
+ }).onfinish=()=>x.remove();
 }
 
 
-function createBeam(){
+function makeBeam(){
 
-  const arena =
-    document.getElementById("arena");
+ const a=document.getElementById("arena");
 
-  const beam =
-    document.createElement("div");
+ const x=document.createElement("div");
 
-  beam.className =
-    "effect lightBeam";
+ x.className="fx beam";
 
-  arena.appendChild(beam);
+ a.appendChild(x);
 
-  setTimeout(
-    ()=>beam.remove(),
-    650
-  );
-
+ setTimeout(()=>x.remove(),650);
 }
 
 
-function createBigBeam(){
+function makeSuperBeam(){
 
-  const arena =
-    document.getElementById("arena");
+ const a=document.getElementById("arena");
 
-  const beam =
-    document.createElement("div");
+ const x=document.createElement("div");
 
-  beam.className =
-    "effect bigBeam";
+ x.className="fx superBeam";
 
-  arena.appendChild(beam);
+ a.appendChild(x);
 
-  setTimeout(
-    ()=>beam.remove(),
-    900
-  );
-
+ setTimeout(()=>x.remove(),900);
 }
 
 
-function createShield(){
+function makeShield(){
 
-  const arena =
-    document.getElementById("arena");
+ const a=document.getElementById("arena");
 
-  const shield =
-    document.createElement("div");
+ const x=document.createElement("div");
 
-  shield.className =
-    "effect shield";
+ x.className="fx shield";
 
-  shield.style.left="0";
-  shield.style.top="25%";
+ a.appendChild(x);
 
-  arena.appendChild(shield);
-
-  setTimeout(
-    ()=>shield.remove(),
-    900
-  );
-
+ setTimeout(()=>x.remove(),850);
 }
 
 
-function createShieldBlock(){
+function impact(){
 
-  const arena =
-    document.getElementById("arena");
+ const a=document.getElementById("arena");
 
-  const shield =
-    document.createElement("div");
+ const x=document.createElement("div");
 
-  shield.className =
-    "effect shield";
+ x.className="fx impact";
 
-  shield.style.left="0";
-  shield.style.top="25%";
+ x.style.left="73%";
+ x.style.top="48%";
 
-  shield.style.borderColor="#fff";
+ a.appendChild(x);
 
-  arena.appendChild(shield);
-
-  setTimeout(
-    ()=>shield.remove(),
-    700
-  );
-
+ setTimeout(()=>x.remove(),550);
 }
 
 
 /* =========================================================
-   UNIQUE BOSS ATTACK EFFECTS
+   BOSS-SPECIFIC ATTACKS
 ========================================================= */
 
-function createShadowAttack(){
+function enemyEffect(){
 
-  const arena =
-    document.getElementById("arena");
+ const a=document.getElementById("arena");
 
-  const orb =
-    document.createElement("div");
+ const x=document.createElement("div");
 
-  orb.className =
-    "effect lightOrb";
+ x.className="fx";
 
-  orb.style.background="#ff1640";
+ if(state.level===1){
 
-  orb.style.boxShadow =
-    "0 0 20px #ff1640,0 0 50px #9b0030";
+  x.style.width="34px";
+  x.style.height="34px";
+  x.style.borderRadius="50%";
+  x.style.background="#ff1744";
+  x.style.boxShadow="0 0 25px #ff1744,0 0 70px #9d0030";
+  x.style.left="73%";
+  x.style.top="50%";
 
-  orb.style.left="68%";
-  orb.style.top="50%";
+  a.appendChild(x);
 
-  arena.appendChild(orb);
+  x.animate([
+   {transform:"translateX(0) scale(.4)",opacity:0},
+   {transform:"translateX(-390px) scale(1)",opacity:1},
+   {transform:"translateX(-470px) scale(.2)",opacity:0}
+  ],{duration:570}).onfinish=()=>x.remove();
 
-  orb.animate(
+ }
 
-    [
-      {
-        transform:"translateX(0) scale(.5)"
-      },
-      {
-        transform:"translateX(-330px) scale(1)"
-      }
-    ],
+ else if(state.level===2){
 
-    {
-      duration:550
-    }
+  x.className="fx beam";
+  x.style.background="linear-gradient(90deg,#fff,#b8c4ff,#fff)";
+  x.style.boxShadow="0 0 30px #fff,0 0 80px #899cff";
 
-  ).onfinish=()=>{
-    orb.remove();
-  };
+  a.appendChild(x);
+  setTimeout(()=>x.remove(),700);
 
-}
+ }
 
+ else{
 
-function createAngelAttack(){
+  x.className="fx superBeam";
+  x.style.background="#ff173f";
+  x.style.boxShadow="0 0 40px #ff173f,0 0 110px #a5002d";
 
-  const arena =
-    document.getElementById("arena");
-
-  const beam =
-    document.createElement("div");
-
-  beam.className =
-    "effect lightBeam";
-
-  beam.style.background=
-    "linear-gradient(90deg,#fff,#9eaaff,#fff)";
-
-  beam.style.boxShadow=
-    "0 0 30px #fff,0 0 70px #8d9bff";
-
-  beam.style.top="45%";
-
-  arena.appendChild(beam);
-
-  setTimeout(
-    ()=>beam.remove(),
-    700
-  );
-
-}
-
-
-function createColossusAttack(){
-
-  const arena =
-    document.getElementById("arena");
-
-  const beam =
-    document.createElement("div");
-
-  beam.className =
-    "effect bigBeam";
-
-  beam.style.background=
-    "#ff1744";
-
-  beam.style.boxShadow=
-    "0 0 35px #ff1744,0 0 100px #b00030";
-
-  beam.style.top="42%";
-
-  arena.appendChild(beam);
-
-  setTimeout(
-    ()=>beam.remove(),
-    850
-  );
-
+  a.appendChild(x);
+  setTimeout(()=>x.remove(),850);
+ }
 }
 
 
 /* =========================================================
-   HIT EFFECTS
+   HIT
 ========================================================= */
 
-function hitEnemy(){
+function enemyHit(){
 
-  const enemyEl =
-    document.getElementById("enemy");
+ const e=document.getElementById("enemy");
 
-  enemyEl.classList.add("hit");
+ e.classList.add("hit");
 
-  setTimeout(
-    ()=>enemyEl.classList.remove("hit"),
-    450
-  );
-
+ setTimeout(()=>e.classList.remove("hit"),450);
 }
 
+function playerHit(){
 
-function hitPlayer(){
+ const p=document.getElementById("player");
 
-  const player =
-    document.getElementById("player");
+ p.classList.add("hit");
 
-  player.classList.add("hit");
-
-  setTimeout(
-    ()=>player.classList.remove("hit"),
-    450
-  );
-
+ setTimeout(()=>p.classList.remove("hit"),450);
 }
 
 
 /* =========================================================
-   PLAYER DEFEATED
+   DEFEATED
 ========================================================= */
 
-function playerDefeated(){
+function defeated(){
 
-  busy=false;
+ busy=false;
 
-  state.hp =
-    100 + (state.level-1)*35;
+ state.power+=100*state.level;
 
-  state.spirit=0;
+ gameSave();
 
-  state.turns=0;
+ if(state.level===3){
 
-  state.specialUnlocked=false;
-
-  saveGame();
-
-  showOverlay(
-    "DEFEATED",
-    "The battle is not over. Rise and try again."
+  show(
+   "VICTORY!",
+   "The Shadow Colossus has fallen. You completed Shadowbound."
   );
 
+ }else{
+
+  show(
+   "BOSS DEFEATED!",
+   `${enemy.name} has been defeated.`
+  );
+ }
 }
 
 
-/* =========================================================
-   ENEMY DEFEATED
-========================================================= */
+function defeatedPlayer(){
 
-function enemyDefeated(){
+ busy=false;
 
-  busy=false;
+ state.hp=100+(state.level-1)*35;
+ state.turns=0;
+ state.spirit=0;
+ state.special=false;
 
-  state.power +=
-    100*state.level;
+ gameSave();
 
-  saveGame();
-
-
-  if(state.level>=3){
-
-    showOverlay(
-      "VICTORY!",
-      "The Shadow Colossus has fallen. You completed the Shadowbound journey."
-    );
-
-    return;
-
-  }
-
-
-  showOverlay(
-    "BOSS DEFEATED",
-    `You defeated ${enemy.name}. Prepare for Level ${state.level+1}.`
-  );
-
+ show(
+  "DEFEATED",
+  "The battle is over for now. Rise and try again."
+ );
 }
 
 
@@ -2724,86 +1658,48 @@ function enemyDefeated(){
    OVERLAY
 ========================================================= */
 
-function showOverlay(title,text){
+function show(title,text){
 
-  document
-    .getElementById("overlayTitle")
-    .textContent=title;
+ document.getElementById("overlayTitle")
+ .textContent=title;
 
-  document
-    .getElementById("overlayText")
-    .textContent=text;
+ document.getElementById("overlayText")
+ .textContent=text;
 
-  document
-    .getElementById("overlay")
-    .classList.remove("hidden");
-
+ document.getElementById("overlay")
+ .classList.remove("hidden");
 }
 
 
-function continueOverlay(){
+function overlayContinue(){
 
-  document
-    .getElementById("overlay")
-    .classList.add("hidden");
+ document.getElementById("overlay")
+ .classList.add("hidden");
 
+ if(enemy.hp<=0){
 
-  if(
-    state.level>=3 &&
-    enemy.hp<=0
-  ){
+  if(state.level<3){
 
-    state.level=1;
+   state.level++;
+   loadLevel();
 
-    state.power=0;
+   log(
+    `LEVEL ${state.level}: ${enemy.name}`
+   );
 
-    loadLevel();
+  }else{
 
-    saveGame();
-
-    return;
-
-  }
-
-
-  if(enemy.hp<=0){
-
-    state.level++;
-
-    loadLevel();
-
-    saveGame();
-
-    log(
-      `LEVEL ${state.level}: ${enemy.name}`
-    );
-
-    return;
+   state.level=1;
+   state.power=0;
+   loadLevel();
 
   }
 
+  gameSave();
+  return;
+ }
 
-  loadLevel();
-
-}
-
-
-/* =========================================================
-   SAVE GAME
-========================================================= */
-
-function saveGame(){
-
-  if(currentSave===null)
-    return;
-
-  saves[currentSave] =
-    JSON.parse(
-      JSON.stringify(state)
-    );
-
-  saveAll();
-
+ loadLevel();
 }
 
 
@@ -2813,50 +1709,21 @@ function saveGame(){
 
 setInterval(()=>{
 
-  if(
-    !document
-      .getElementById("game")
-      .classList
-      .contains("hidden")
-  ){
+ if(!document.getElementById("game")
+ .classList.contains("hidden")){
 
-    saveGame();
-
-  }
+  gameSave();
+ }
 
 },5000);
 
 
 /* =========================================================
-   START
+   INITIALIZE
 ========================================================= */
 
 showSaves();
 
-
-/*
- IMPORTANT TOUCH SAFETY:
-
- Visual effects can NEVER intercept
- taps intended for the buttons.
-*/
-
-document.addEventListener(
-  "touchstart",
-  ()=>{
-    const controls =
-      document.getElementById(
-        "attackControls"
-      );
-
-    if(controls){
-      controls.style.pointerEvents="auto";
-    }
-  },
-  {passive:true}
-);
-
 </script>
-
 </body>
 </html>
