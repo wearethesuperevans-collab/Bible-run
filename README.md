@@ -2,2801 +2,1536 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Spiritual Power: Shadowbound</title>
 
 <style>
 *{box-sizing:border-box}
-html,body{
- margin:0;
- min-height:100%;
- background:#02030a;
- color:white;
- font-family:Arial,sans-serif;
- overflow-x:hidden;
-}
-button{font:inherit}
-.hidden{display:none!important}
-
-/* ================= MENU ================= */
-
-.screen{
- min-height:100vh;
- display:flex;
- justify-content:center;
- align-items:center;
- padding:20px;
- background:
- radial-gradient(circle at 50% 20%,#172a70,#060914 55%,#010208);
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% 25%,#263a70 0%,#10162d 38%,#050712 100%);
+  color:white;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-.panel{
- width:min(650px,100%);
- padding:30px;
- border-radius:28px;
- background:linear-gradient(145deg,#111b3c,#050711);
- border:1px solid #5272e9;
- box-shadow:0 0 70px #315cff55;
- text-align:center;
+button{
+  font:inherit;
+  cursor:pointer;
+  border:0;
 }
-
-.title{
- font-size:clamp(38px,10vw,72px);
- letter-spacing:5px;
- margin:0;
- background:linear-gradient(#fff,#79aaff,#fff);
- -webkit-background-clip:text;
- color:transparent;
-}
-
-.subtitle{
- margin:8px 0 28px;
- color:#aebcff;
- letter-spacing:4px;
-}
-
-.saveGrid{
- display:grid;
- gap:12px;
-}
-
-.save{
- padding:16px;
- border-radius:15px;
- background:#080d1e;
- border:1px solid #344b91;
- text-align:left;
-}
-
-.saveName{
- font-size:18px;
- font-weight:bold;
-}
-
-.saveInfo{
- color:#91a1cb;
- font-size:13px;
- margin:5px 0 10px;
-}
-
-.menuBtn,.createBtn{
- padding:13px 20px;
- border:0;
- border-radius:13px;
- color:white;
- font-weight:bold;
- background:linear-gradient(135deg,#527aff,#1939c4);
- box-shadow:0 7px 20px #0009;
-}
-
-.delete{
- background:#8d2436;
- border:0;
- color:white;
- padding:11px;
- border-radius:10px;
- margin-left:6px;
-}
-
-/* ================= GAME ================= */
 
 #game{
- min-height:100vh;
- padding:7px;
- background:#02030a;
+  width:100%;
+  max-width:1100px;
+  margin:auto;
+  min-height:100vh;
+  padding:12px;
 }
 
 .top{
- width:min(1300px,100%);
- margin:auto;
- display:flex;
- justify-content:space-between;
- padding:8px 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.title{
+  font-size:clamp(22px,5vw,38px);
+  font-weight:900;
+  letter-spacing:1px;
+  text-shadow:0 0 12px #68aaff;
 }
 
 .level{
- font-weight:bold;
- font-size:20px;
-}
-
-.power{
- color:#ffe35b;
- text-shadow:0 0 12px #ffcf36;
+  padding:8px 14px;
+  border-radius:20px;
+  background:#151d3a;
+  border:1px solid #5875b9;
+  font-weight:bold;
 }
 
 .arena{
- position:relative;
- width:min(1300px,100%);
- height:690px;
- margin:auto;
- overflow:hidden;
- border-radius:25px;
- border:1px solid #435b9e;
- background:
- radial-gradient(circle at 50% 34%,#263d8d,#111a40 30%,#050817 70%,#02030a);
- box-shadow:0 0 90px #183b9a55,inset 0 0 100px #000;
+  position:relative;
+  height:540px;
+  border-radius:24px;
+  overflow:hidden;
+  border:2px solid #344d82;
+  background:
+    radial-gradient(circle at 50% 65%,rgba(90,130,255,.2),transparent 35%),
+    linear-gradient(#101832,#080b18);
+  box-shadow:inset 0 0 80px #000;
 }
 
-/* stars */
-
-.arena:before{
- content:"";
- position:absolute;
- inset:0;
- pointer-events:none;
- background-image:
- radial-gradient(circle,#fff 1px,transparent 1.5px),
- radial-gradient(circle,#779cff 1px,transparent 1.5px),
- radial-gradient(circle,#fff 1px,transparent 1.5px);
- background-size:75px 75px,130px 130px,190px 190px;
- opacity:.4;
- animation:stars 20s linear infinite;
+.stars{
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(circle,#fff 1px,transparent 2px),
+    radial-gradient(circle,#9fc9ff 1px,transparent 2px);
+  background-size:85px 85px,137px 137px;
+  opacity:.35;
 }
 
-@keyframes stars{
- to{
-  background-position:75px 75px,130px 130px,190px 190px;
- }
-}
-
-.horizon{
- position:absolute;
- left:0;
- right:0;
- bottom:32%;
- height:2px;
- background:#7897ff;
- box-shadow:0 0 30px #5075ff;
-}
-
-.floor{
- position:absolute;
- left:-10%;
- right:-10%;
- bottom:-20%;
- height:55%;
- transform:perspective(550px) rotateX(60deg);
- transform-origin:bottom;
- background:
- linear-gradient(#38539a 1px,transparent 1px),
- linear-gradient(90deg,#38539a 1px,transparent 1px);
- background-size:65px 45px;
- opacity:.35;
-}
-
-.ambient{
- position:absolute;
- left:50%;
- top:55%;
- width:55%;
- height:30%;
- transform:translate(-50%,-50%);
- background:#487bff1b;
- filter:blur(35px);
-}
-
-/* ================= HEALTH ================= */
-
-.health{
- position:absolute;
- top:18px;
- width:32%;
- min-width:175px;
- z-index:100;
-}
-
-.playerHealth{left:2.5%}
-.enemyHealth{right:2.5%;text-align:right}
-
-.name{
- font-size:16px;
- font-weight:bold;
- text-shadow:0 2px 8px #000;
-}
-
-.bar{
- height:19px;
- border-radius:20px;
- background:#050711;
- border:2px solid #68769c;
- overflow:hidden;
- margin-top:4px;
-}
-
-.fill{
- height:100%;
- transition:width .35s;
-}
-
-.gold{
- background:linear-gradient(90deg,#986000,#ffd52e,#fff2a1,#ce8500);
- box-shadow:0 0 22px #ffd62e;
-}
-
-.red{
- background:linear-gradient(90deg,#680014,#e51e40,#ff7181);
- box-shadow:0 0 22px #ff173e;
-}
-
-.hp{
- font-size:11px;
- color:#bbc6e6;
+.ground{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:110px;
+  background:
+    linear-gradient(transparent,#080b13),
+    repeating-linear-gradient(165deg,#11182a 0 2px,transparent 2px 42px);
+  border-top:2px solid #28365b;
 }
 
 .status{
- position:absolute;
- top:20px;
- left:50%;
- transform:translateX(-50%);
- z-index:110;
- padding:7px 17px;
- border-radius:30px;
- background:#02040dcc;
- border:1px solid #526aa7;
- font-size:12px;
- white-space:nowrap;
+  position:absolute;
+  top:15px;
+  left:15px;
+  right:15px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  z-index:20;
 }
 
-/* =========================================================
-   FIGHTER CONTAINERS
-   IMPORTANT: position never changes during animations.
-   Only the inner model moves.
-========================================================= */
-
-.fighter{
- position:absolute;
- bottom:75px;
- width:270px;
- height:370px;
- z-index:80;
- pointer-events:none;
+.healthBox{
+  width:42%;
+  min-width:140px;
 }
 
-#player{
- left:4%;
+.name{
+  font-weight:900;
+  margin-bottom:5px;
+  text-shadow:0 2px 3px #000;
 }
 
-#enemy{
- right:4%;
+.health{
+  height:20px;
+  border-radius:15px;
+  overflow:hidden;
+  background:#191b24;
+  border:2px solid #d9b544;
+  box-shadow:0 0 10px rgba(255,205,50,.4);
 }
+
+.healthFill{
+  height:100%;
+  width:100%;
+  background:linear-gradient(#fff18b,#d8a900,#ffdf45);
+  transition:width .35s;
+}
+
+.enemyHealth{
+  border-color:#d74758;
+}
+
+.enemyHealth .healthFill{
+  background:linear-gradient(#ff8994,#d5223c,#ff5265);
+}
+
+.character{
+  position:absolute;
+  bottom:75px;
+  width:190px;
+  height:390px;
+  z-index:10;
+}
+
+.player{
+  left:4%;
+}
+
+.enemy{
+  right:4%;
+}
+
+/* CHARACTER SKELETON */
 
 .model{
- position:absolute;
- inset:0;
- transform-origin:50% 100%;
+  position:absolute;
+  inset:0;
+  transform-origin:50% 85%;
 }
-
-/* ================= PLAYER AURA ================= */
-
-.playerAura{
- position:absolute;
- left:25px;
- top:70px;
- width:220px;
- height:220px;
- border-radius:50%;
- background:#3e82ff20;
- filter:blur(25px);
- animation:aura 2s infinite;
-}
-
-@keyframes aura{
- 50%{
-  transform:scale(1.15);
-  opacity:.55;
- }
-}
-
-/* =========================================================
-   PLAYER BODY
-========================================================= */
 
 .head{
- position:absolute;
- left:97px;
- top:2px;
- width:76px;
- height:82px;
- border-radius:47%;
- background:linear-gradient(145deg,#ffd4b4,#a9634e);
- border:3px solid #633c38;
- z-index:5;
+  position:absolute;
+  width:62px;
+  height:68px;
+  left:64px;
+  top:20px;
+  border-radius:45% 45% 42% 42%;
+  background:linear-gradient(145deg,#f2c49c,#b87350);
+  border:4px solid #dce8ff;
+  z-index:8;
+  transform-origin:50% 90%;
 }
 
-.hair{
- position:absolute;
- left:-4px;
- top:-5px;
- width:80px;
- height:37px;
- border-radius:50% 50% 35% 35%;
- background:#171822;
+.face{
+  position:absolute;
+  width:40px;
+  height:14px;
+  left:7px;
+  top:27px;
+  border-top:4px solid #18213c;
+  border-radius:50%;
 }
 
 .eye{
- position:absolute;
- top:38px;
- width:7px;
- height:7px;
- border-radius:50%;
- background:#111;
+  position:absolute;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#10203d;
+  top:25px;
 }
 
-.eye1{left:20px}
-.eye2{right:20px}
+.eye.a{left:12px}
+.eye.b{right:12px}
 
-.mouth{
- position:absolute;
- left:27px;
- top:61px;
- width:20px;
- height:5px;
- border-bottom:2px solid #522b2b;
-}
-
-.neck{
- position:absolute;
- left:117px;
- top:74px;
- width:36px;
- height:24px;
- background:#a7654f;
+.body{
+  position:absolute;
+  width:90px;
+  height:135px;
+  left:50px;
+  top:84px;
+  border-radius:28px 28px 20px 20px;
+  background:
+    linear-gradient(90deg,#6c7b99,#eaf1ff 45%,#687a9e);
+  border:4px solid #dbe8ff;
+  z-index:6;
+  transform-origin:50% 20%;
 }
 
 .chest{
- position:absolute;
- left:64px;
- top:86px;
- width:142px;
- height:142px;
- border-radius:37px 37px 22px 22px;
- background:linear-gradient(145deg,#5278ff,#293ba5,#10174a);
- border:3px solid #b8c7ff;
- box-shadow:inset 0 0 30px #aec0ff44,0 0 22px #416eff55;
+  position:absolute;
+  width:48px;
+  height:55px;
+  left:17px;
+  top:18px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff,#8ce7ff 25%,#2377d5 60%,#102c65);
+  box-shadow:0 0 18px #6bdcff;
 }
 
-.core{
- position:absolute;
- left:53px;
- top:44px;
- width:36px;
- height:36px;
- border-radius:50%;
- background:white;
- box-shadow:0 0 15px white,0 0 35px #72c0ff,0 0 65px #3378ff;
- animation:corePulse 1.1s infinite;
+.belt{
+  position:absolute;
+  left:0;
+  right:0;
+  top:88px;
+  height:17px;
+  background:#b38b1e;
+  border-top:3px solid #ffe978;
+  border-bottom:3px solid #70500b;
 }
-
-@keyframes corePulse{
- 50%{transform:scale(1.13)}
-}
-
-.shoulder{
- position:absolute;
- top:89px;
- width:58px;
- height:56px;
- border-radius:50%;
- background:linear-gradient(145deg,#9eb1ff,#26399d);
- border:3px solid #b9c8ff;
-}
-
-.shoulder1{left:29px}
-.shoulder2{right:29px}
 
 .arm{
- position:absolute;
- top:130px;
- width:37px;
- height:108px;
- border-radius:20px;
- background:linear-gradient(#536dd4,#111b4e);
- border:3px solid #8298ff;
+  position:absolute;
+  width:32px;
+  height:125px;
+  top:91px;
+  z-index:5;
+  transform-origin:50% 12px;
 }
 
-.arm1{left:28px}
-.arm2{right:28px}
+.arm.left{
+  left:30px;
+  transform:rotate(12deg);
+}
+
+.arm.right{
+  right:30px;
+  transform:rotate(-12deg);
+}
+
+.upperArm{
+  position:absolute;
+  width:30px;
+  height:62px;
+  top:0;
+  border-radius:18px;
+  background:linear-gradient(90deg,#65799f,#edf4ff,#65799f);
+  border:3px solid #dbe8ff;
+}
+
+.forearm{
+  position:absolute;
+  width:28px;
+  height:56px;
+  top:52px;
+  left:1px;
+  border-radius:15px;
+  background:linear-gradient(90deg,#65799f,#f2f7ff,#65799f);
+  border:3px solid #dbe8ff;
+  transform-origin:50% 5px;
+}
+
+.hand{
+  position:absolute;
+  width:27px;
+  height:29px;
+  left:2px;
+  top:99px;
+  border-radius:45% 45% 50% 50%;
+  background:#e0aa83;
+  border:3px solid #d9e5fa;
+  transform-origin:50% 20%;
+}
+
+.finger{
+  position:absolute;
+  width:5px;
+  height:14px;
+  top:-8px;
+  border-radius:5px;
+  background:#e0aa83;
+}
+
+.f1{left:2px;transform:rotate(-18deg)}
+.f2{left:8px;transform:rotate(-7deg)}
+.f3{left:14px;transform:rotate(7deg)}
+.f4{left:20px;transform:rotate(18deg)}
 
 .leg{
- position:absolute;
- top:222px;
- width:48px;
- height:96px;
- border-radius:14px;
- background:linear-gradient(#384eae,#10152e);
- border:3px solid #7186ef;
+  position:absolute;
+  width:38px;
+  height:150px;
+  top:205px;
+  z-index:4;
+  transform-origin:50% 8px;
 }
 
-.leg1{left:85px}
-.leg2{right:85px}
+.leg.left{left:54px}
+.leg.right{right:54px}
+
+.thigh{
+  position:absolute;
+  width:34px;
+  height:78px;
+  border-radius:18px;
+  background:linear-gradient(90deg,#65799f,#f0f5ff,#65799f);
+  border:3px solid #dbe8ff;
+}
+
+.shin{
+  position:absolute;
+  top:68px;
+  left:2px;
+  width:34px;
+  height:73px;
+  border-radius:18px;
+  background:linear-gradient(90deg,#65799f,#e9f1ff,#65799f);
+  border:3px solid #dbe8ff;
+  transform-origin:50% 7px;
+}
 
 .boot{
- position:absolute;
- top:307px;
- width:62px;
- height:26px;
- border-radius:15px;
- background:#080b18;
- border:2px solid #748aff;
+  position:absolute;
+  width:48px;
+  height:27px;
+  top:128px;
+  left:-5px;
+  border-radius:12px 20px 8px 8px;
+  background:#263d70;
+  border:3px solid #dbe8ff;
 }
 
-.boot1{left:72px}
-.boot2{right:72px}
-
-/* =========================================================
-   REAL ATTACK CHOREOGRAPHY
-========================================================= */
-
-/* player preparation */
-
-.attackPrepare{
- animation:attackPrepare .42s ease-in-out;
+.enemy .head{
+  background:linear-gradient(145deg,#5a2032,#160b16);
+  border-color:#bd3b56;
 }
 
-@keyframes attackPrepare{
- 0%{transform:scale(1) translateX(0)}
- 45%{transform:scale(.94) translateX(-18px) rotate(-3deg)}
- 100%{transform:scale(1) translateX(0)}
+.enemy .body{
+  background:linear-gradient(90deg,#180d20,#54182e,#130a18);
+  border-color:#c73852;
 }
 
-/* punch / strike */
-
-.strikeMove{
- animation:strikeMove .72s cubic-bezier(.2,.8,.2,1);
+.enemy .chest{
+  background:radial-gradient(circle,#fff,#ff405c 25%,#791126 65%,#1c0710);
+  box-shadow:0 0 22px #ff2448;
 }
 
-@keyframes strikeMove{
- 0%{
-  transform:translateX(0) rotate(0) scale(1);
- }
- 22%{
-  transform:translateX(-25px) rotate(-4deg) scale(.96);
- }
- 55%{
-  transform:translateX(100px) rotate(2deg) scale(1.05);
- }
- 72%{
-  transform:translateX(125px) rotate(0) scale(1.03);
- }
- 100%{
-  transform:translateX(0) rotate(0) scale(1);
- }
+.enemy .arm,
+.enemy .leg{
+  filter:hue-rotate(300deg) brightness(.7);
 }
 
-/* shield stance */
-
-.shieldMove{
- animation:shieldMove .7s ease-in-out;
+.enemy .hand{
+  background:#421528;
+  border-color:#c73852;
 }
 
-@keyframes shieldMove{
- 0%{transform:translateY(0) rotate(0)}
- 30%{transform:translateY(10px) rotate(-4deg)}
- 60%{transform:translateY(-4px) rotate(2deg) scale(1.05)}
- 100%{transform:translateY(0) rotate(0)}
+.horns{
+  position:absolute;
+  width:25px;
+  height:40px;
+  top:-25px;
+  background:#54152c;
+  clip-path:polygon(50% 0,100% 100%,55% 72%,0 100%);
 }
 
-/* truth casting */
+.horn1{left:2px}
+.horn2{right:2px}
 
-.truthMove{
- animation:truthMove 1s cubic-bezier(.2,.8,.2,1);
+.wings{
+  position:absolute;
+  width:90px;
+  height:180px;
+  top:70px;
+  z-index:2;
 }
-
-@keyframes truthMove{
- 0%{
-  transform:translateY(0) scale(1);
- }
- 25%{
-  transform:translateY(-18px) scale(.95);
- }
- 48%{
-  transform:translateY(-5px) scale(1.04);
- }
- 70%{
-  transform:translateX(30px) scale(1.06);
- }
- 100%{
-  transform:translateX(0) scale(1);
- }
-}
-
-/* ultimate */
-
-.burstMove{
- animation:burstMove 1.15s cubic-bezier(.15,.8,.2,1);
-}
-
-@keyframes burstMove{
- 0%{
-  transform:translateY(0) scale(1);
- }
- 18%{
-  transform:translateY(20px) scale(.88);
- }
- 42%{
-  transform:translateY(-22px) scale(1.1);
- }
- 65%{
-  transform:translateY(-8px) scale(1.18);
- }
- 82%{
-  transform:translateY(5px) scale(1.06);
- }
- 100%{
-  transform:translateY(0) scale(1);
- }
-}
-
-/* =========================================================
-   ENEMY CHOREOGRAPHY
-========================================================= */
-
-.enemyPrepare{
- animation:enemyPrepare .45s ease;
-}
-
-@keyframes enemyPrepare{
- 0%{transform:translateX(0)}
- 50%{transform:translateX(20px) scale(.95)}
- 100%{transform:translateX(0)}
-}
-
-.enemyAttack{
- animation:enemyAttack .75s cubic-bezier(.2,.8,.2,1);
-}
-
-@keyframes enemyAttack{
- 0%{transform:translateX(0)}
- 25%{transform:translateX(20px) scale(.95)}
- 60%{transform:translateX(-110px) scale(1.07)}
- 75%{transform:translateX(-130px) scale(1.04)}
- 100%{transform:translateX(0)}
-}
-
-/* recoil */
-
-.recoil{
- animation:recoil .4s ease;
-}
-
-@keyframes recoil{
- 0%{transform:translateX(0)}
- 30%{transform:translateX(22px)}
- 60%{transform:translateX(-12px)}
- 100%{transform:translateX(0)}
-}
-
-/* =========================================================
-   BOSS LEVEL 1
-========================================================= */
-
-.l1head{
- position:absolute;
- left:78px;
- top:28px;
- width:110px;
- height:96px;
- border-radius:48% 48% 38% 38%;
- background:linear-gradient(145deg,#512866,#08060d);
- border:3px solid #a052c4;
- box-shadow:0 0 35px #8b36b055;
-}
-
-.horn{
- position:absolute;
- top:-49px;
- width:39px;
- height:62px;
- background:linear-gradient(145deg,#9254ad,#160b1f);
- border:3px solid #a95ac7;
- clip-path:polygon(50% 0,100% 100%,0 100%);
-}
-
-.horn1{left:4px;transform:rotate(-17deg)}
-.horn2{right:4px;transform:rotate(17deg)}
-
-.redEye{
- position:absolute;
- top:45px;
- width:27px;
- height:12px;
- border-radius:50%;
- background:#ff173c;
- box-shadow:0 0 22px #ff1740;
-}
-
-.redEye1{left:18px}
-.redEye2{right:18px}
-
-.demonBody{
- position:absolute;
- left:55px;
- top:120px;
- width:156px;
- height:139px;
- border-radius:42px 42px 20px 20px;
- background:linear-gradient(145deg,#4b245c,#0e0714);
- border:3px solid #793d91;
-}
-
-.demonCore{
- position:absolute;
- left:56px;
- top:46px;
- width:43px;
- height:43px;
- border-radius:50%;
- background:#ff163e;
- box-shadow:0 0 20px #ff163e,0 0 55px #a0002d;
- animation:corePulse .9s infinite;
-}
-
-.demonArm{
- position:absolute;
- top:143px;
- width:49px;
- height:112px;
- border-radius:24px;
- background:#1e1029;
- border:3px solid #753c8e;
-}
-
-.demonArm1{left:22px}
-.demonArm2{right:22px}
-
-.demonLeg{
- position:absolute;
- top:250px;
- width:52px;
- height:85px;
- border-radius:15px;
- background:#130a1b;
- border:3px solid #633172;
-}
-
-.demonLeg1{left:68px}
-.demonLeg2{right:68px}
-
-/* =========================================================
-   LEVEL 2 ANGEL
-========================================================= */
 
 .wing{
- position:absolute;
- top:48px;
- width:140px;
- height:210px;
- background:linear-gradient(145deg,#e4eaff,#65729b 48%,#121625);
- border:3px solid #b8c7ff;
- clip-path:polygon(
-  50% 0,75% 15%,100% 34%,76% 39%,
-  100% 60%,66% 57%,83% 84%,49% 72%,
-  50% 100%,30% 70%,0 83%,21% 56%,
-  0 59%,25% 38%,0 34%,32% 17%
- );
+  position:absolute;
+  width:85px;
+  height:150px;
+  background:linear-gradient(135deg,#20112e,#68152e,#18091c);
+  clip-path:polygon(50% 0,100% 28%,78% 45%,100% 65%,63% 60%,74% 100%,42% 67%,0 82%,23% 50%,0 42%,35% 28%);
+  opacity:.9;
 }
 
-.wing1{left:-20px}
-.wing2{right:-20px;transform:scaleX(-1)}
+.wing.one{right:70px;transform:scaleX(-1)}
+.wing.two{left:70px}
 
-.halo{
- position:absolute;
- left:77px;
- top:4px;
- width:110px;
- height:110px;
- border:7px solid #ffe66b;
- border-radius:50%;
- box-shadow:0 0 25px #ffe66b,0 0 55px #ffc928;
- animation:haloSpin 2s infinite linear;
+.enemy .wings{
+  display:block;
 }
 
-@keyframes haloSpin{
- to{transform:rotate(360deg)}
+/* HAND ENERGY */
+
+.handEnergy{
+  position:absolute;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff,#71eaff 30%,#287eff 65%,transparent 72%);
+  box-shadow:0 0 25px #55dfff;
+  opacity:0;
+  z-index:20;
+  pointer-events:none;
 }
 
-.angelHead{
- position:absolute;
- left:95px;
- top:36px;
- width:80px;
- height:84px;
- border-radius:50%;
- background:linear-gradient(145deg,#dfe4ef,#555d75);
- border:3px solid #c3d0f2;
- z-index:4;
+/* ATTACK ANIMATIONS */
+
+.player.spirit .body{
+  animation:torsoTwist .8s ease;
+}
+.player.spirit .head{
+  animation:headTurn .8s ease;
+}
+.player.spirit .arm.right{
+  animation:spiritArm .8s ease;
+}
+.player.spirit .arm.right .forearm{
+  animation:spiritForearm .8s ease;
+}
+.player.spirit .arm.right .hand{
+  animation:spiritHand .8s ease;
+}
+.player.spirit .arm.left{
+  animation:backArm .8s ease;
+}
+.player.spirit .leg.left{
+  animation:stepLeg .8s ease;
+}
+.player.spirit .leg.right{
+  animation:backLeg .8s ease;
 }
 
-.visor{
- position:absolute;
- left:10px;
- top:31px;
- width:56px;
- height:18px;
- border-radius:5px;
- background:#0c1120;
- border:2px solid #8298ff;
- box-shadow:0 0 15px #6480ff;
+@keyframes spiritArm{
+  0%{transform:rotate(-12deg)}
+  25%{transform:rotate(-55deg)}
+  55%{transform:rotate(-38deg)}
+  100%{transform:rotate(-12deg)}
 }
 
-.angelBody{
- position:absolute;
- left:65px;
- top:111px;
- width:140px;
- height:148px;
- border-radius:31px;
- background:linear-gradient(145deg,#c4cee2,#374059,#111625);
- border:3px solid #d2dcff;
+@keyframes spiritForearm{
+  0%{transform:rotate(0)}
+  30%{transform:rotate(55deg)}
+  60%{transform:rotate(-15deg)}
+  100%{transform:rotate(0)}
 }
 
-.angelCore{
- position:absolute;
- left:50px;
- top:48px;
- width:39px;
- height:39px;
- border-radius:50%;
- background:white;
- box-shadow:0 0 20px white,0 0 60px #9eafff;
- animation:corePulse 1.1s infinite;
+@keyframes spiritHand{
+  0%,35%{transform:rotate(0) scale(1)}
+  55%{transform:rotate(15deg) scale(1.2)}
+  70%{transform:rotate(0) scale(.9)}
+  100%{transform:rotate(0) scale(1)}
 }
 
-.angelArm{
- position:absolute;
- top:145px;
- width:40px;
- height:110px;
- border-radius:20px;
- background:#39435c;
- border:3px solid #8c9abd;
+@keyframes backArm{
+  0%{transform:rotate(12deg)}
+  35%{transform:rotate(55deg)}
+  65%{transform:rotate(30deg)}
+  100%{transform:rotate(12deg)}
 }
 
-.angelArm1{left:34px}
-.angelArm2{right:34px}
-
-.angelLeg{
- position:absolute;
- top:254px;
- width:47px;
- height:85px;
- border-radius:13px;
- background:#202638;
- border:3px solid #68789d;
+@keyframes torsoTwist{
+  0%{transform:rotate(0)}
+  35%{transform:rotate(-8deg)}
+  60%{transform:rotate(5deg)}
+  100%{transform:rotate(0)}
 }
 
-.angelLeg1{left:78px}
-.angelLeg2{right:78px}
-
-/* =========================================================
-   LEVEL 3 COLOSSUS
-========================================================= */
-
-.colWing{
- position:absolute;
- top:8px;
- width:180px;
- height:250px;
- background:linear-gradient(145deg,#292d49,#070912);
- border:4px solid #59618d;
- clip-path:polygon(
-  50% 0,72% 14%,100% 9%,78% 34%,100% 31%,
-  70% 53%,91% 66%,58% 63%,68% 92%,45% 70%,
-  34% 100%,30% 65%,0 77%,25% 51%,0 48%,
-  27% 30%,3% 25%,32% 14%
- );
- box-shadow:0 0 30px #252b55;
+@keyframes headTurn{
+  0%{transform:rotate(0)}
+  50%{transform:rotate(-7deg)}
+  100%{transform:rotate(0)}
 }
 
-.colWing1{left:-40px}
-.colWing2{right:-40px;transform:scaleX(-1)}
-
-.colHead{
- position:absolute;
- left:70px;
- top:40px;
- width:130px;
- height:112px;
- border-radius:45% 45% 34% 34%;
- background:linear-gradient(145deg,#2c304b,#06070d);
- border:4px solid #606992;
- z-index:5;
+@keyframes stepLeg{
+  0%{transform:rotate(0)}
+  40%{transform:rotate(18deg) translateY(5px)}
+  70%{transform:rotate(-5deg)}
+  100%{transform:rotate(0)}
 }
 
-.colHorn{
- position:absolute;
- top:-62px;
- width:46px;
- height:78px;
- background:#11131f;
- border:4px solid #59628b;
- clip-path:polygon(50% 0,100% 100%,0 100%);
+@keyframes backLeg{
+  0%{transform:rotate(0)}
+  40%{transform:rotate(-12deg)}
+  70%{transform:rotate(4deg)}
+  100%{transform:rotate(0)}
 }
 
-.colHorn1{left:3px}
-.colHorn2{right:3px}
+/* SHIELD */
 
-.colEye{
- position:absolute;
- top:55px;
- width:34px;
- height:14px;
- border-radius:50%;
- background:#ff143e;
- box-shadow:0 0 25px #ff143e;
+.player.shieldMove .arm.left{
+  animation:shieldArm .9s ease;
+}
+.player.shieldMove .arm.left .forearm{
+  animation:shieldForearm .9s ease;
+}
+.player.shieldMove .arm.left .hand{
+  animation:shieldHand .9s ease;
+}
+.player.shieldMove .body{
+  animation:shieldBody .9s ease;
 }
 
-.colEye1{left:22px}
-.colEye2{right:22px}
-
-.colBody{
- position:absolute;
- left:38px;
- top:145px;
- width:190px;
- height:190px;
- border-radius:50px 50px 26px 26px;
- background:linear-gradient(145deg,#363b56,#090b14 65%);
- border:4px solid #5d668f;
- box-shadow:inset 0 0 40px #6c78aa44;
+@keyframes shieldArm{
+  0%{transform:rotate(12deg)}
+  35%{transform:rotate(-30deg)}
+  65%{transform:rotate(-55deg)}
+  100%{transform:rotate(12deg)}
 }
 
-.plate{
- position:absolute;
- left:26px;
- top:22px;
- width:132px;
- height:88px;
- border:3px solid #737da9;
- border-radius:25px;
- background:#141725;
+@keyframes shieldForearm{
+  0%{transform:rotate(0)}
+  40%{transform:rotate(-65deg)}
+  70%{transform:rotate(-40deg)}
+  100%{transform:rotate(0)}
 }
 
-.colCore{
- position:absolute;
- left:66px;
- top:40px;
- width:55px;
- height:55px;
- border-radius:50%;
- background:#ff153d;
- box-shadow:0 0 25px #ff153d,0 0 70px #ae002d;
- animation:corePulse .75s infinite;
+@keyframes shieldHand{
+  0%{transform:rotate(0)}
+  45%{transform:rotate(-35deg) scale(1.15)}
+  100%{transform:rotate(0)}
 }
 
-.colArm{
- position:absolute;
- top:180px;
- width:62px;
- height:155px;
- border-radius:30px;
- background:linear-gradient(#272c42,#090b14);
- border:4px solid #59628a;
+@keyframes shieldBody{
+  0%{transform:rotate(0)}
+  50%{transform:rotate(8deg)}
+  100%{transform:rotate(0)}
 }
 
-.colArm1{left:0}
-.colArm2{right:0}
+/* WORD OF TRUTH */
 
-.colLeg{
- position:absolute;
- top:322px;
- width:64px;
- height:92px;
- border-radius:16px;
- background:#10121d;
- border:4px solid #50597e;
+.player.truth .arm.left{
+  animation:truthLeft .95s ease;
+}
+.player.truth .arm.right{
+  animation:truthRight .95s ease;
+}
+.player.truth .arm.left .forearm,
+.player.truth .arm.right .forearm{
+  animation:truthForearm .95s ease;
+}
+.player.truth .arm.left .hand,
+.player.truth .arm.right .hand{
+  animation:truthHands .95s ease;
+}
+.player.truth .body{
+  animation:truthBody .95s ease;
 }
 
-.colLeg1{left:54px}
-.colLeg2{right:54px}
-
-/* =========================================================
-   ATTACK EFFECTS
-========================================================= */
-
-.fx{
- position:absolute;
- pointer-events:none;
- z-index:500;
+@keyframes truthLeft{
+  0%{transform:rotate(12deg)}
+  40%{transform:rotate(-48deg)}
+  65%{transform:rotate(-30deg)}
+  100%{transform:rotate(12deg)}
 }
 
-.charge{
- left:50%;
- top:48%;
- width:45px;
- height:45px;
- transform:translate(-50%,-50%);
- border-radius:50%;
- background:white;
- box-shadow:
- 0 0 15px white,
- 0 0 35px #72c9ff,
- 0 0 75px #317aff;
- animation:charge .65s ease-out forwards;
+@keyframes truthRight{
+  0%{transform:rotate(-12deg)}
+  40%{transform:rotate(48deg)}
+  65%{transform:rotate(30deg)}
+  100%{transform:rotate(-12deg)}
 }
 
-@keyframes charge{
- 0%{transform:translate(-50%,-50%) scale(.2);opacity:0}
- 45%{transform:translate(-50%,-50%) scale(1.3);opacity:1}
- 100%{transform:translate(-50%,-50%) scale(.8);opacity:.8}
+@keyframes truthForearm{
+  0%{transform:rotate(0)}
+  45%{transform:rotate(-55deg)}
+  65%{transform:rotate(-10deg)}
+  100%{transform:rotate(0)}
 }
+
+@keyframes truthHands{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.3) rotate(15deg)}
+  70%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+
+@keyframes truthBody{
+  0%{transform:translateY(0)}
+  45%{transform:translateY(-10px) rotate(0)}
+  70%{transform:translateY(0)}
+  100%{transform:translateY(0)}
+}
+
+/* LIGHT BURST */
+
+.player.burst .arm.left{
+  animation:burstLeft 1.2s ease;
+}
+.player.burst .arm.right{
+  animation:burstRight 1.2s ease;
+}
+.player.burst .leg.left{
+  animation:burstLegLeft 1.2s ease;
+}
+.player.burst .leg.right{
+  animation:burstLegRight 1.2s ease;
+}
+.player.burst .body{
+  animation:burstBody 1.2s ease;
+}
+.player.burst .head{
+  animation:burstHead 1.2s ease;
+}
+
+@keyframes burstLeft{
+  0%{transform:rotate(12deg)}
+  25%{transform:rotate(60deg)}
+  55%{transform:rotate(-75deg)}
+  80%{transform:rotate(-35deg)}
+  100%{transform:rotate(12deg)}
+}
+
+@keyframes burstRight{
+  0%{transform:rotate(-12deg)}
+  25%{transform:rotate(-60deg)}
+  55%{transform:rotate(75deg)}
+  80%{transform:rotate(35deg)}
+  100%{transform:rotate(-12deg)}
+}
+
+@keyframes burstLegLeft{
+  0%{transform:rotate(0)}
+  30%{transform:rotate(12deg) translateY(8px)}
+  55%{transform:rotate(-10deg)}
+  100%{transform:rotate(0)}
+}
+
+@keyframes burstLegRight{
+  0%{transform:rotate(0)}
+  30%{transform:rotate(-12deg) translateY(8px)}
+  55%{transform:rotate(10deg)}
+  100%{transform:rotate(0)}
+}
+
+@keyframes burstBody{
+  0%{transform:scale(1)}
+  35%{transform:scale(.92) translateY(8px)}
+  65%{transform:scale(1.1) translateY(-12px)}
+  100%{transform:scale(1)}
+}
+
+@keyframes burstHead{
+  0%{transform:rotate(0)}
+  45%{transform:rotate(10deg)}
+  70%{transform:rotate(-10deg)}
+  100%{transform:rotate(0)}
+}
+
+/* ENEMY MOVEMENT */
+
+.enemy.enemyMove .arm.right{
+  animation:enemyArm .9s ease;
+}
+.enemy.enemyMove .arm.right .forearm{
+  animation:enemyForearm .9s ease;
+}
+.enemy.enemyMove .arm.right .hand{
+  animation:enemyHand .9s ease;
+}
+.enemy.enemyMove .body{
+  animation:enemyBody .9s ease;
+}
+.enemy.enemyMove .leg.left{
+  animation:enemyLeg .9s ease;
+}
+
+@keyframes enemyArm{
+  0%{transform:rotate(-12deg)}
+  35%{transform:rotate(55deg)}
+  65%{transform:rotate(25deg)}
+  100%{transform:rotate(-12deg)}
+}
+
+@keyframes enemyForearm{
+  0%{transform:rotate(0)}
+  40%{transform:rotate(-55deg)}
+  65%{transform:rotate(25deg)}
+  100%{transform:rotate(0)}
+}
+
+@keyframes enemyHand{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.35)}
+  70%{transform:scale(.9)}
+  100%{transform:scale(1)}
+}
+
+@keyframes enemyBody{
+  0%{transform:rotate(0)}
+  45%{transform:rotate(-8deg)}
+  70%{transform:rotate(5deg)}
+  100%{transform:rotate(0)}
+}
+
+@keyframes enemyLeg{
+  0%{transform:rotate(0)}
+  45%{transform:rotate(-12deg)}
+  70%{transform:rotate(5deg)}
+  100%{transform:rotate(0)}
+}
+
+/* EFFECTS */
 
 .projectile{
- width:32px;
- height:32px;
- border-radius:50%;
- background:#fff;
- box-shadow:
- 0 0 15px #fff,
- 0 0 35px #6cc5ff,
- 0 0 70px #327aff;
+  position:absolute;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff,#70edff 30%,#277cff 65%,transparent 72%);
+  box-shadow:0 0 25px #5ddcff;
+  z-index:30;
+  animation:projectileFly .5s linear forwards;
 }
 
-.projectile:after{
- content:"";
- position:absolute;
- width:120px;
- height:10px;
- right:17px;
- top:11px;
- background:linear-gradient(90deg,transparent,#69bdff,#fff);
- filter:blur(4px);
+@keyframes projectileFly{
+  from{transform:translateX(0) scale(.5);opacity:0}
+  15%{opacity:1}
+  to{transform:translateX(570px) scale(1.2);opacity:1}
 }
 
 .beam{
- left:3%;
- right:3%;
- top:45%;
- height:45px;
- border-radius:50%;
- background:linear-gradient(90deg,#fff,#83c9ff,#fff);
- box-shadow:
- 0 0 25px #fff,
- 0 0 65px #55aaff,
- 0 0 120px #3477ff;
- transform-origin:left center;
- animation:beam .65s ease-out;
+  position:absolute;
+  height:25px;
+  left:180px;
+  top:250px;
+  width:0;
+  border-radius:20px;
+  background:linear-gradient(90deg,#fff,#8cf3ff,#477bff,#fff);
+  box-shadow:0 0 25px #65e8ff;
+  z-index:25;
+  animation:beamFire .65s ease-out forwards;
 }
 
-@keyframes beam{
- from{transform:scaleX(.01);opacity:0}
- to{transform:scaleX(1);opacity:1}
+@keyframes beamFire{
+  0%{width:0;opacity:0}
+  25%{width:180px;opacity:1}
+  100%{width:650px;opacity:1}
 }
 
-.superBeam{
- left:-10%;
- right:-10%;
- top:35%;
- height:115px;
- border-radius:50%;
- background:#fff;
- box-shadow:
- 0 0 35px #fff,
- 0 0 90px #63baff,
- 0 0 170px #2d6fff;
- animation:superBeam .85s ease-out;
+.bigBeam{
+  position:absolute;
+  left:150px;
+  top:230px;
+  height:80px;
+  width:0;
+  border-radius:50%;
+  background:radial-gradient(ellipse,#fff,#9df8ff 25%,#398bff 55%,transparent 75%);
+  filter:blur(2px);
+  z-index:28;
+  animation:bigBeam .8s ease-out forwards;
 }
 
-@keyframes superBeam{
- from{transform:scaleX(.01);opacity:0}
- to{transform:scaleX(1);opacity:1}
+@keyframes bigBeam{
+  0%{width:0;opacity:0}
+  25%{width:280px;opacity:1}
+  100%{width:720px;opacity:1}
 }
 
 .shield{
- left:2%;
- top:27%;
- width:310px;
- height:310px;
- border-radius:50%;
- border:6px solid #64caff;
- background:#48aaff0c;
- box-shadow:
- 0 0 30px #63caff,
- 0 0 70px #3d9cff,
-  inset 0 0 55px #3d9cff44;
- animation:shieldAppear .8s ease-out;
+  position:absolute;
+  left:105px;
+  top:145px;
+  width:90px;
+  height:130px;
+  border-radius:48% 48% 55% 55%;
+  border:7px solid #ffe46b;
+  background:radial-gradient(circle,rgba(255,255,255,.8),rgba(80,190,255,.3),rgba(20,80,180,.15));
+  box-shadow:0 0 35px #ffd83d;
+  z-index:35;
+  animation:shieldAppear .4s ease forwards;
 }
 
 @keyframes shieldAppear{
- 0%{transform:scale(.2);opacity:0}
- 55%{transform:scale(1.03);opacity:1}
- 100%{transform:scale(1.1);opacity:.35}
+  from{transform:scale(.2) rotate(-30deg);opacity:0}
+  to{transform:scale(1) rotate(0);opacity:1}
+}
+
+.ring{
+  position:absolute;
+  left:55px;
+  top:110px;
+  width:100px;
+  height:100px;
+  border:7px solid #70edff;
+  border-radius:50%;
+  box-shadow:0 0 35px #70edff;
+  z-index:24;
+  animation:ringExpand .7s ease forwards;
+}
+
+@keyframes ringExpand{
+  from{transform:scale(.3);opacity:0}
+  to{transform:scale(4);opacity:0}
 }
 
 .impact{
- width:30px;
- height:30px;
- border-radius:50%;
- border:4px solid white;
- box-shadow:0 0 20px white,0 0 55px #52aaff;
- animation:impact .55s ease-out forwards;
+  position:absolute;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  border:8px solid white;
+  right:95px;
+  top:210px;
+  z-index:40;
+  animation:impact .45s ease-out forwards;
 }
 
 @keyframes impact{
- from{transform:scale(.2);opacity:1}
- to{transform:scale(5);opacity:0}
+  from{transform:scale(.2);opacity:1}
+  to{transform:scale(1.8);opacity:0}
 }
 
-.energyRing{
- left:50%;
- top:48%;
- width:100px;
- height:100px;
- border:5px solid white;
- border-radius:50%;
- transform:translate(-50%,-50%);
- box-shadow:0 0 30px #67c8ff;
- animation:ring .7s ease-out forwards;
-}
-
-@keyframes ring{
- from{transform:translate(-50%,-50%) scale(.2);opacity:1}
- to{transform:translate(-50%,-50%) scale(5);opacity:0}
-}
-
-/* =========================================================
-   SCREEN IMPACT
-========================================================= */
-
-.screenFlash{
- position:absolute;
- inset:0;
- z-index:1000;
- pointer-events:none;
- background:white;
- animation:flash .3s ease-out forwards;
+.flash{
+  position:absolute;
+  inset:0;
+  background:white;
+  opacity:0;
+  z-index:50;
+  pointer-events:none;
+  animation:flash .3s ease;
 }
 
 @keyframes flash{
- from{opacity:.85}
- to{opacity:0}
+  0%{opacity:.8}
+  100%{opacity:0}
 }
-
-.cameraShake{
- animation:cameraShake .35s ease;
-}
-
-@keyframes cameraShake{
- 0%,100%{transform:translate(0)}
- 25%{transform:translate(7px,-4px)}
- 50%{transform:translate(-8px,5px)}
- 75%{transform:translate(5px,3px)}
-}
-
-/* =========================================================
-   CONTROLS
-========================================================= */
 
 .controls{
- width:min(1300px,100%);
- margin:10px auto;
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:10px;
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
 }
 
-.controls button{
- min-height:65px;
- border-radius:14px;
- border:2px solid #4669ec;
- background:linear-gradient(145deg,#1b2e6d,#070e29);
- color:white;
- box-shadow:0 7px 20px #0009;
- font-weight:bold;
+.attack{
+  min-height:60px;
+  border-radius:15px;
+  color:white;
+  font-weight:900;
+  background:linear-gradient(#314c88,#17284f);
+  border:2px solid #6686ce;
+  box-shadow:0 4px 0 #0b142b;
+  transition:.12s;
 }
 
-.controls button:active{
- transform:translateY(3px) scale(.97);
+.attack:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 #0b142b;
 }
 
-.controls button:disabled{
- opacity:.35;
+.attack:disabled{
+  opacity:.4;
+  cursor:not-allowed;
 }
-
-.special{
- border-color:#ffe05a!important;
- color:#ffe66d!important;
-}
-
-/* =========================================================
-   LOG
-========================================================= */
 
 .log{
- width:min(1300px,100%);
- margin:auto;
- min-height:48px;
- max-height:95px;
- overflow-y:auto;
- padding:9px 13px;
- border-radius:12px;
- background:#050914;
- border:1px solid #2f4277;
- color:#bac8ec;
- font-size:13px;
+  margin-top:12px;
+  min-height:70px;
+  padding:12px;
+  border-radius:15px;
+  background:rgba(8,12,27,.9);
+  border:1px solid #334a7d;
+  color:#dce8ff;
+  line-height:1.45;
 }
 
-/* =========================================================
-   OVERLAY
-========================================================= */
-
-.overlay{
- position:fixed;
- inset:0;
- z-index:2000;
- background:#000d;
- display:flex;
- justify-content:center;
- align-items:center;
- padding:20px;
+.verse{
+  margin-top:10px;
+  padding:12px;
+  border-left:4px solid #e6c24d;
+  background:rgba(255,220,80,.06);
+  color:#fff1a7;
+  font-style:italic;
 }
-
-.overlayBox{
- width:min(560px,100%);
- padding:32px;
- text-align:center;
- border-radius:25px;
- background:linear-gradient(145deg,#121d42,#050711);
- border:2px solid #5d7cff;
- box-shadow:0 0 70px #315cff77;
-}
-
-.overlayBox h1{
- font-size:42px;
- margin:0 0 10px;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
 
 @media(max-width:700px){
+  .arena{
+    height:480px;
+  }
 
- .arena{
-  height:600px;
- }
+  .character{
+    transform:scale(.82);
+    transform-origin:bottom center;
+  }
 
- .fighter{
-  transform:scale(.66);
-  transform-origin:50% 100%;
- }
+  .player{left:-2%}
+  .enemy{right:-2%}
 
- #player{left:-35px}
- #enemy{right:-35px}
-
- .health{
-  width:43%;
-  min-width:0;
- }
-
- .status{
-  top:63px;
-  font-size:10px;
- }
-
- .controls{
-  grid-template-columns:repeat(2,1fr);
- }
-
- .controls button{
-  min-height:62px;
-  font-size:12px;
- }
-
- .log{
-  font-size:12px;
- }
+  .controls{
+    grid-template-columns:repeat(2,1fr);
+  }
 }
 
-@media(max-width:430px){
+@media(max-width:480px){
+  .arena{
+    height:430px;
+  }
 
- .arena{
-  height:560px;
- }
+  .character{
+    transform:scale(.68);
+  }
 
- .fighter{
-  transform:scale(.57);
- }
+  .status{
+    gap:8px;
+  }
 
- #player{left:-55px}
- #enemy{right:-55px}
+  .healthBox{
+    min-width:0;
+    width:45%;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================================================
- SAVE SCREEN
-========================================================= -->
+<div id="game">
 
-<div id="saveScreen" class="screen">
-<div class="panel">
+  <div class="top">
+    <div class="title">SPIRITUAL POWER</div>
+    <div class="level" id="levelText">LEVEL 1 — SHADOW DEMON</div>
+  </div>
 
-<h1 class="title">SHADOWBOUND</h1>
-<div class="subtitle">SPIRITUAL POWER</div>
+  <div class="arena" id="arena">
 
-<div id="saveGrid" class="saveGrid"></div>
+    <div class="stars"></div>
+    <div class="ground"></div>
 
-<br>
+    <div class="status">
 
-<button class="menuBtn" onclick="newSave()">
-CREATE NEW SAVE
-</button>
+      <div class="healthBox">
+        <div class="name">SPIRIT WARRIOR</div>
+        <div class="health">
+          <div class="healthFill" id="playerHP"></div>
+        </div>
+      </div>
 
-</div>
-</div>
+      <div class="healthBox">
+        <div class="name" id="enemyName">SHADOW DEMON</div>
+        <div class="health enemyHealth">
+          <div class="healthFill" id="enemyHP"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PLAYER -->
+
+    <div class="character player" id="player">
+
+      <div class="model">
+
+        <div class="head">
+          <div class="eye a"></div>
+          <div class="eye b"></div>
+          <div class="face"></div>
+        </div>
+
+        <div class="body">
+          <div class="chest"></div>
+          <div class="belt"></div>
+        </div>
 
+        <div class="arm left">
+          <div class="upperArm"></div>
+          <div class="forearm"></div>
+          <div class="hand">
+            <i class="finger f1"></i>
+            <i class="finger f2"></i>
+            <i class="finger f3"></i>
+            <i class="finger f4"></i>
+          </div>
+        </div>
 
-<!-- =========================================================
- CREATE SCREEN
-========================================================= -->
+        <div class="arm right">
+          <div class="upperArm"></div>
+          <div class="forearm"></div>
+          <div class="hand">
+            <i class="finger f1"></i>
+            <i class="finger f2"></i>
+            <i class="finger f3"></i>
+            <i class="finger f4"></i>
+          </div>
+        </div>
 
-<div id="customScreen" class="screen hidden">
+        <div class="leg left">
+          <div class="thigh"></div>
+          <div class="shin"></div>
+          <div class="boot"></div>
+        </div>
 
-<div class="panel">
+        <div class="leg right">
+          <div class="thigh"></div>
+          <div class="shin"></div>
+          <div class="boot"></div>
+        </div>
 
-<h2>Create Your Warrior</h2>
+      </div>
 
-<input
- id="nameInput"
- placeholder="Warrior name"
- maxlength="20"
- style="width:100%;padding:13px;margin:8px 0;border-radius:10px"
->
+      <div class="handEnergy" id="handEnergy"></div>
 
-<select
- id="genderInput"
- style="width:100%;padding:13px;margin:8px 0;border-radius:10px"
->
-<option>Male</option>
-<option>Female</option>
-</select>
+    </div>
 
-<p>Armor Color</p>
 
-<input
- id="armorInput"
- type="color"
- value="#315cff"
->
+    <!-- ENEMY -->
 
-<p>Helmet / Hair Color</p>
+    <div class="character enemy" id="enemy">
 
-<input
- id="helmetInput"
- type="color"
- value="#171822"
->
+      <div class="wings">
+        <div class="wing one"></div>
+        <div class="wing two"></div>
+      </div>
 
-<br><br>
+      <div class="model">
 
-<button class="createBtn" onclick="createCharacter()">
-BEGIN JOURNEY
-</button>
+        <div class="head">
 
-</div>
-</div>
+          <div class="horns">
+            <div class="horn1"></div>
+            <div class="horn2"></div>
+          </div>
 
+          <div class="eye a"></div>
+          <div class="eye b"></div>
 
-<!-- =========================================================
- GAME
-========================================================= -->
+        </div>
 
-<div id="game" class="hidden">
+        <div class="body">
+          <div class="chest"></div>
+          <div class="belt"></div>
+        </div>
 
-<div class="top">
-<div class="level">
-LEVEL <span id="level">1</span>
-</div>
+        <div class="arm left">
+          <div class="upperArm"></div>
+          <div class="forearm"></div>
+          <div class="hand"></div>
+        </div>
 
-<div class="power">
-SPIRITUAL POWER:
-<span id="power">0</span>
-</div>
-</div>
+        <div class="arm right">
+          <div class="upperArm"></div>
+          <div class="forearm"></div>
+          <div class="hand"></div>
+        </div>
 
+        <div class="leg left">
+          <div class="thigh"></div>
+          <div class="shin"></div>
+          <div class="boot"></div>
+        </div>
 
-<div class="arena" id="arena">
+        <div class="leg right">
+          <div class="thigh"></div>
+          <div class="shin"></div>
+          <div class="boot"></div>
+        </div>
 
-<div class="ambient"></div>
-<div class="horizon"></div>
-<div class="floor"></div>
+      </div>
 
+    </div>
 
-<!-- PLAYER HEALTH -->
+  </div>
 
-<div class="health playerHealth">
 
-<div class="name" id="playerName">
-Warrior
-</div>
+  <div class="controls">
 
-<div class="bar">
-<div
- id="playerBar"
- class="fill gold"
- style="width:100%"
-></div>
-</div>
+    <button class="attack" id="strikeBtn">
+      ⚡ SPIRIT STRIKE
+    </button>
 
-<div class="hp" id="playerHP">
-100 / 100
-</div>
+    <button class="attack" id="shieldBtn">
+      🛡️ SHIELD OF FATE
+    </button>
 
-</div>
+    <button class="attack" id="truthBtn">
+      ✋ WORD OF TRUTH
+    </button>
 
+    <button class="attack" id="burstBtn">
+      ☀️ LIGHT BURST
+    </button>
 
-<!-- ENEMY HEALTH -->
+  </div>
 
-<div class="health enemyHealth">
+  <div class="log" id="log">
+    The Shadow Demon approaches...
+  </div>
 
-<div class="name" id="enemyName">
-Shadow Demon
-</div>
+  <div class="verse" id="verse">
+    “Put on the whole armour of God, that ye may be able to stand against the wiles of the devil.”
+    — Ephesians 6:11
+  </div>
 
-<div class="bar">
-<div
- id="enemyBar"
- class="fill red"
- style="width:100%"
-></div>
-</div>
-
-<div class="hp" id="enemyHP">
-100 / 100
-</div>
-
-</div>
-
-
-<div class="status" id="status">
-YOUR TURN
-</div>
-
-
-<!-- =========================================================
- PLAYER
-========================================================= -->
-
-<div id="player" class="fighter">
-
-<div id="playerModel" class="model">
-
-<div class="playerAura"></div>
-
-<div class="head">
-<div class="hair"></div>
-<div class="eye eye1"></div>
-<div class="eye eye2"></div>
-<div class="mouth"></div>
-</div>
-
-<div class="neck"></div>
-
-<div class="chest">
-<div class="core"></div>
-</div>
-
-<div class="shoulder shoulder1"></div>
-<div class="shoulder shoulder2"></div>
-
-<div class="arm arm1"></div>
-<div class="arm arm2"></div>
-
-<div class="leg leg1"></div>
-<div class="leg leg2"></div>
-
-<div class="boot boot1"></div>
-<div class="boot boot2"></div>
-
-</div>
-</div>
-
-
-<!-- =========================================================
- ENEMY
-========================================================= -->
-
-<div id="enemy" class="fighter">
-
-<div id="enemyModel" class="model">
-<div id="boss"></div>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================================================
- CONTROLS
-========================================================= -->
-
-<div class="controls" id="controls">
-
-<button onclick="attack('strike')">
-✨<br>
-SPIRIT STRIKE
-</button>
-
-<button onclick="attack('shield')">
-🛡<br>
-SHIELD OF FATE
-</button>
-
-<button onclick="attack('truth')">
-☀<br>
-WORD OF TRUTH
-</button>
-
-<button
- id="burst"
- class="special"
- onclick="attack('burst')"
- disabled
->
-⚡<br>
-LIGHT BURST
-</button>
-
-</div>
-
-
-<div class="log" id="log">
-Your journey begins...
-</div>
-
-</div>
-
-
-<!-- =========================================================
- OVERLAY
-========================================================= -->
-
-<div id="overlay" class="overlay hidden">
-
-<div class="overlayBox">
-
-<h1 id="overlayTitle"></h1>
-
-<p id="overlayText"></p>
-
-<button
- class="menuBtn"
- onclick="overlayContinue()"
->
-CONTINUE
-</button>
-
-</div>
 </div>
 
 
 <script>
 
-/* =========================================================
- DATA
-========================================================= */
+const player = document.getElementById("player");
+const enemy = document.getElementById("enemy");
+const arena = document.getElementById("arena");
 
-const SAVE_KEY="ShadowboundMaximumChoreography";
+const playerHPBar = document.getElementById("playerHP");
+const enemyHPBar = document.getElementById("enemyHP");
 
-let saves=JSON.parse(
- localStorage.getItem(SAVE_KEY)||"[]"
-);
+const log = document.getElementById("log");
+const levelText = document.getElementById("levelText");
+const enemyName = document.getElementById("enemyName");
 
-let slot=null;
+const strikeBtn = document.getElementById("strikeBtn");
+const shieldBtn = document.getElementById("shieldBtn");
+const truthBtn = document.getElementById("truthBtn");
+const burstBtn = document.getElementById("burstBtn");
 
-let state={
- name:"Warrior",
- gender:"Male",
- armor:"#315cff",
- helmet:"#171822",
- level:1,
- power:0,
- hp:100,
- turns:0,
- spirit:0,
- special:false
-};
+let playerHP = 100;
+let enemyHP = 100;
+let level = 1;
 
-let enemy={
- name:"",
- hp:0,
- max:0
-};
-
-let busy=false;
-let shield=false;
+let busy = false;
+let shieldActive = false;
+let turnsSurvived = 0;
+let specialUnlocked = false;
 
 
-/* =========================================================
- LEVELS
-========================================================= */
-
-const levels=[
-
- {
-  name:"SHADOW DEMON",
-  hp:100,
-  verse:"Ephesians 6:11",
-  text:"Put on the whole armour of God, that ye may be able to stand against the wiles of the devil."
- },
-
- {
-  name:"DARK ANGEL",
-  hp:220,
-  verse:"Psalm 18:2",
-  text:"The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust."
- },
-
- {
-  name:"SHADOW COLOSSUS",
-  hp:420,
-  verse:"1 John 4:4",
-  text:"Greater is he that is in you, than he that is in the world."
- }
-
-];
-
-
-/* =========================================================
- SAVES
-========================================================= */
-
-function save(){
- localStorage.setItem(
-  SAVE_KEY,
-  JSON.stringify(saves)
- );
+function wait(ms){
+  return new Promise(resolve => setTimeout(resolve,ms));
 }
 
-function gameSave(){
 
- if(slot!==null){
-  saves[slot]=JSON.parse(
-   JSON.stringify(state)
+function setButtons(enabled){
+
+  const buttons = [
+    strikeBtn,
+    shieldBtn,
+    truthBtn,
+    burstBtn
+  ];
+
+  buttons.forEach(btn => {
+    btn.disabled = !enabled;
+  });
+
+  burstBtn.disabled = !enabled || !specialUnlocked;
+}
+
+
+function message(text){
+  log.innerHTML = text;
+}
+
+
+function updateBars(){
+
+  playerHP = Math.max(0,Math.min(100,playerHP));
+  enemyHP = Math.max(0,Math.min(100,enemyHP));
+
+  playerHPBar.style.width = playerHP + "%";
+  enemyHPBar.style.width = enemyHP + "%";
+}
+
+
+function clearAnimationClasses(){
+
+  player.classList.remove(
+    "spirit",
+    "shieldMove",
+    "truth",
+    "burst"
   );
 
-  save();
- }
-}
-
-function showSaves(){
-
- const grid=document.getElementById("saveGrid");
-
- grid.innerHTML="";
-
- for(let i=0;i<3;i++){
-
-  const s=saves[i];
-
-  const box=document.createElement("div");
-
-  box.className="save";
-
-  if(s){
-
-   box.innerHTML=`
-    <div class="saveName">${esc(s.name)}</div>
-    <div class="saveInfo">
-     Level ${s.level} • Power ${s.power}
-    </div>
-
-    <button
-     class="menuBtn"
-     onclick="load(${i})"
-    >
-     CONTINUE
-    </button>
-
-    <button
-     class="delete"
-     onclick="del(${i})"
-    >
-     DELETE
-    </button>
-   `;
-
-  }else{
-
-   box.innerHTML=`
-    <div class="saveName">
-     EMPTY SAVE ${i+1}
-    </div>
-
-    <button
-     class="menuBtn"
-     onclick="newSave(${i})"
-    >
-     CREATE
-    </button>
-   `;
-  }
-
-  grid.appendChild(box);
- }
-}
-
-function newSave(i){
-
- if(i===undefined){
-
-  i=saves.findIndex(x=>!x);
-
-  if(i<0){
-   alert("All save slots are full.");
-   return;
-  }
- }
-
- slot=i;
-
- document
- .getElementById("saveScreen")
- .classList.add("hidden");
-
- document
- .getElementById("customScreen")
- .classList.remove("hidden");
-}
-
-function load(i){
-
- slot=i;
-
- state=JSON.parse(
-  JSON.stringify(saves[i])
- );
-
- document
- .getElementById("saveScreen")
- .classList.add("hidden");
-
- start();
-}
-
-function del(i){
-
- if(confirm("Delete this save?")){
-
-  saves[i]=null;
-
-  save();
-
-  showSaves();
- }
+  enemy.classList.remove("enemyMove");
 }
 
 
-/* =========================================================
- CREATE
-========================================================= */
+function effect(className){
 
-function createCharacter(){
+  const el = document.createElement("div");
+  el.className = className;
 
- state.name=
- document.getElementById("nameInput")
- .value
- .trim()
- ||"Warrior";
+  arena.appendChild(el);
 
- state.gender=
- document.getElementById("genderInput")
- .value;
+  setTimeout(() => el.remove(),1400);
 
- state.armor=
- document.getElementById("armorInput")
- .value;
-
- state.helmet=
- document.getElementById("helmetInput")
- .value;
-
- state.level=1;
- state.power=0;
- state.hp=100;
- state.turns=0;
- state.spirit=0;
- state.special=false;
-
- gameSave();
-
- document
- .getElementById("customScreen")
- .classList.add("hidden");
-
- start();
+  return el;
 }
 
 
-/* =========================================================
- START
-========================================================= */
+async function spiritStrike(){
 
-function start(){
+  if(busy || enemyHP <= 0) return;
 
- document
- .getElementById("game")
- .classList.remove("hidden");
+  busy = true;
+  setButtons(false);
 
- busy=false;
- shield=false;
+  clearAnimationClasses();
 
- loadLevel();
+  message("⚡ The warrior pulls his arm back...");
 
- applyPlayer();
+  player.classList.add("spirit");
 
- update();
+  await wait(350);
 
- log(
-  levels[0].verse+
-  " — "+
-  levels[0].text
- );
+  message("⚡ His shoulder twists and his hand charges with light...");
+
+  const energy = document.getElementById("handEnergy");
+
+  energy.style.left = "120px";
+  energy.style.top = "180px";
+  energy.style.opacity = "1";
+
+  await wait(250);
+
+  message("⚡ SPIRIT STRIKE!");
+
+  energy.style.opacity = "0";
+
+  const projectile = document.createElement("div");
+  projectile.className = "projectile";
+
+  projectile.style.left = "150px";
+  projectile.style.top = "210px";
+
+  arena.appendChild(projectile);
+
+  await wait(500);
+
+  projectile.remove();
+
+  damageEnemy(22);
+
+  effect("impact");
+
+  await wait(400);
+
+  clearAnimationClasses();
+
+  await enemyTurn();
+
 }
 
 
-/* =========================================================
- LEVEL
-========================================================= */
+async function shieldOfFate(){
 
-function loadLevel(){
+  if(busy || enemyHP <= 0) return;
 
- const l=levels[state.level-1];
+  busy = true;
+  setButtons(false);
 
- enemy.name=l.name;
- enemy.max=l.hp;
- enemy.hp=l.hp;
+  clearAnimationClasses();
 
- state.hp=
- 100+
- ((state.level-1)*35);
+  message("🛡️ The warrior raises his arm...");
 
- state.turns=0;
- state.spirit=0;
- state.special=false;
+  player.classList.add("shieldMove");
 
- busy=false;
- shield=false;
+  await wait(550);
 
- buildBoss();
+  message("🛡️ His hand turns forward — SHIELD OF FATE!");
 
- update();
+  const shield = effect("shield");
+
+  shieldActive = true;
+
+  await wait(900);
+
+  shield.remove();
+
+  clearAnimationClasses();
+
+  await enemyTurn();
+
 }
 
 
-/* =========================================================
- BOSS BUILD
-========================================================= */
+async function wordOfTruth(){
 
-function buildBoss(){
+  if(busy || enemyHP <= 0) return;
 
- const b=document.getElementById("boss");
+  busy = true;
+  setButtons(false);
 
- if(state.level===1){
+  clearAnimationClasses();
 
-  b.innerHTML=`
+  message("✋ The warrior raises both hands...");
 
-   <div class="l1head">
+  player.classList.add("truth");
 
-    <div class="horn horn1"></div>
-    <div class="horn horn2"></div>
+  await wait(400);
 
-    <div class="redEye redEye1"></div>
-    <div class="redEye redEye2"></div>
+  message("✋ Both hands focus into a single point of light...");
 
-   </div>
+  const ring = effect("ring");
 
-   <div class="demonBody">
-    <div class="demonCore"></div>
-   </div>
+  await wait(400);
 
-   <div class="demonArm demonArm1"></div>
-   <div class="demonArm demonArm2"></div>
+  message("✋ WORD OF TRUTH!");
 
-   <div class="demonLeg demonLeg1"></div>
-   <div class="demonLeg demonLeg2"></div>
+  const beam = effect("beam");
 
-  `;
+  await wait(650);
 
- }
+  beam.remove();
+  ring.remove();
 
- else if(state.level===2){
+  damageEnemy(30);
 
-  b.innerHTML=`
+  effect("impact");
 
-   <div class="wing wing1"></div>
-   <div class="wing wing2"></div>
+  await wait(400);
 
-   <div class="halo"></div>
+  clearAnimationClasses();
 
-   <div class="angelHead">
-    <div class="visor"></div>
-   </div>
+  await enemyTurn();
 
-   <div class="angelBody">
-    <div class="angelCore"></div>
-   </div>
-
-   <div class="angelArm angelArm1"></div>
-   <div class="angelArm angelArm2"></div>
-
-   <div class="angelLeg angelLeg1"></div>
-   <div class="angelLeg angelLeg2"></div>
-
-  `;
-
- }
-
- else{
-
-  b.innerHTML=`
-
-   <div class="colWing colWing1"></div>
-   <div class="colWing colWing2"></div>
-
-   <div class="colHead">
-
-    <div class="colHorn colHorn1"></div>
-    <div class="colHorn colHorn2"></div>
-
-    <div class="colEye colEye1"></div>
-    <div class="colEye colEye2"></div>
-
-   </div>
-
-   <div class="colBody">
-
-    <div class="plate"></div>
-    <div class="colCore"></div>
-
-   </div>
-
-   <div class="colArm colArm1"></div>
-   <div class="colArm colArm2"></div>
-
-   <div class="colLeg colLeg1"></div>
-   <div class="colLeg colLeg2"></div>
-
-  `;
- }
 }
 
 
-/* =========================================================
- PLAYER COLOR
-========================================================= */
+async function lightBurst(){
 
-function applyPlayer(){
+  if(
+    busy ||
+    enemyHP <= 0 ||
+    !specialUnlocked
+  ) return;
 
- document.querySelector(".chest").style.background=
- `
- linear-gradient(
-  145deg,
-  ${state.armor},
-  #293ca7,
-  #10174a
- )
- `;
+  busy = true;
+  setButtons(false);
 
- document
- .querySelector(".hair")
- .style.background=state.helmet;
+  clearAnimationClasses();
 
- document
- .getElementById("playerName")
- .textContent=state.name;
+  message("☀️ The warrior crouches and gathers spiritual power...");
+
+  player.classList.add("burst");
+
+  await wait(500);
+
+  message("☀️ Both arms rise as the armor begins glowing...");
+
+  await wait(350);
+
+  message("☀️ LIGHT BURST!");
+
+  effect("ring");
+
+  const beam = effect("bigBeam");
+
+  await wait(800);
+
+  beam.remove();
+
+  damageEnemy(50);
+
+  effect("impact");
+  effect("flash");
+
+  await wait(500);
+
+  clearAnimationClasses();
+
+  await enemyTurn();
+
 }
 
-
-/* =========================================================
- UI
-========================================================= */
-
-function update(){
-
- const max=
- 100+
- ((state.level-1)*35);
-
- document.getElementById("level")
- .textContent=state.level;
-
- document.getElementById("power")
- .textContent=state.power;
-
- document.getElementById("playerName")
- .textContent=state.name;
-
- document.getElementById("enemyName")
- .textContent=enemy.name;
-
- document.getElementById("playerBar")
- .style.width=
- Math.max(0,state.hp/max*100)+"%";
-
- document.getElementById("enemyBar")
- .style.width=
- Math.max(0,enemy.hp/enemy.max*100)+"%";
-
- document.getElementById("playerHP")
- .textContent=
- `${Math.max(0,state.hp)} / ${max}`;
-
- document.getElementById("enemyHP")
- .textContent=
- `${Math.max(0,enemy.hp)} / ${enemy.max}`;
-
- document.getElementById("burst")
- .disabled=
- !state.special||busy;
-
- document.getElementById("status")
- .textContent=
- busy?"ENEMY TURN...":"YOUR TURN";
-}
-
-
-/* =========================================================
- LOG
-========================================================= */
-
-function esc(x){
-
- return String(x||"")
- .replaceAll("&","&amp;")
- .replaceAll("<","&lt;")
- .replaceAll(">","&gt;")
- .replaceAll('"',"&quot;")
- .replaceAll("'","&#039;");
-}
-
-function log(x){
-
- const l=
- document.getElementById("log");
-
- l.innerHTML+=
- `<div>${esc(x)}</div>`;
-
- l.scrollTop=l.scrollHeight;
-}
-
-
-/* =========================================================
- ATTACK START
-========================================================= */
-
-function attack(type){
-
- if(busy)return;
-
- if(
-  type==="burst" &&
-  !state.special
- )return;
-
- busy=true;
-
- update();
-
- if(type==="strike")
-  spiritStrike();
-
- if(type==="shield")
-  shieldOfFate();
-
- if(type==="truth")
-  wordOfTruth();
-
- if(type==="burst")
-  lightBurst();
-}
-
-
-/* =========================================================
- SPIRIT STRIKE
-========================================================= */
-
-function spiritStrike(){
-
- log("✨ The warrior draws spiritual energy into his arm...");
-
- const model=
- document.getElementById("playerModel");
-
- model.classList.add("attackPrepare");
-
- setTimeout(()=>{
-
-  createCharge();
-
- },150);
-
- setTimeout(()=>{
-
-  model.classList.remove("attackPrepare");
-
-  log("✨ SPIRIT STRIKE!");
-
-  model.classList.add("strikeMove");
-
- },430);
-
- setTimeout(()=>{
-
-  createProjectile();
-
- },700);
-
- setTimeout(()=>{
-
-  model.classList.remove("strikeMove");
-
-  damageEnemy(25+state.level*6);
-
- },900);
-
- setTimeout(()=>{
-
-  finishAttack();
-
- },1100);
-}
-
-
-/* =========================================================
- SHIELD
-========================================================= */
-
-function shieldOfFate(){
-
- log("🛡 The warrior plants his feet and raises his hand...");
-
- const model=
- document.getElementById("playerModel");
-
- model.classList.add("shieldMove");
-
- setTimeout(()=>{
-
-  shield=true;
-
-  log("🛡 SHIELD OF FATE!");
-
-  createShield();
-
-  state.spirit+=20;
-
-  update();
-
- },500);
-
- setTimeout(()=>{
-
-  model.classList.remove("shieldMove");
-
-  finishAttack();
-
- },950);
-}
-
-
-/* =========================================================
- WORD OF TRUTH
-========================================================= */
-
-function wordOfTruth(){
-
- log("☀ The warrior raises both hands toward the heavens...");
-
- const model=
- document.getElementById("playerModel");
-
- model.classList.add("truthMove");
-
- setTimeout(()=>{
-
-  createCharge();
-
-  log("☀ Light gathers around the warrior...");
-
- },300);
-
- setTimeout(()=>{
-
-  log("☀ WORD OF TRUTH!");
-
-  createBeam();
-
- },720);
-
- setTimeout(()=>{
-
-  model.classList.remove("truthMove");
-
-  damageEnemy(38+state.level*8);
-
- },950);
-
- setTimeout(()=>{
-
-  finishAttack();
-
- },1150);
-}
-
-
-/* =========================================================
- LIGHT BURST
-========================================================= */
-
-function lightBurst(){
-
- log("⚡ The warrior lowers his stance...");
-
- const model=
- document.getElementById("playerModel");
-
- model.classList.add("burstMove");
-
- setTimeout(()=>{
-
-  createCharge();
-
-  createEnergyRing();
-
-  log("⚡ Spiritual power is surging!");
-
- },300);
-
- setTimeout(()=>{
-
-  log("⚡ LIGHT BURST!");
-
-  createSuperBeam();
-
-  flash();
-
- },780);
-
- setTimeout(()=>{
-
-  model.classList.remove("burstMove");
-
-  damageEnemy(
-   105+
-   state.level*28
-  );
-
-  state.spirit=0;
-  state.special=false;
-
- },1050);
-
- setTimeout(()=>{
-
-  finishAttack();
-
- },1350);
-}
-
-
-/* =========================================================
- DAMAGE
-========================================================= */
 
 function damageEnemy(amount){
 
- enemy.hp=
- Math.max(
-  0,
-  enemy.hp-amount
- );
+  enemyHP -= amount;
 
- enemyRecoil();
+  if(enemyHP < 0) enemyHP = 0;
 
- createImpact();
+  updateBars();
 
- update();
+  if(enemyHP <= 0){
+
+    message("✨ The Shadow Demon has been defeated!");
+
+    setButtons(false);
+
+    setTimeout(nextLevel,1200);
+  }
 }
 
 
-/* =========================================================
- FINISH
-========================================================= */
+async function enemyTurn(){
 
-function finishAttack(){
+  if(enemyHP <= 0) return;
 
- if(enemy.hp<=0){
+  await wait(450);
 
-  defeated();
+  message("👹 The enemy prepares its attack...");
 
- }else{
+  clearAnimationClasses();
 
-  setTimeout(
-   enemyTurn,
-   300
-  );
- }
-}
+  enemy.classList.add("enemyMove");
 
+  await wait(550);
 
-/* =========================================================
- ENEMY TURN
-========================================================= */
+  message("👹 The Shadow Demon strikes!");
 
-function enemyTurn(){
+  await wait(300);
 
- document
- .getElementById("status")
- .textContent="ENEMY TURN...";
+  if(shieldActive){
 
- const model=
- document.getElementById("enemyModel");
+    shieldActive = false;
 
- log(
-  enemy.name+
-  " begins gathering power..."
- );
+    message("🛡️ SHIELD OF FATE blocked the attack!");
 
- model.classList.add("enemyPrepare");
+    effect("shield");
 
- setTimeout(()=>{
-
-  model.classList.remove("enemyPrepare");
-
-  model.classList.add("enemyAttack");
-
-  enemyAttackEffect();
-
- },420);
-
- setTimeout(()=>{
-
-  model.classList.remove("enemyAttack");
-
-  if(shield){
-
-   log(
-    "🛡 SHIELD OF FATE BLOCKED THE ATTACK!"
-   );
-
-   shield=false;
-
-   createShield();
+    await wait(600);
 
   }else{
 
-   state.hp=
-   Math.max(
-    0,
-    state.hp-
-    (12+state.level*5)
-   );
+    const damage = Math.floor(Math.random()*9)+8;
 
-   playerRecoil();
+    playerHP -= damage;
 
-   log(
-    enemy.name+
-    " struck the warrior."
-   );
+    updateBars();
+
+    effect("impact");
+
+    message(
+      "💥 The attack connects! " +
+      damage +
+      " spiritual power lost."
+    );
+
+    await wait(500);
   }
 
-  update();
+  turnsSurvived++;
 
- },850);
+  if(turnsSurvived >= 3 && !specialUnlocked){
 
- setTimeout(()=>{
+    specialUnlocked = true;
 
-  if(state.hp<=0){
+    message(
+      "🔥 Your spiritual power has increased! " +
+      "LIGHT BURST unlocked!"
+    );
 
-   defeatedPlayer();
+    await wait(1000);
+  }
+
+  clearAnimationClasses();
+
+  if(playerHP <= 0){
+
+    message("The warrior has fallen. Refresh to try again.");
+
+    setButtons(false);
+
+    return;
+  }
+
+  busy = false;
+  setButtons(true);
+}
+
+
+function nextLevel(){
+
+  level++;
+
+  if(level > 3){
+
+    message(
+      "🏆 VICTORY! You defeated the Shadow Colossus!"
+    );
+
+    levelText.textContent = "VICTORY";
+
+    return;
+  }
+
+  enemyHP = 100 + ((level-1)*20);
+  playerHP = 100;
+
+  specialUnlocked = false;
+  turnsSurvived = 0;
+  shieldActive = false;
+
+  updateBars();
+
+  if(level === 2){
+
+    enemyName.textContent = "DARK ANGEL";
+    levelText.textContent = "LEVEL 2 — DARK ANGEL";
+
+    message(
+      "🌑 The Dark Angel descends from the shadows..."
+    );
+
+    document.getElementById("verse").textContent =
+      "“The LORD is my rock, and my fortress, and my deliverer.” — Psalm 18:2";
 
   }else{
 
-   endEnemyTurn();
+    enemyName.textContent = "SHADOW COLOSSUS";
+    levelText.textContent = "LEVEL 3 — SHADOW COLOSSUS";
+
+    enemy.style.transform = "scale(1.15)";
+
+    message(
+      "👹 THE SHADOW COLOSSUS AWAKENS!"
+    );
+
+    document.getElementById("verse").textContent =
+      "“Greater is he that is in you, than he that is in the world.” — 1 John 4:4";
   }
 
- },1150);
+  busy = false;
+  setButtons(true);
 }
 
 
-/* =========================================================
- TURN RESET
-========================================================= */
-
-function endEnemyTurn(){
-
- state.turns++;
-
- if(state.turns>=3){
-
-  state.special=true;
-
-  log(
-   "⚡ LIGHT BURST IS READY!"
-  );
- }
-
- gameSave();
-
- busy=false;
-
- document
- .getElementById("controls")
- .style.pointerEvents="auto";
-
- document
- .querySelectorAll("#controls button")
- .forEach(b=>{
-  b.style.pointerEvents="auto";
- });
-
- update();
-
- log("YOUR TURN.");
-}
-
-
-/* =========================================================
- EFFECT CREATION
-========================================================= */
-
-function createCharge(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx charge";
-
- arena.appendChild(x);
-
- setTimeout(
-  ()=>x.remove(),
-  700
- );
-}
-
-
-function createProjectile(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx projectile";
-
- x.style.left="24%";
- x.style.top="49%";
-
- arena.appendChild(x);
-
- x.animate(
-  [
-   {
-    transform:"translateX(0) scale(.25)",
-    opacity:0
-   },
-   {
-    transform:"translateX(220px) scale(1)",
-    opacity:1
-   },
-   {
-    transform:"translateX(590px) scale(.15)",
-    opacity:0
-   }
-  ],
-  {
-   duration:700,
-   easing:"cubic-bezier(.2,.8,.2,1)"
-  }
- ).onfinish=
- ()=>x.remove();
-}
-
-
-function createShield(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx shield";
-
- arena.appendChild(x);
-
- setTimeout(
-  ()=>x.remove(),
-  900
- );
-}
-
-
-function createBeam(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx beam";
-
- arena.appendChild(x);
-
- setTimeout(
-  ()=>x.remove(),
-  750
- );
-}
-
-
-function createSuperBeam(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx superBeam";
-
- arena.appendChild(x);
-
- setTimeout(
-  ()=>x.remove(),
-  1000
- );
-}
-
-
-function createEnergyRing(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx energyRing";
-
- arena.appendChild(x);
-
- setTimeout(
-  ()=>x.remove(),
-  750
- );
-}
-
-
-function createImpact(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx impact";
-
- x.style.left="76%";
- x.style.top="49%";
-
- arena.appendChild(x);
-
- setTimeout(
-  ()=>x.remove(),
-  600
- );
-
- flash();
-}
-
-
-function flash(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="screenFlash";
-
- arena.appendChild(x);
-
- setTimeout(
-  ()=>x.remove(),
-  350
- );
-
- arena.classList.add("cameraShake");
-
- setTimeout(
-  ()=>arena.classList.remove("cameraShake"),
-  380
- );
-}
-
-
-/* =========================================================
- ENEMY ATTACK EFFECTS
-========================================================= */
-
-function enemyAttackEffect(){
-
- const arena=
- document.getElementById("arena");
-
- const x=
- document.createElement("div");
-
- x.className="fx";
-
- if(state.level===1){
-
-  x.style.left="73%";
-  x.style.top="49%";
-  x.style.width="36px";
-  x.style.height="36px";
-  x.style.borderRadius="50%";
-  x.style.background="#ff1744";
-
-  x.style.boxShadow=
-   "0 0 25px #ff1744,0 0 70px #9d0030";
-
-  arena.appendChild(x);
-
-  x.animate(
-   [
-    {
-     transform:"translateX(0) scale(.3)",
-     opacity:0
-    },
-    {
-     transform:"translateX(-300px) scale(1)",
-     opacity:1
-    },
-    {
-     transform:"translateX(-520px) scale(.2)",
-     opacity:0
-    }
-   ],
-   {
-    duration:650
-   }
-  ).onfinish=
-  ()=>x.remove();
-
- }
-
- else if(state.level===2){
-
-  x.className="fx beam";
-
-  x.style.background=
-   "linear-gradient(90deg,#fff,#b8c4ff,#fff)";
-
-  x.style.boxShadow=
-   "0 0 30px #fff,0 0 80px #899cff";
-
-  arena.appendChild(x);
-
-  setTimeout(
-   ()=>x.remove(),
-   750
-  );
-
- }
-
- else{
-
-  x.className="fx superBeam";
-
-  x.style.background="#ff173f";
-
-  x.style.boxShadow=
-   "0 0 40px #ff173f,0 0 110px #a5002d";
-
-  arena.appendChild(x);
-
-  setTimeout(
-   ()=>x.remove(),
-   900
-  );
- }
-}
-
-
-/* =========================================================
- RECOIL
-========================================================= */
-
-function enemyRecoil(){
-
- const model=
- document.getElementById("enemyModel");
-
- model.classList.add("recoil");
-
- setTimeout(
-  ()=>model.classList.remove("recoil"),
-  450
- );
-}
-
-function playerRecoil(){
-
- const model=
- document.getElementById("playerModel");
-
- model.classList.add("recoil");
-
- setTimeout(
-  ()=>model.classList.remove("recoil"),
-  450
- );
-}
-
-
-/* =========================================================
- VICTORY / DEFEAT
-========================================================= */
-
-function defeated(){
-
- busy=false;
-
- state.power+=
- 100*state.level;
-
- gameSave();
-
- if(state.level===3){
-
-  show(
-   "VICTORY!",
-   "The Shadow Colossus has fallen. You completed Shadowbound."
-  );
-
- }else{
-
-  show(
-   "BOSS DEFEATED!",
-   enemy.name+
-   " has been defeated."
-  );
- }
-}
-
-function defeatedPlayer(){
-
- busy=false;
-
- state.hp=
- 100+
- ((state.level-1)*35);
-
- state.turns=0;
- state.spirit=0;
- state.special=false;
-
- gameSave();
-
- show(
-  "DEFEATED",
-  "The warrior has fallen. Rise and try again."
- );
-}
-
-
-/* =========================================================
- OVERLAY
-========================================================= */
-
-function show(title,text){
-
- document
- .getElementById("overlayTitle")
- .textContent=title;
-
- document
- .getElementById("overlayText")
- .textContent=text;
-
- document
- .getElementById("overlay")
- .classList.remove("hidden");
-}
-
-function overlayContinue(){
-
- document
- .getElementById("overlay")
- .classList.add("hidden");
-
- if(enemy.hp<=0){
-
-  if(state.level<3){
-
-   state.level++;
-
-   loadLevel();
-
-   log(
-    `LEVEL ${state.level}: ${enemy.name}`
-   );
-
-  }else{
-
-   state.level=1;
-   state.power=0;
-
-   loadLevel();
-  }
-
-  gameSave();
-
- }else{
-
-  loadLevel();
- }
-}
-
-
-/* =========================================================
- AUTO SAVE
-========================================================= */
-
-setInterval(()=>{
-
- if(
-  !document
-  .getElementById("game")
-  .classList.contains("hidden")
- ){
-
-  gameSave();
- }
-
-},5000);
-
-
-/* =========================================================
- INITIALIZE
-========================================================= */
-
-showSaves();
+strikeBtn.addEventListener("click",spiritStrike);
+shieldBtn.addEventListener("click",shieldOfFate);
+truthBtn.addEventListener("click",wordOfTruth);
+burstBtn.addEventListener("click",lightBurst);
+
+updateBars();
+setButtons(true);
 
 </script>
 
