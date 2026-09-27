@@ -2,1401 +2,202 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Spiritual Power: Shadowbound</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:#03050d;
+  color:#fff;
+  font-family:Inter,Arial,sans-serif;
+}
 
 body{
-  margin:0;
-  background:#050713;
-  color:white;
-  font-family:Arial,Helvetica,sans-serif;
   overflow-x:hidden;
 }
 
-#game{
-  width:min(1100px,100%);
-  margin:auto;
-  padding:12px;
+button{
+  font:inherit;
+  color:inherit;
 }
 
-.header{
+#app{
+  width:100%;
+  min-height:100vh;
   display:flex;
-  justify-content:space-between;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 50% -10%,#182a55,#050814 55%,#020309);
+}
+
+#game{
+  width:min(1180px,100%);
+  padding:10px;
+}
+
+.topbar{
+  height:58px;
+  display:flex;
   align-items:center;
-  margin-bottom:10px;
+  justify-content:space-between;
   gap:10px;
 }
 
-.title{
-  font-size:clamp(23px,5vw,38px);
-  font-weight:900;
-  letter-spacing:1px;
-  text-shadow:0 0 18px #4fa8ff;
+.logo{
+  font-size:clamp(18px,4vw,30px);
+  font-weight:1000;
+  letter-spacing:.08em;
+  text-shadow:
+    0 0 10px #52cfff,
+    0 0 28px rgba(82,207,255,.45);
 }
 
-.level{
-  background:#111a35;
-  border:1px solid #4b67a5;
-  border-radius:20px;
+.stageLabel{
   padding:8px 13px;
-  font-weight:bold;
+  border:1px solid #40598e;
+  border-radius:999px;
+  background:rgba(12,21,43,.8);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.05em;
+  white-space:nowrap;
 }
 
-.arena{
+/* ARENA */
+
+#arena{
   position:relative;
-  height:570px;
+  width:100%;
+  aspect-ratio:16/9;
+  min-height:390px;
+  max-height:690px;
   overflow:hidden;
-  border-radius:25px;
-  border:2px solid #334c80;
-  background:
-    radial-gradient(circle at 50% 48%,#263a69 0%,#10182e 38%,#060812 85%);
+  border-radius:24px;
+  border:1px solid #39527e;
+  background:#050812;
   box-shadow:
-    inset 0 0 100px #000,
-    0 10px 35px #000;
+    0 25px 70px rgba(0,0,0,.6),
+    inset 0 0 80px rgba(0,0,0,.6);
 }
 
-.stars{
+#canvas{
   position:absolute;
   inset:0;
-  opacity:.5;
-  background-image:
-    radial-gradient(circle,#fff 1px,transparent 2px),
-    radial-gradient(circle,#8cbcff 1px,transparent 2px);
-  background-size:83px 83px,151px 151px;
-}
-
-.mist{
-  position:absolute;
-  left:-10%;
-  right:-10%;
-  bottom:70px;
-  height:180px;
-  background:radial-gradient(ellipse,rgba(80,130,255,.13),transparent 65%);
-  filter:blur(15px);
-}
-
-.ground{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:115px;
-  background:
-    linear-gradient(transparent,#050711),
-    repeating-linear-gradient(
-      165deg,
-      #10172a 0 2px,
-      transparent 2px 45px
-    );
-  border-top:2px solid #25365d;
-}
-
-.status{
-  position:absolute;
-  top:15px;
-  left:15px;
-  right:15px;
-  display:flex;
-  justify-content:space-between;
-  z-index:100;
-}
-
-.healthBox{
-  width:40%;
-  min-width:150px;
-}
-
-.name{
-  font-size:14px;
-  font-weight:900;
-  margin-bottom:5px;
-  text-shadow:0 2px 4px #000;
-}
-
-.health{
-  height:20px;
-  border-radius:20px;
-  overflow:hidden;
-  background:#090b13;
-  border:2px solid #e3bd39;
-  box-shadow:0 0 12px rgba(255,205,50,.4);
-}
-
-.healthFill{
   width:100%;
   height:100%;
-  background:linear-gradient(
-    #fff39a,
-    #e5bd24 45%,
-    #b98400
-  );
-  transition:width .35s cubic-bezier(.2,.8,.2,1);
+  display:block;
 }
 
-.enemyHealth{
-  border-color:#dc465b;
-}
+/* HUD */
 
-.enemyHealth .healthFill{
-  background:linear-gradient(
-    #ff9ca7,
-    #e52e48 45%,
-    #8e1025
-  );
-}
-
-/* =========================
-   CHARACTER
-========================= */
-
-.character{
+.hud{
   position:absolute;
-  width:210px;
-  height:430px;
-  bottom:62px;
   z-index:20;
-  transform-origin:50% 90%;
-}
-
-.player{
-  left:3%;
-}
-
-.enemy{
-  right:3%;
-}
-
-.model{
-  position:absolute;
-  inset:0;
-  transform-origin:50% 85%;
-}
-
-/* shadow underneath */
-
-.character:after{
-  content:"";
-  position:absolute;
-  left:42px;
-  bottom:0;
-  width:125px;
-  height:24px;
-  border-radius:50%;
-  background:rgba(0,0,0,.65);
-  filter:blur(7px);
-  transform:scaleX(1);
-  transition:.2s;
-}
-
-/* HEAD */
-
-.head{
-  position:absolute;
-  width:64px;
-  height:70px;
-  left:73px;
-  top:25px;
-  border-radius:45% 45% 42% 42%;
-  background:
-    linear-gradient(
-      110deg,
-      #9a5d42,
-      #edbd94 38%,
-      #c27e5d 75%,
-      #70402f
-    );
-  border:3px solid #dce8ff;
-  z-index:15;
-  transform-origin:50% 85%;
-  box-shadow:inset -7px -5px 12px rgba(0,0,0,.25);
-}
-
-.face{
-  position:absolute;
-  left:10px;
-  top:29px;
-  width:44px;
-  height:16px;
-}
-
-.eye{
-  position:absolute;
-  width:7px;
-  height:5px;
-  top:1px;
-  border-radius:50%;
-  background:#17233c;
-}
-
-.eye.a{left:5px}
-.eye.b{right:5px}
-
-.nose{
-  position:absolute;
-  left:20px;
-  top:7px;
-  width:4px;
-  height:7px;
-  border-right:2px solid #704735;
-  transform:rotate(15deg);
-}
-
-.mouth{
-  position:absolute;
-  left:16px;
-  top:12px;
-  width:13px;
-  height:5px;
-  border-bottom:2px solid #733d35;
-  border-radius:50%;
-}
-
-/* HAIR */
-
-.hair{
-  position:absolute;
-  left:0;
-  top:-5px;
-  width:64px;
-  height:25px;
-  border-radius:50% 50% 20% 20%;
-  background:#172036;
-  z-index:4;
-}
-
-/* BODY */
-
-.body{
-  position:absolute;
-  left:51px;
-  top:91px;
-  width:108px;
-  height:143px;
-  border-radius:32px 32px 22px 22px;
-  background:
-    linear-gradient(
-      90deg,
-      #33486f,
-      #dbe8ff 38%,
-      #f6fbff 50%,
-      #b5c9e9 64%,
-      #344a73
-    );
-  border:4px solid #dbe8ff;
-  z-index:10;
-  transform-origin:50% 20%;
-  box-shadow:
-    inset 0 0 12px rgba(0,0,0,.35),
-    0 0 10px rgba(100,160,255,.2);
-}
-
-.shoulder{
-  position:absolute;
-  width:125px;
-  height:35px;
-  left:-12px;
-  top:0;
-  border-radius:50%;
-  background:linear-gradient(#eaf4ff,#8198bd);
-  border:3px solid #dbe8ff;
-}
-
-.chest{
-  position:absolute;
-  width:53px;
-  height:58px;
-  left:24px;
-  top:22px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle,
-      #fff 0 8%,
-      #b7f8ff 15%,
-      #4edaff 32%,
-      #2360d1 57%,
-      #122a67 70%,
-      transparent 72%
-    );
-  box-shadow:
-    0 0 12px #57dcff,
-    0 0 25px rgba(70,180,255,.55);
-}
-
-.chestCore{
-  position:absolute;
-  width:14px;
-  height:14px;
-  left:19px;
-  top:21px;
-  border-radius:50%;
-  background:white;
-  box-shadow:0 0 12px white;
-}
-
-.belt{
-  position:absolute;
-  left:-2px;
-  right:-2px;
-  top:96px;
-  height:18px;
-  background:linear-gradient(#ffe779,#b58712,#e6bd35);
-  border-top:3px solid #fff0a0;
-  border-bottom:3px solid #71520a;
-}
-
-/* ARMS */
-
-.arm{
-  position:absolute;
-  top:99px;
-  width:37px;
-  height:135px;
-  z-index:9;
-  transform-origin:50% 10px;
-}
-
-.arm.left{
-  left:25px;
-  transform:rotate(12deg);
-}
-
-.arm.right{
-  right:25px;
-  transform:rotate(-12deg);
-}
-
-.upperArm{
-  position:absolute;
-  top:0;
-  left:2px;
-  width:33px;
-  height:66px;
-  border-radius:18px;
-  background:linear-gradient(
-    90deg,
-    #506a96,
-    #f3f8ff 48%,
-    #7188ac
-  );
-  border:3px solid #dce8ff;
-  transform-origin:50% 8px;
-}
-
-.elbow{
-  position:absolute;
-  left:5px;
-  top:55px;
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  background:radial-gradient(circle,#fff,#7187aa);
-  border:3px solid #dce8ff;
-  z-index:5;
-}
-
-.forearm{
-  position:absolute;
-  left:4px;
-  top:67px;
-  width:30px;
-  height:60px;
-  border-radius:16px;
-  background:linear-gradient(
-    90deg,
-    #4e6791,
-    #f4f9ff 48%,
-    #667fa7
-  );
-  border:3px solid #dce8ff;
-  transform-origin:50% 5px;
-}
-
-.hand{
-  position:absolute;
-  left:4px;
-  top:118px;
-  width:28px;
-  height:30px;
-  border-radius:45%;
-  background:linear-gradient(145deg,#f0c19a,#a96a4e);
-  border:3px solid #dce8ff;
-  transform-origin:50% 15%;
-  z-index:8;
-}
-
-.finger{
-  position:absolute;
-  width:5px;
-  height:14px;
-  top:-8px;
-  border-radius:5px;
-  background:#d99d79;
-}
-
-.f1{left:1px;transform:rotate(-18deg)}
-.f2{left:7px;transform:rotate(-7deg)}
-.f3{left:13px;transform:rotate(6deg)}
-.f4{left:19px;transform:rotate(18deg)}
-
-/* LEGS */
-
-.leg{
-  position:absolute;
-  top:218px;
-  width:43px;
-  height:165px;
-  z-index:5;
-  transform-origin:50% 10px;
-}
-
-.leg.left{left:54px}
-.leg.right{right:54px}
-
-.thigh{
-  position:absolute;
-  left:3px;
-  top:0;
-  width:37px;
-  height:82px;
-  border-radius:19px;
-  background:linear-gradient(
-    90deg,
-    #526b96,
-    #f2f7ff 48%,
-    #607ba5
-  );
-  border:3px solid #dce8ff;
-  transform-origin:50% 8px;
-}
-
-.knee{
-  position:absolute;
-  left:5px;
-  top:70px;
-  width:33px;
-  height:33px;
-  border-radius:50%;
-  background:radial-gradient(circle,#fff,#748aad);
-  border:3px solid #dce8ff;
-  z-index:4;
-}
-
-.shin{
-  position:absolute;
-  left:5px;
-  top:82px;
-  width:35px;
-  height:78px;
-  border-radius:18px;
-  background:linear-gradient(
-    90deg,
-    #536d99,
-    #f3f8ff 48%,
-    #607aa3
-  );
-  border:3px solid #dce8ff;
-  transform-origin:50% 7px;
-}
-
-.boot{
-  position:absolute;
-  left:-4px;
-  top:144px;
-  width:53px;
-  height:28px;
-  border-radius:12px 22px 9px 9px;
-  background:linear-gradient(#38538a,#101d3e);
-  border:3px solid #dce8ff;
-}
-
-/* =========================
-   DEMON
-========================= */
-
-.enemy .body{
-  background:
-    linear-gradient(
-      90deg,
-      #190d20,
-      #64182e 40%,
-      #2a0b20 70%,
-      #100813
-    );
-  border-color:#c93a56;
-}
-
-.enemy .shoulder{
-  background:linear-gradient(#74223d,#260b1b);
-  border-color:#c93a56;
-}
-
-.enemy .chest{
-  background:
-    radial-gradient(
-      circle,
-      #fff 0 8%,
-      #ff8190 13%,
-      #ff294c 30%,
-      #80152c 60%,
-      transparent 72%
-    );
-  box-shadow:0 0 20px #ff294c;
-}
-
-.enemy .upperArm,
-.enemy .forearm,
-.enemy .thigh,
-.enemy .shin{
-  background:linear-gradient(
-    90deg,
-    #1a1022,
-    #65203a 48%,
-    #170a18
-  );
-  border-color:#b83350;
-}
-
-.enemy .elbow,
-.enemy .knee{
-  background:radial-gradient(circle,#a62d48,#1b0a18);
-  border-color:#b83350;
-}
-
-.enemy .hand{
-  background:#481427;
-  border-color:#b83350;
-}
-
-.enemy .head{
-  background:
-    linear-gradient(
-      145deg,
-      #180916,
-      #641b31 45%,
-      #230914
-    );
-  border-color:#b83350;
-}
-
-.horns{
-  position:absolute;
-  width:30px;
-  height:45px;
-  top:-35px;
-  background:linear-gradient(90deg,#160913,#72182f);
-  clip-path:polygon(50% 0,100% 100%,55% 73%,0 100%);
-}
-
-.horn1{left:0}
-.horn2{right:0}
-
-.enemy .eye{
-  background:#ff334f;
-  box-shadow:0 0 8px #ff334f;
-}
-
-/* WINGS */
-
-.wings{
-  position:absolute;
-  width:250px;
-  height:220px;
-  left:-20px;
-  top:55px;
-  z-index:1;
-}
-
-.wing{
-  position:absolute;
-  width:120px;
-  height:210px;
-  background:
-    linear-gradient(
-      135deg,
-      #100914,
-      #421328,
-      #130812
-    );
-  clip-path:polygon(
-    48% 0,
-    100% 22%,
-    76% 35%,
-    100% 52%,
-    69% 55%,
-    82% 82%,
-    50% 65%,
-    32% 100%,
-    28% 66%,
-    0 79%,
-    21% 48%,
-    0 39%,
-    34% 27%
-  );
-}
-
-.wing.one{
-  left:-28px;
-  transform:scaleX(-1);
-}
-
-.wing.two{
-  right:-28px;
-}
-
-/* =========================
-   HAND ENERGY
-========================= */
-
-.handGlow{
-  position:absolute;
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  background:radial-gradient(
-    circle,
-    #fff,
-    #9df7ff 20%,
-    #3da6ff 45%,
-    transparent 70%
-  );
-  box-shadow:0 0 25px #67e8ff;
-  opacity:0;
-  z-index:50;
+  top:14px;
+  left:14px;
+  right:14px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:12px;
   pointer-events:none;
 }
 
-/* =========================
-   ATTACK ANIMATION STATES
-========================= */
-
-.player.attackStrike .model{
-  animation:strikeBody 1.05s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackStrike .head{
-  animation:strikeHead 1.05s ease;
-}
-
-.player.attackStrike .arm.right{
-  animation:strikeShoulder 1.05s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackStrike .arm.right .forearm{
-  animation:strikeElbow 1.05s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackStrike .arm.right .hand{
-  animation:strikeWrist 1.05s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackStrike .arm.left{
-  animation:strikeBackArm 1.05s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackStrike .leg.left{
-  animation:strikeFrontLeg 1.05s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackStrike .leg.right{
-  animation:strikeBackLeg 1.05s cubic-bezier(.2,.8,.2,1);
-}
-
-/* BODY */
-
-@keyframes strikeBody{
-  0%{
-    transform:translateX(0) rotate(0);
-  }
-  18%{
-    transform:translateX(-8px) rotate(-7deg);
-  }
-  48%{
-    transform:translateX(5px) rotate(4deg);
-  }
-  62%{
-    transform:translateX(17px) rotate(-2deg);
-  }
-  78%{
-    transform:translateX(9px) rotate(2deg);
-  }
-  100%{
-    transform:translateX(0) rotate(0);
-  }
-}
-
-@keyframes strikeHead{
-  0%{transform:rotate(0)}
-  20%{transform:rotate(-9deg)}
-  52%{transform:rotate(7deg)}
-  75%{transform:rotate(-3deg)}
-  100%{transform:rotate(0)}
-}
-
-/* SHOULDER */
-
-@keyframes strikeShoulder{
-  0%{
-    transform:rotate(-12deg);
-  }
-  20%{
-    transform:rotate(-63deg);
-  }
-  43%{
-    transform:rotate(-76deg);
-  }
-  59%{
-    transform:rotate(-24deg);
-  }
-  74%{
-    transform:rotate(-2deg);
-  }
-  100%{
-    transform:rotate(-12deg);
-  }
-}
-
-/* ELBOW */
-
-@keyframes strikeElbow{
-  0%{
-    transform:rotate(5deg);
-  }
-  25%{
-    transform:rotate(62deg);
-  }
-  43%{
-    transform:rotate(72deg);
-  }
-  58%{
-    transform:rotate(-18deg);
-  }
-  72%{
-    transform:rotate(-5deg);
-  }
-  100%{
-    transform:rotate(5deg);
-  }
-}
-
-/* WRIST */
-
-@keyframes strikeWrist{
-  0%{
-    transform:scale(1) rotate(0);
-  }
-  42%{
-    transform:scale(1.03) rotate(12deg);
-  }
-  58%{
-    transform:scale(1.2) rotate(-12deg);
-  }
-  68%{
-    transform:scale(.9) rotate(8deg);
-  }
-  100%{
-    transform:scale(1) rotate(0);
-  }
-}
-
-/* BACK ARM */
-
-@keyframes strikeBackArm{
-  0%{transform:rotate(12deg)}
-  25%{transform:rotate(48deg)}
-  45%{transform:rotate(37deg)}
-  68%{transform:rotate(20deg)}
-  100%{transform:rotate(12deg)}
-}
-
-/* LEGS */
-
-@keyframes strikeFrontLeg{
-  0%{transform:rotate(0)}
-  25%{transform:rotate(8deg) translateY(3px)}
-  45%{transform:rotate(14deg) translateY(5px)}
-  68%{transform:rotate(-5deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes strikeBackLeg{
-  0%{transform:rotate(0)}
-  25%{transform:rotate(-7deg)}
-  50%{transform:rotate(-10deg)}
-  70%{transform:rotate(3deg)}
-  100%{transform:rotate(0)}
-}
-
-/* =========================
-   SHIELD
-========================= */
-
-.player.attackShield .model{
-  animation:shieldBody .9s ease;
-}
-
-.player.attackShield .arm.left{
-  animation:shieldShoulder .9s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackShield .arm.left .forearm{
-  animation:shieldElbow .9s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackShield .arm.left .hand{
-  animation:shieldWrist .9s ease;
-}
-
-.player.attackShield .leg.left{
-  animation:shieldLeg .9s ease;
-}
-
-@keyframes shieldBody{
-  0%{transform:translateX(0) rotate(0)}
-  30%{transform:translateX(-7px) rotate(5deg)}
-  58%{transform:translateX(-3px) rotate(2deg)}
-  100%{transform:translateX(0) rotate(0)}
-}
-
-@keyframes shieldShoulder{
-  0%{transform:rotate(12deg)}
-  25%{transform:rotate(-25deg)}
-  48%{transform:rotate(-52deg)}
-  65%{transform:rotate(-43deg)}
-  100%{transform:rotate(12deg)}
-}
-
-@keyframes shieldElbow{
-  0%{transform:rotate(0)}
-  30%{transform:rotate(-40deg)}
-  52%{transform:rotate(-72deg)}
-  72%{transform:rotate(-35deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes shieldWrist{
-  0%{transform:rotate(0)}
-  48%{transform:rotate(-30deg) scale(1.08)}
-  65%{transform:rotate(-5deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes shieldLeg{
-  0%{transform:rotate(0)}
-  35%{transform:rotate(7deg)}
-  60%{transform:rotate(-4deg)}
-  100%{transform:rotate(0)}
-}
-
-/* =========================
-   WORD OF TRUTH
-========================= */
-
-.player.attackTruth .model{
-  animation:truthBody .95s ease;
-}
-
-.player.attackTruth .arm.left{
-  animation:truthLeft .95s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackTruth .arm.right{
-  animation:truthRight .95s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackTruth .arm.left .forearm{
-  animation:truthLeftElbow .95s ease;
+.hudCard{
+  min-width:0;
+  padding:9px 11px;
+  border:1px solid rgba(137,174,230,.4);
+  border-radius:14px;
+  background:rgba(5,10,24,.72);
+  backdrop-filter:blur(10px);
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
 }
 
-.player.attackTruth .arm.right .forearm{
-  animation:truthRightElbow .95s ease;
+.hudCard.enemyCard{
+  text-align:right;
 }
 
-.player.attackTruth .arm.left .hand,
-.player.attackTruth .arm.right .hand{
-  animation:truthHands .95s ease;
+.hudName{
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.08em;
+  margin-bottom:5px;
 }
 
-.player.attackTruth .head{
-  animation:truthHead .95s ease;
+.bar{
+  position:relative;
+  height:15px;
+  border-radius:999px;
+  background:#070a13;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.25);
 }
 
-@keyframes truthBody{
-  0%{transform:translateY(0)}
-  35%{transform:translateY(-7px) rotate(0)}
-  58%{transform:translateY(-13px)}
-  78%{transform:translateY(-4px)}
-  100%{transform:translateY(0)}
+.barFill{
+  height:100%;
+  width:100%;
+  transition:width .35s ease;
 }
-
-@keyframes truthLeft{
-  0%{transform:rotate(12deg)}
-  30%{transform:rotate(-35deg)}
-  53%{transform:rotate(-57deg)}
-  68%{transform:rotate(-37deg)}
-  100%{transform:rotate(12deg)}
-}
-
-@keyframes truthRight{
-  0%{transform:rotate(-12deg)}
-  30%{transform:rotate(35deg)}
-  53%{transform:rotate(57deg)}
-  68%{transform:rotate(37deg)}
-  100%{transform:rotate(-12deg)}
-}
-
-@keyframes truthLeftElbow{
-  0%{transform:rotate(0)}
-  35%{transform:rotate(-55deg)}
-  58%{transform:rotate(-80deg)}
-  75%{transform:rotate(-25deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes truthRightElbow{
-  0%{transform:rotate(0)}
-  35%{transform:rotate(55deg)}
-  58%{transform:rotate(80deg)}
-  75%{transform:rotate(25deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes truthHands{
-  0%{transform:scale(1)}
-  40%{transform:scale(1.12)}
-  58%{transform:scale(1.32) rotate(5deg)}
-  70%{transform:scale(1)}
-  100%{transform:scale(1)}
-}
-
-@keyframes truthHead{
-  0%{transform:rotate(0)}
-  40%{transform:rotate(-4deg)}
-  60%{transform:rotate(4deg)}
-  100%{transform:rotate(0)}
-}
-
-/* =========================
-   LIGHT BURST
-========================= */
-
-.player.attackBurst .model{
-  animation:burstBody 1.3s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackBurst .arm.left{
-  animation:burstLeft 1.3s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackBurst .arm.right{
-  animation:burstRight 1.3s cubic-bezier(.2,.8,.2,1);
-}
-
-.player.attackBurst .arm.left .forearm{
-  animation:burstLeftElbow 1.3s ease;
-}
-
-.player.attackBurst .arm.right .forearm{
-  animation:burstRightElbow 1.3s ease;
-}
-
-.player.attackBurst .arm.left .hand,
-.player.attackBurst .arm.right .hand{
-  animation:burstHands 1.3s ease;
-}
-
-.player.attackBurst .leg.left{
-  animation:burstLegLeft 1.3s ease;
-}
-
-.player.attackBurst .leg.right{
-  animation:burstLegRight 1.3s ease;
-}
-
-@keyframes burstBody{
-  0%{transform:scale(1) translateY(0)}
-  22%{transform:scale(.93) translateY(9px)}
-  48%{transform:scale(.98) translateY(2px)}
-  67%{transform:scale(1.13) translateY(-15px)}
-  82%{transform:scale(1.05) translateY(-4px)}
-  100%{transform:scale(1)}
-}
-
-@keyframes burstLeft{
-  0%{transform:rotate(12deg)}
-  25%{transform:rotate(67deg)}
-  45%{transform:rotate(76deg)}
-  62%{transform:rotate(-62deg)}
-  78%{transform:rotate(-37deg)}
-  100%{transform:rotate(12deg)}
-}
-
-@keyframes burstRight{
-  0%{transform:rotate(-12deg)}
-  25%{transform:rotate(-67deg)}
-  45%{transform:rotate(-76deg)}
-  62%{transform:rotate(62deg)}
-  78%{transform:rotate(37deg)}
-  100%{transform:rotate(-12deg)}
-}
-
-@keyframes burstLeftElbow{
-  0%{transform:rotate(0)}
-  30%{transform:rotate(-70deg)}
-  48%{transform:rotate(-90deg)}
-  65%{transform:rotate(60deg)}
-  80%{transform:rotate(25deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes burstRightElbow{
-  0%{transform:rotate(0)}
-  30%{transform:rotate(70deg)}
-  48%{transform:rotate(90deg)}
-  65%{transform:rotate(-60deg)}
-  80%{transform:rotate(-25deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes burstHands{
-  0%{transform:scale(1)}
-  35%{transform:scale(1.15)}
-  60%{transform:scale(1.4)}
-  72%{transform:scale(.8)}
-  100%{transform:scale(1)}
-}
-
-@keyframes burstLegLeft{
-  0%{transform:rotate(0)}
-  25%{transform:rotate(12deg) translateY(8px)}
-  48%{transform:rotate(-7deg)}
-  70%{transform:rotate(4deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes burstLegRight{
-  0%{transform:rotate(0)}
-  25%{transform:rotate(-12deg) translateY(8px)}
-  48%{transform:rotate(7deg)}
-  70%{transform:rotate(-4deg)}
-  100%{transform:rotate(0)}
-}
-
-/* =========================
-   ENEMY ATTACK
-========================= */
-
-.enemy.enemyAttack .model{
-  animation:demonBody .9s cubic-bezier(.2,.8,.2,1);
-}
-
-.enemy.enemyAttack .arm.right{
-  animation:demonShoulder .9s cubic-bezier(.2,.8,.2,1);
-}
-
-.enemy.enemyAttack .arm.right .forearm{
-  animation:demonElbow .9s cubic-bezier(.2,.8,.2,1);
-}
-
-.enemy.enemyAttack .arm.right .hand{
-  animation:demonHand .9s ease;
-}
-
-.enemy.enemyAttack .leg.left{
-  animation:demonLeg .9s ease;
-}
-
-@keyframes demonBody{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-8px) rotate(-6deg)}
-  50%{transform:translateX(8px) rotate(5deg)}
-  67%{transform:translateX(13px) rotate(-2deg)}
-  100%{transform:translateX(0)}
-}
-
-@keyframes demonShoulder{
-  0%{transform:rotate(-12deg)}
-  28%{transform:rotate(63deg)}
-  48%{transform:rotate(76deg)}
-  63%{transform:rotate(-20deg)}
-  100%{transform:rotate(-12deg)}
-}
-
-@keyframes demonElbow{
-  0%{transform:rotate(0)}
-  28%{transform:rotate(70deg)}
-  50%{transform:rotate(85deg)}
-  65%{transform:rotate(-25deg)}
-  100%{transform:rotate(0)}
-}
-
-@keyframes demonHand{
-  0%{transform:scale(1)}
-  48%{transform:scale(1.3)}
-  62%{transform:scale(.82)}
-  100%{transform:scale(1)}
-}
-
-@keyframes demonLeg{
-  0%{transform:rotate(0)}
-  35%{transform:rotate(-12deg)}
-  60%{transform:rotate(7deg)}
-  100%{transform:rotate(0)}
-}
-
-/* =========================
-   EFFECTS
-========================= */
 
-.projectile{
-  position:absolute;
-  width:30px;
-  height:30px;
-  border-radius:50%;
+.playerFill{
   background:
-    radial-gradient(
-      circle,
-      #fff 0 12%,
-      #a8faff 25%,
-      #43a9ff 52%,
-      transparent 72%
-    );
-  box-shadow:
-    0 0 15px white,
-    0 0 30px #54dfff,
-    0 0 50px #287cff;
-  z-index:70;
+    linear-gradient(90deg,#9e6c00,#ffd85c,#fff2a5);
+  box-shadow:0 0 15px #ffd34f;
 }
 
-.projectileTrail{
-  position:absolute;
-  height:9px;
-  width:110px;
-  border-radius:20px;
-  background:linear-gradient(
-    90deg,
-    transparent,
-    #65eaff,
-    white
-  );
-  filter:blur(2px);
-  z-index:69;
-}
-
-.beam{
-  position:absolute;
-  left:175px;
-  top:250px;
-  width:0;
-  height:28px;
-  border-radius:20px;
+.enemyFill{
   background:
-    linear-gradient(
-      #fff,
-      #9af8ff,
-      #3c8cff,
-      #fff
-    );
-  box-shadow:
-    0 0 15px white,
-    0 0 30px #57dcff,
-    0 0 55px #267aff;
-  z-index:65;
-  animation:beamGrow .55s cubic-bezier(.15,.8,.2,1) forwards;
+    linear-gradient(90deg,#731126,#f0445d,#ff9aa7);
+  box-shadow:0 0 15px #f0445d;
 }
 
-@keyframes beamGrow{
-  0%{
-    width:0;
-    opacity:0;
-  }
-  20%{
-    width:130px;
-    opacity:1;
-  }
-  100%{
-    width:700px;
-    opacity:1;
-  }
+.centerHud{
+  align-self:start;
+  text-align:center;
+  min-width:120px;
 }
 
-.bigBeam{
-  position:absolute;
-  left:155px;
-  top:220px;
-  width:0;
-  height:95px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      ellipse,
-      white 0 10%,
-      #b9fbff 18%,
-      #56dfff 38%,
-      #287aff 60%,
-      transparent 76%
-    );
-  box-shadow:
-    0 0 35px white,
-    0 0 65px #53dcff;
-  z-index:66;
-  animation:bigBeamGrow .75s cubic-bezier(.15,.8,.2,1) forwards;
-}
-
-@keyframes bigBeamGrow{
-  0%{
-    width:0;
-    opacity:0;
-  }
-  20%{
-    width:160px;
-    opacity:1;
-  }
-  100%{
-    width:760px;
-    opacity:1;
-  }
-}
-
-.shield{
-  position:absolute;
-  left:92px;
-  top:145px;
-  width:105px;
-  height:140px;
-  border-radius:50% 50% 55% 55%;
-  border:6px solid #ffe66a;
-  background:
-    radial-gradient(
-      circle,
-      rgba(255,255,255,.75),
-      rgba(77,196,255,.28) 35%,
-      rgba(20,70,170,.12) 65%,
-      transparent
-    );
-  box-shadow:
-    0 0 18px #ffe66a,
-    inset 0 0 25px #72ddff;
-  z-index:80;
-  animation:shieldIn .32s cubic-bezier(.2,1.4,.4,1) forwards;
-}
-
-@keyframes shieldIn{
-  from{
-    opacity:0;
-    transform:scale(.35) rotate(-20deg);
-  }
-  to{
-    opacity:1;
-    transform:scale(1) rotate(0);
-  }
-}
-
-.ring{
-  position:absolute;
-  left:55px;
-  top:105px;
-  width:105px;
-  height:105px;
-  border-radius:50%;
-  border:7px solid #72eaff;
-  box-shadow:0 0 30px #4ddcff;
-  z-index:60;
-  animation:ringExpand .8s ease-out forwards;
-}
-
-@keyframes ringExpand{
-  from{
-    transform:scale(.3);
-    opacity:1;
-  }
-  to{
-    transform:scale(4);
-    opacity:0;
-  }
-}
-
-.impact{
-  position:absolute;
-  right:80px;
-  top:205px;
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  border:7px solid white;
-  box-shadow:0 0 35px #fff;
-  z-index:100;
-  animation:impact .45s ease-out forwards;
-}
-
-@keyframes impact{
-  from{
-    transform:scale(.15);
-    opacity:1;
-  }
-  to{
-    transform:scale(1.8);
-    opacity:0;
-  }
-}
-
-.flash{
-  position:absolute;
-  inset:0;
-  background:white;
-  opacity:0;
-  z-index:150;
-  pointer-events:none;
-  animation:flash .25s ease;
-}
-
-@keyframes flash{
-  0%{opacity:.7}
-  100%{opacity:0}
-}
-
-.damageNumber{
-  position:absolute;
-  right:115px;
-  top:170px;
-  font-size:28px;
+.turnText{
+  font-size:10px;
+  color:#9eb7e9;
   font-weight:900;
-  color:#fff;
-  text-shadow:
-    0 0 5px #000,
-    0 0 15px #65eaff;
-  z-index:200;
-  animation:damageFloat .7s ease-out forwards;
+  letter-spacing:.1em;
 }
 
-@keyframes damageFloat{
-  from{
-    transform:translateY(0) scale(.7);
-    opacity:0;
-  }
-  20%{
-    opacity:1;
-  }
-  to{
-    transform:translateY(-65px) scale(1.1);
-    opacity:0;
-  }
+.powerText{
+  margin-top:4px;
+  color:#75e9ff;
+  font-size:13px;
+  font-weight:1000;
 }
 
-/* CAMERA HIT */
+/* COMBAT MESSAGE */
 
-.arena.hit{
-  animation:cameraHit .22s ease;
-}
-
-@keyframes cameraHit{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-6px)}
-  50%{transform:translateX(7px)}
-  75%{transform:translateX(-4px)}
-  100%{transform:translateX(0)}
+.combatMessage{
+  position:absolute;
+  z-index:30;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  width:min(700px,90%);
+  text-align:center;
+  padding:10px 16px;
+  border-radius:14px;
+  background:rgba(3,7,18,.74);
+  border:1px solid rgba(120,170,235,.32);
+  backdrop-filter:blur(10px);
+  font-size:13px;
+  font-weight:800;
+  pointer-events:none;
+  text-shadow:0 2px 5px #000;
 }
 
 /* CONTROLS */
@@ -1405,95 +206,340 @@ body{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:10px;
-  margin-top:12px;
+  margin-top:10px;
 }
 
-.attack{
-  min-height:62px;
-  border-radius:15px;
-  color:white;
-  font-weight:900;
+.attackButton{
+  position:relative;
+  min-height:70px;
+  padding:10px;
+  border-radius:17px;
+  border:1px solid #506da8;
   background:
-    linear-gradient(#324d8b,#17284e);
-  border:2px solid #6889d1;
-  box-shadow:0 4px 0 #080f21;
-  transition:transform .1s,filter .1s;
+    linear-gradient(180deg,#263d6c,#101c39);
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.12),
+    0 6px 0 #050914,
+    0 12px 25px rgba(0,0,0,.25);
+  cursor:pointer;
+  user-select:none;
+  touch-action:manipulation;
+  transition:
+    transform .1s,
+    filter .15s,
+    border-color .15s;
 }
 
-.attack:active{
-  transform:translateY(3px);
-  filter:brightness(1.25);
+.attackButton:active{
+  transform:translateY(5px);
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.12),
+    0 2px 0 #050914;
 }
 
-.attack:disabled{
-  opacity:.4;
+.attackButton:disabled{
+  opacity:.38;
+  filter:grayscale(.5);
   cursor:not-allowed;
 }
 
-.log{
-  min-height:70px;
-  margin-top:12px;
+.attackIcon{
+  display:block;
+  font-size:23px;
+  margin-bottom:4px;
+}
+
+.attackName{
+  display:block;
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.05em;
+}
+
+.attackInfo{
+  display:block;
+  margin-top:3px;
+  color:#9db4df;
+  font-size:9px;
+}
+
+.special{
+  border-color:#d4a932;
+  background:
+    linear-gradient(180deg,#55451c,#1c1730);
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.15),
+    0 6px 0 #08070d,
+    0 0 25px rgba(255,205,60,.15);
+}
+
+/* BOTTOM */
+
+.bottom{
+  display:grid;
+  grid-template-columns:1fr 1.6fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.panel{
   padding:13px;
-  border-radius:15px;
-  background:#090d1d;
-  border:1px solid #304777;
+  border-radius:16px;
+  border:1px solid #293c64;
+  background:rgba(7,12,26,.8);
+}
+
+.panelTitle{
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.12em;
+  color:#7794c8;
+  margin-bottom:7px;
+}
+
+.log{
+  min-height:55px;
+  font-size:12px;
   line-height:1.45;
 }
 
 .verse{
-  margin-top:10px;
-  padding:12px;
-  border-left:4px solid #e4c34b;
-  background:rgba(228,195,75,.06);
-  color:#fff0a3;
+  color:#ffe99a;
   font-style:italic;
+  line-height:1.45;
+  font-size:12px;
 }
+
+.verseRef{
+  margin-top:5px;
+  color:#a9bce1;
+  font-style:normal;
+  font-weight:900;
+}
+
+/* MENU */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(41,83,160,.25),rgba(0,0,0,.88) 65%);
+  backdrop-filter:blur(10px);
+}
+
+.overlay.active{
+  display:flex;
+}
+
+.menu{
+  width:min(520px,100%);
+  max-height:90vh;
+  overflow:auto;
+  padding:24px;
+  border:1px solid #46659a;
+  border-radius:24px;
+  background:
+    linear-gradient(145deg,rgba(15,28,56,.98),rgba(5,9,21,.98));
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.7),
+    inset 0 1px rgba(255,255,255,.1);
+}
+
+.menu h1{
+  margin:0 0 5px;
+  text-align:center;
+  font-size:clamp(25px,7vw,42px);
+  font-weight:1000;
+  letter-spacing:.06em;
+}
+
+.menuSub{
+  text-align:center;
+  color:#91a9d5;
+  font-size:12px;
+  margin-bottom:22px;
+}
+
+.saveGrid{
+  display:grid;
+  gap:10px;
+}
+
+.saveSlot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:15px;
+  border-radius:16px;
+  border:1px solid #354d7d;
+  background:#0b1429;
+}
+
+.saveInfo{
+  min-width:0;
+}
+
+.saveName{
+  font-weight:1000;
+}
+
+.saveDetails{
+  color:#7892bd;
+  font-size:10px;
+  margin-top:4px;
+}
+
+.menuButton{
+  border:1px solid #5575ae;
+  border-radius:12px;
+  padding:10px 14px;
+  background:#1a315c;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.deleteButton{
+  background:#351827;
+  border-color:#793449;
+}
+
+.customize{
+  display:none;
+}
+
+.customize.active{
+  display:block;
+}
+
+.field{
+  margin:12px 0;
+}
+
+.field label{
+  display:block;
+  color:#91a9d5;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+select,input{
+  width:100%;
+  padding:12px;
+  color:#fff;
+  background:#081125;
+  border:1px solid #3a578d;
+  border-radius:12px;
+}
+
+.bigButton{
+  width:100%;
+  margin-top:10px;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #6c8ed0;
+  background:linear-gradient(#31569a,#162c55);
+  font-weight:1000;
+  cursor:pointer;
+}
+
+/* LEVEL TRANSITION */
+
+.levelFlash{
+  position:fixed;
+  inset:0;
+  z-index:450;
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.75);
+  opacity:0;
+}
+
+.levelFlash.show{
+  animation:levelFlash 1.5s ease forwards;
+}
+
+.levelTitle{
+  text-align:center;
+  font-size:clamp(28px,8vw,70px);
+  font-weight:1000;
+  letter-spacing:.08em;
+  text-shadow:
+    0 0 20px #5adfff,
+    0 0 50px #287cff;
+}
+
+@keyframes levelFlash{
+  0%{opacity:0}
+  20%{opacity:1}
+  70%{opacity:1}
+  100%{opacity:0}
+}
+
+/* MOBILE */
 
 @media(max-width:700px){
 
-  .arena{
-    height:500px;
+  #game{
+    padding:7px;
   }
 
-  .character{
-    transform:scale(.82);
-    transform-origin:50% 90%;
+  .topbar{
+    height:48px;
   }
 
-  .player{
-    left:-3%;
+  .stageLabel{
+    font-size:9px;
+    padding:7px 9px;
   }
 
-  .enemy{
-    right:-3%;
+  #arena{
+    aspect-ratio:4/3;
+    min-height:390px;
+    border-radius:18px;
+  }
+
+  .hud{
+    top:8px;
+    left:8px;
+    right:8px;
+    gap:6px;
+  }
+
+  .hudCard{
+    padding:7px;
+  }
+
+  .hudName{
+    font-size:8px;
+  }
+
+  .centerHud{
+    min-width:75px;
   }
 
   .controls{
     grid-template-columns:repeat(2,1fr);
   }
-}
 
-@media(max-width:480px){
-
-  .arena{
-    height:450px;
+  .attackButton{
+    min-height:62px;
   }
 
-  .character{
-    transform:scale(.68);
+  .bottom{
+    grid-template-columns:1fr;
   }
 
-  .status{
-    left:10px;
-    right:10px;
-  }
-
-  .healthBox{
-    min-width:0;
-    width:45%;
-  }
-
-  .name{
+  .combatMessage{
+    bottom:9px;
     font-size:11px;
   }
 }
@@ -1502,229 +548,180 @@ body{
 
 <body>
 
+<div id="app">
+
 <div id="game">
 
-  <div class="header">
-    <div class="title">SPIRITUAL POWER</div>
-    <div class="level" id="levelText">
-      LEVEL 1 — SHADOW DEMON
+  <div class="topbar">
+    <div class="logo">SPIRITUAL POWER</div>
+    <div class="stageLabel" id="stageLabel">
+      LEVEL 1 • SHADOW DEMON
     </div>
   </div>
 
-  <div class="arena" id="arena">
+  <div id="arena">
 
-    <div class="stars"></div>
-    <div class="mist"></div>
-    <div class="ground"></div>
+    <canvas id="canvas"></canvas>
 
-    <div class="status">
+    <div class="hud">
 
-      <div class="healthBox">
-        <div class="name">SPIRIT WARRIOR</div>
-        <div class="health">
-          <div class="healthFill" id="playerHP"></div>
+      <div class="hudCard">
+        <div class="hudName">SPIRIT WARRIOR</div>
+        <div class="bar">
+          <div id="playerBar" class="barFill playerFill"></div>
         </div>
       </div>
 
-      <div class="healthBox">
-        <div class="name" id="enemyName">
-          SHADOW DEMON
-        </div>
-        <div class="health enemyHealth">
-          <div class="healthFill" id="enemyHP"></div>
+      <div class="hudCard centerHud">
+        <div class="turnText" id="turnText">YOUR TURN</div>
+        <div class="powerText" id="powerText">POWER 0</div>
+      </div>
+
+      <div class="hudCard enemyCard">
+        <div class="hudName" id="enemyHUDName">SHADOW DEMON</div>
+        <div class="bar">
+          <div id="enemyBar" class="barFill enemyFill"></div>
         </div>
       </div>
 
     </div>
 
-
-    <!-- PLAYER -->
-
-    <div class="character player" id="player">
-
-      <div class="model">
-
-        <div class="head">
-
-          <div class="hair"></div>
-
-          <div class="face">
-            <div class="eye a"></div>
-            <div class="eye b"></div>
-            <div class="nose"></div>
-            <div class="mouth"></div>
-          </div>
-
-        </div>
-
-        <div class="body">
-
-          <div class="shoulder"></div>
-
-          <div class="chest">
-            <div class="chestCore"></div>
-          </div>
-
-          <div class="belt"></div>
-
-        </div>
-
-
-        <div class="arm left">
-          <div class="upperArm"></div>
-          <div class="elbow"></div>
-          <div class="forearm"></div>
-
-          <div class="hand">
-            <i class="finger f1"></i>
-            <i class="finger f2"></i>
-            <i class="finger f3"></i>
-            <i class="finger f4"></i>
-          </div>
-        </div>
-
-
-        <div class="arm right">
-          <div class="upperArm"></div>
-          <div class="elbow"></div>
-          <div class="forearm"></div>
-
-          <div class="hand">
-            <i class="finger f1"></i>
-            <i class="finger f2"></i>
-            <i class="finger f3"></i>
-            <i class="finger f4"></i>
-          </div>
-        </div>
-
-
-        <div class="leg left">
-          <div class="thigh"></div>
-          <div class="knee"></div>
-          <div class="shin"></div>
-          <div class="boot"></div>
-        </div>
-
-
-        <div class="leg right">
-          <div class="thigh"></div>
-          <div class="knee"></div>
-          <div class="shin"></div>
-          <div class="boot"></div>
-        </div>
-
-      </div>
-
-      <div class="handGlow" id="handGlow"></div>
-
-    </div>
-
-
-    <!-- ENEMY -->
-
-    <div class="character enemy" id="enemy">
-
-      <div class="wings">
-        <div class="wing one"></div>
-        <div class="wing two"></div>
-      </div>
-
-      <div class="model">
-
-        <div class="head">
-
-          <div class="horns">
-            <div class="horn1"></div>
-            <div class="horn2"></div>
-          </div>
-
-          <div class="face">
-            <div class="eye a"></div>
-            <div class="eye b"></div>
-          </div>
-
-        </div>
-
-        <div class="body">
-
-          <div class="shoulder"></div>
-
-          <div class="chest">
-            <div class="chestCore"></div>
-          </div>
-
-          <div class="belt"></div>
-
-        </div>
-
-
-        <div class="arm left">
-          <div class="upperArm"></div>
-          <div class="elbow"></div>
-          <div class="forearm"></div>
-          <div class="hand"></div>
-        </div>
-
-
-        <div class="arm right">
-          <div class="upperArm"></div>
-          <div class="elbow"></div>
-          <div class="forearm"></div>
-          <div class="hand"></div>
-        </div>
-
-
-        <div class="leg left">
-          <div class="thigh"></div>
-          <div class="knee"></div>
-          <div class="shin"></div>
-          <div class="boot"></div>
-        </div>
-
-
-        <div class="leg right">
-          <div class="thigh"></div>
-          <div class="knee"></div>
-          <div class="shin"></div>
-          <div class="boot"></div>
-        </div>
-
-      </div>
-
+    <div class="combatMessage" id="combatMessage">
+      A shadow emerges from the darkness...
     </div>
 
   </div>
-
 
   <div class="controls">
 
-    <button class="attack" id="strikeBtn">
-      ⚡ SPIRIT STRIKE
+    <button class="attackButton" id="strike">
+      <span class="attackIcon">⚡</span>
+      <span class="attackName">SPIRIT STRIKE</span>
+      <span class="attackInfo">Fast energy attack</span>
     </button>
 
-    <button class="attack" id="shieldBtn">
-      🛡️ SHIELD OF FATE
+    <button class="attackButton" id="shield">
+      <span class="attackIcon">🛡️</span>
+      <span class="attackName">SHIELD OF FATE</span>
+      <span class="attackInfo">Block the next hit</span>
     </button>
 
-    <button class="attack" id="truthBtn">
-      ✋ WORD OF TRUTH
+    <button class="attackButton" id="truth">
+      <span class="attackIcon">✋</span>
+      <span class="attackName">WORD OF TRUTH</span>
+      <span class="attackInfo">Powerful beam</span>
     </button>
 
-    <button class="attack" id="burstBtn">
-      ☀️ LIGHT BURST
+    <button class="attackButton special" id="burst">
+      <span class="attackIcon">☀️</span>
+      <span class="attackName">LIGHT BURST</span>
+      <span class="attackInfo">Unlock after surviving 3 turns</span>
     </button>
 
   </div>
 
+  <div class="bottom">
 
-  <div class="log" id="log">
-    The Shadow Demon approaches...
+    <div class="panel">
+      <div class="panelTitle">COMBAT LOG</div>
+      <div class="log" id="log">
+        Prepare yourself.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelTitle">SCRIPTURE</div>
+      <div class="verse" id="verse">
+        “Put on the whole armour of God, that ye may be able to stand against the wiles of the devil.”
+        <div class="verseRef">Ephesians 6:11</div>
+      </div>
+    </div>
+
   </div>
 
+</div>
+</div>
 
-  <div class="verse" id="verse">
-    “Put on the whole armour of God, that ye may be able to stand against the wiles of the devil.”
-    — Ephesians 6:11
+
+<!-- SAVE MENU -->
+
+<div class="overlay active" id="saveOverlay">
+
+  <div class="menu">
+
+    <h1>SHADOWBOUND</h1>
+
+    <div class="menuSub">
+      Choose your save slot
+    </div>
+
+    <div class="saveGrid" id="saveGrid"></div>
+
+  </div>
+
+</div>
+
+
+<!-- CUSTOMIZATION -->
+
+<div class="overlay" id="customOverlay">
+
+  <div class="menu">
+
+    <h1>WARRIOR</h1>
+
+    <div class="menuSub">
+      Create your spiritual warrior
+    </div>
+
+    <div class="field">
+
+      <label>WARRIOR NAME</label>
+
+      <input
+        id="warriorName"
+        maxlength="18"
+        placeholder="Spirit Warrior"
+      >
+
+    </div>
+
+    <div class="field">
+
+      <label>GENDER</label>
+
+      <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+
+    </div>
+
+    <div class="field">
+
+      <label>ARMOR STYLE</label>
+
+      <select id="armor">
+        <option value="light">Light Guardian</option>
+        <option value="royal">Royal Guardian</option>
+        <option value="celestial">Celestial Guardian</option>
+      </select>
+
+    </div>
+
+    <button class="bigButton" id="startGame">
+      BEGIN JOURNEY
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="levelFlash" id="levelFlash">
+
+  <div class="levelTitle" id="levelTitle">
+    LEVEL 2
   </div>
 
 </div>
@@ -1732,274 +729,2759 @@ body{
 
 <script>
 
-const player = document.getElementById("player");
-const enemy = document.getElementById("enemy");
+/* =========================================================
+   SPIRITUAL POWER: SHADOWBOUND
+   Full Canvas Game
+========================================================= */
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
 const arena = document.getElementById("arena");
 
-const playerHPBar = document.getElementById("playerHP");
-const enemyHPBar = document.getElementById("enemyHP");
+const playerBar = document.getElementById("playerBar");
+const enemyBar = document.getElementById("enemyBar");
 
-const strikeBtn = document.getElementById("strikeBtn");
-const shieldBtn = document.getElementById("shieldBtn");
-const truthBtn = document.getElementById("truthBtn");
-const burstBtn = document.getElementById("burstBtn");
+const stageLabel = document.getElementById("stageLabel");
+const enemyHUDName = document.getElementById("enemyHUDName");
 
-const log = document.getElementById("log");
-const levelText = document.getElementById("levelText");
-const enemyName = document.getElementById("enemyName");
-const verse = document.getElementById("verse");
+const turnText = document.getElementById("turnText");
+const powerText = document.getElementById("powerText");
 
-let playerHP = 100;
-let enemyHP = 100;
+const combatMessage =
+  document.getElementById("combatMessage");
 
+const log =
+  document.getElementById("log");
+
+const verse =
+  document.getElementById("verse");
+
+const saveOverlay =
+  document.getElementById("saveOverlay");
+
+const customOverlay =
+  document.getElementById("customOverlay");
+
+const saveGrid =
+  document.getElementById("saveGrid");
+
+const levelFlash =
+  document.getElementById("levelFlash");
+
+const levelTitle =
+  document.getElementById("levelTitle");
+
+const warriorName =
+  document.getElementById("warriorName");
+
+const gender =
+  document.getElementById("gender");
+
+const armor =
+  document.getElementById("armor");
+
+const startGame =
+  document.getElementById("startGame");
+
+
+const buttons = {
+  strike:document.getElementById("strike"),
+  shield:document.getElementById("shield"),
+  truth:document.getElementById("truth"),
+  burst:document.getElementById("burst")
+};
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let W = 1000;
+let H = 560;
+
+let running = false;
 let busy = false;
-let shieldActive = false;
-let turnsSurvived = 0;
-let specialUnlocked = false;
-let level = 1;
+
+let selectedSlot = null;
+
+let player = {
+  x:.22,
+  hp:100,
+  maxHP:100,
+  power:0,
+  turns:0,
+  shield:false,
+  name:"Spirit Warrior",
+  gender:"male",
+  armor:"light"
+};
+
+let enemy = {
+  x:.78,
+  hp:100,
+  maxHP:100,
+  level:1,
+  name:"Shadow Demon"
+};
+
+let camera = {
+  shake:0,
+  x:0,
+  y:0
+};
+
+let worldTime = 0;
+
+let particles = [];
+let effects = [];
+let projectiles = [];
+let floatingText = [];
 
 
-function wait(ms){
-  return new Promise(resolve => setTimeout(resolve,ms));
+/* =========================================================
+   SAVE SYSTEM
+========================================================= */
+
+const SAVE_KEY =
+  "ShadowboundUltimateSave_v4";
+
+
+function getSaves(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(SAVE_KEY)
+    ) || {};
+
+  }catch{
+
+    return {};
+
+  }
+
 }
 
 
-function message(text){
-  log.innerHTML = text;
-}
+function saveGame(){
 
+  if(selectedSlot===null)return;
 
-function buttons(enabled){
+  const saves=getSaves();
 
-  strikeBtn.disabled = !enabled;
-  shieldBtn.disabled = !enabled;
-  truthBtn.disabled = !enabled;
+  saves[selectedSlot]={
+    player:{
+      name:player.name,
+      gender:player.gender,
+      armor:player.armor
+    },
+    level:enemy.level,
+    hp:player.hp,
+    power:player.power,
+    turns:player.turns
+  };
 
-  burstBtn.disabled =
-    !enabled ||
-    !specialUnlocked;
-}
-
-
-function updateHP(){
-
-  playerHP = Math.max(0,Math.min(100,playerHP));
-  enemyHP = Math.max(0,Math.min(100,enemyHP));
-
-  playerHPBar.style.width = playerHP+"%";
-  enemyHPBar.style.width = enemyHP+"%";
-}
-
-
-function clearStates(){
-
-  player.classList.remove(
-    "attackStrike",
-    "attackShield",
-    "attackTruth",
-    "attackBurst"
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(saves)
   );
 
-  enemy.classList.remove("enemyAttack");
 }
 
 
-function screenHit(){
+function loadSave(slot){
 
-  arena.classList.remove("hit");
+  const saves=getSaves();
 
-  void arena.offsetWidth;
+  if(!saves[slot]){
 
-  arena.classList.add("hit");
+    selectedSlot=slot;
+
+    customOverlay.classList.add("active");
+
+    return;
+
+  }
+
+  selectedSlot=slot;
+
+  const s=saves[slot];
+
+  player.name=s.player.name;
+  player.gender=s.player.gender;
+  player.armor=s.player.armor;
+
+  player.hp=s.hp;
+  player.power=s.power;
+  player.turns=s.turns;
+
+  enemy.level=s.level;
+
+  setupLevel(enemy.level);
+
+  saveOverlay.classList.remove("active");
+
+  running=true;
+
 }
 
 
-function impact(){
+function deleteSave(slot){
 
-  const x = document.createElement("div");
+  const saves=getSaves();
 
-  x.className = "impact";
+  delete saves[slot];
 
-  arena.appendChild(x);
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(saves)
+  );
 
-  screenHit();
+  renderSaveSlots();
 
-  setTimeout(()=>x.remove(),500);
 }
 
 
-function damageText(amount){
+function renderSaveSlots(){
 
-  const d = document.createElement("div");
+  saveGrid.innerHTML="";
 
-  d.className = "damageNumber";
-  d.textContent = "-"+amount;
+  const saves=getSaves();
 
-  arena.appendChild(d);
+  for(let i=1;i<=3;i++){
 
-  setTimeout(()=>d.remove(),800);
+    const save=saves[i];
+
+    const slot=document.createElement("div");
+
+    slot.className="saveSlot";
+
+    if(save){
+
+      slot.innerHTML=`
+
+        <div class="saveInfo">
+
+          <div class="saveName">
+            SAVE ${i} — ${escapeHTML(save.player.name)}
+          </div>
+
+          <div class="saveDetails">
+            Level ${save.level} • ${save.player.armor} armor
+          </div>
+
+        </div>
+
+        <div>
+
+          <button
+            class="menuButton"
+            data-load="${i}">
+            LOAD
+          </button>
+
+          <button
+            class="menuButton deleteButton"
+            data-delete="${i}">
+            DELETE
+          </button>
+
+        </div>
+
+      `;
+
+    }else{
+
+      slot.innerHTML=`
+
+        <div class="saveInfo">
+
+          <div class="saveName">
+            SAVE ${i}
+          </div>
+
+          <div class="saveDetails">
+            Empty slot
+          </div>
+
+        </div>
+
+        <button
+          class="menuButton"
+          data-load="${i}">
+          NEW GAME
+        </button>
+
+      `;
+
+    }
+
+    saveGrid.appendChild(slot);
+
+  }
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+
+}
+
+
+saveGrid.addEventListener("click",e=>{
+
+  const load=e.target.dataset.load;
+  const del=e.target.dataset.delete;
+
+  if(load){
+    loadSave(Number(load));
+  }
+
+  if(del){
+    deleteSave(Number(del));
+  }
+
+});
+
+
+startGame.addEventListener("click",()=>{
+
+  player.name =
+    warriorName.value.trim() ||
+    "Spirit Warrior";
+
+  player.gender=gender.value;
+  player.armor=armor.value;
+
+  player.hp=100;
+  player.power=0;
+  player.turns=0;
+
+  enemy.level=1;
+
+  setupLevel(1);
+
+  customOverlay.classList.remove("active");
+  saveOverlay.classList.remove("active");
+
+  running=true;
+
+  saveGame();
+
+});
+
+
+/* =========================================================
+   LEVELS
+========================================================= */
+
+const LEVELS={
+
+  1:{
+    name:"SHADOW DEMON",
+    hp:100,
+    color:"#d52e4b",
+    verse:
+      "“Put on the whole armour of God, that ye may be able to stand against the wiles of the devil.”",
+    ref:"Ephesians 6:11"
+  },
+
+  2:{
+    name:"DARK ANGEL",
+    hp:145,
+    color:"#9c5cff",
+    verse:
+      "“The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust.”",
+    ref:"Psalm 18:2"
+  },
+
+  3:{
+    name:"SHADOW COLOSSUS",
+    hp:230,
+    color:"#ff3e6c",
+    verse:
+      "“Greater is he that is in you, than he that is in the world.”",
+    ref:"1 John 4:4"
+  }
+
+};
+
+
+function setupLevel(level){
+
+  const data=LEVELS[level];
+
+  enemy.level=level;
+  enemy.name=data.name;
+  enemy.maxHP=data.hp;
+  enemy.hp=data.hp;
+
+  player.hp=player.maxHP;
+
+  stageLabel.textContent=
+    `LEVEL ${level} • ${data.name}`;
+
+  enemyHUDName.textContent=data.name;
+
+  verse.innerHTML=`
+    ${data.verse}
+    <div class="verseRef">
+      ${data.ref}
+    </div>
+  `;
+
+  player.turns=0;
+  player.shield=false;
+
+  updateHUD();
+
+}
+
+
+function showLevel(title){
+
+  levelTitle.textContent=title;
+
+  levelFlash.classList.remove("show");
+
+  void levelFlash.offsetWidth;
+
+  levelFlash.classList.add("show");
+
+}
+
+
+/* =========================================================
+   HUD
+========================================================= */
+
+function updateHUD(){
+
+  playerBar.style.width=
+    `${Math.max(0,player.hp/player.maxHP*100)}%`;
+
+  enemyBar.style.width=
+    `${Math.max(0,enemy.hp/enemy.maxHP*100)}%`;
+
+  powerText.textContent=
+    `POWER ${player.power}`;
+
+}
+
+
+function say(text){
+
+  combatMessage.textContent=text;
+  log.textContent=text;
+
+}
+
+
+function setButtons(enabled){
+
+  Object.values(buttons).forEach(b=>{
+    b.disabled=!enabled;
+  });
+
+  buttons.burst.disabled=
+    !enabled ||
+    player.turns<3;
+
+}
+
+
+/* =========================================================
+   CANVAS
+========================================================= */
+
+function resize(){
+
+  const rect=arena.getBoundingClientRect();
+
+  const dpr=
+    Math.min(window.devicePixelRatio||1,2);
+
+  W=rect.width;
+  H=rect.height;
+
+  canvas.width=W*dpr;
+  canvas.height=H*dpr;
+
+  canvas.style.width=W+"px";
+  canvas.style.height=H+"px";
+
+  ctx.setTransform(
+    dpr,0,0,dpr,0,0
+  );
+
+}
+
+
+window.addEventListener("resize",resize);
+
+resize();
+
+
+/* =========================================================
+   DRAWING HELPERS
+========================================================= */
+
+function lerp(a,b,t){
+
+  return a+(b-a)*t;
+
+}
+
+
+function ease(t){
+
+  return t<.5
+    ? 4*t*t*t
+    : 1-Math.pow(-2*t+2,3)/2;
+
+}
+
+
+function roundRect(x,y,w,h,r){
+
+  ctx.beginPath();
+
+  ctx.roundRect(
+    x,y,w,h,r
+  );
+
+}
+
+
+function glowCircle(x,y,r,color,alpha=1){
+
+  ctx.save();
+
+  ctx.globalAlpha=alpha;
+
+  const g=ctx.createRadialGradient(
+    x,y,0,
+    x,y,r
+  );
+
+  g.addColorStop(0,color);
+  g.addColorStop(.25,color);
+  g.addColorStop(1,"transparent");
+
+  ctx.fillStyle=g;
+
+  ctx.beginPath();
+  ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.restore();
+
+}
+
+
+function line(x1,y1,x2,y2,width,color){
+
+  ctx.save();
+
+  ctx.strokeStyle=color;
+  ctx.lineWidth=width;
+  ctx.lineCap="round";
+
+  ctx.beginPath();
+
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2,y2);
+
+  ctx.stroke();
+
+  ctx.restore();
+
+}
+
+
+function limb(
+  x1,y1,
+  x2,y2,
+  width,
+  colors
+){
+
+  ctx.save();
+
+  const angle=Math.atan2(
+    y2-y1,
+    x2-x1
+  );
+
+  const length=Math.hypot(
+    x2-x1,
+    y2-y1
+  );
+
+  ctx.translate(x1,y1);
+  ctx.rotate(angle);
+
+  const g=ctx.createLinearGradient(
+    0,-width/2,
+    0,width/2
+  );
+
+  g.addColorStop(0,colors[0]);
+  g.addColorStop(.5,colors[1]);
+  g.addColorStop(1,colors[2]);
+
+  ctx.fillStyle=g;
+
+  roundRect(
+    0,
+    -width/2,
+    length,
+    width,
+    width/2
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle=colors[3]||"#dcecff";
+  ctx.lineWidth=2;
+
+  ctx.stroke();
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+function drawBackground(){
+
+  const lv=enemy.level;
+
+  let top="#081329";
+  let bottom="#02040b";
+
+  if(lv===2){
+
+    top="#160c32";
+    bottom="#05030d";
+
+  }
+
+  if(lv===3){
+
+    top="#21091d";
+    bottom="#050208";
+
+  }
+
+  const g=ctx.createLinearGradient(
+    0,0,0,H
+  );
+
+  g.addColorStop(0,top);
+  g.addColorStop(1,bottom);
+
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,W,H);
+
+
+  /* moon */
+
+  const moonX=W*.5;
+  const moonY=H*.25;
+
+  glowCircle(
+    moonX,
+    moonY,
+    105,
+    lv===3 ? "#ff365b":"#67dfff",
+    .11
+  );
+
+  ctx.fillStyle=
+    lv===3 ? "#3b1022":"#d8f7ff";
+
+  ctx.globalAlpha=.9;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    moonX,
+    moonY,
+    36,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.globalAlpha=1;
+
+
+  /* stars */
+
+  for(let i=0;i<70;i++){
+
+    const x=
+      (i*137.3)%W;
+
+    const y=
+      (i*71.7)%(H*.62);
+
+    const twinkle=
+      .35+
+      Math.sin(worldTime*.002+i)*.25;
+
+    ctx.globalAlpha=twinkle;
+
+    ctx.fillStyle="#dff7ff";
+
+    ctx.fillRect(
+      x,
+      y,
+      1.5,
+      1.5
+    );
+
+  }
+
+  ctx.globalAlpha=1;
+
+
+  /* distant mountains */
+
+  ctx.fillStyle=
+    lv===3 ? "#170916":"#0a1224";
+
+  ctx.beginPath();
+
+  ctx.moveTo(0,H*.67);
+
+  for(let x=0;x<=W;x+=90){
+
+    const y=
+      H*.58+
+      Math.sin(x*.011)*45+
+      Math.sin(x*.027)*20;
+
+    ctx.lineTo(x,y);
+
+  }
+
+  ctx.lineTo(W,H);
+  ctx.lineTo(0,H);
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  /* ground */
+
+  const ground=ctx.createLinearGradient(
+    0,H*.73,
+    0,H
+  );
+
+  ground.addColorStop(
+    0,
+    lv===3 ? "#170b16":"#0a1427"
+  );
+
+  ground.addColorStop(
+    1,
+    "#02040a"
+  );
+
+  ctx.fillStyle=ground;
+
+  ctx.fillRect(
+    0,
+    H*.72,
+    W,
+    H*.28
+  );
+
+
+  /* arena lines */
+
+  ctx.globalAlpha=.3;
+
+  for(let i=-5;i<20;i++){
+
+    line(
+      W*.5,
+      H*.73,
+      W*.5+i*100,
+      H,
+      1,
+      "#46648d"
+    );
+
+  }
+
+  ctx.globalAlpha=1;
+
+}
+
+
+/* =========================================================
+   CHARACTER POSE SYSTEM
+========================================================= */
+
+function getPlayerPose(){
+
+  return getPose(
+    false,
+    playerAnimation
+  );
+
+}
+
+
+function getEnemyPose(){
+
+  return getPose(
+    true,
+    enemyAnimation
+  );
+
+}
+
+
+let playerAnimation={
+  type:"idle",
+  start:0,
+  duration:0
+};
+
+let enemyAnimation={
+  type:"idle",
+  start:0,
+  duration:0
+};
+
+
+function animationProgress(anim){
+
+  if(anim.duration<=0)return 0;
+
+  return Math.min(
+    1,
+    Math.max(
+      0,
+      (performance.now()-anim.start)/anim.duration
+    )
+  );
+
+}
+
+
+function getPose(isEnemy,anim){
+
+  const p=animationProgress(anim);
+
+  let t=ease(p);
+
+  let bodyX=0;
+  let bodyY=0;
+  let torso=0;
+
+  let frontShoulder=0;
+  let backShoulder=0;
+
+  let frontElbow=0;
+  let backElbow=0;
+
+  let frontWrist=0;
+  let backWrist=0;
+
+  let frontKnee=0;
+  let backKnee=0;
+
+  if(anim.type==="strike"){
+
+    if(p<.25){
+
+      const q=ease(p/.25);
+
+      bodyX=lerp(0,-18,q);
+      torso=lerp(0,-.10,q);
+
+      frontShoulder=lerp(0,-.9,q);
+      frontElbow=lerp(0,.8,q);
+
+      backShoulder=lerp(0,.35,q);
+
+      frontKnee=lerp(0,.12,q);
+
+    }else if(p<.55){
+
+      const q=ease((p-.25)/.30);
+
+      bodyX=lerp(-18,24,q);
+      bodyY=lerp(0,-5,q);
+      torso=lerp(-.10,.10,q);
+
+      frontShoulder=lerp(-.9,1.05,q);
+      frontElbow=lerp(.8,-.95,q);
+      frontWrist=lerp(0,.4,q);
+
+      backShoulder=lerp(.35,-.25,q);
+
+      frontKnee=lerp(.12,-.08,q);
+
+    }else{
+
+      const q=ease((p-.55)/.45);
+
+      bodyX=lerp(24,0,q);
+      bodyY=lerp(-5,0,q);
+      torso=lerp(.10,0,q);
+
+      frontShoulder=lerp(1.05,0,q);
+      frontElbow=lerp(-.95,0,q);
+      frontWrist=lerp(.4,0,q);
+
+      backShoulder=lerp(-.25,0,q);
+
+      frontKnee=lerp(-.08,0,q);
+
+    }
+
+  }
+
+
+  if(anim.type==="shield"){
+
+    const q=ease(p);
+
+    bodyX=
+      Math.sin(p*Math.PI)*-10;
+
+    bodyY=
+      Math.sin(p*Math.PI)*-2;
+
+    torso=
+      Math.sin(p*Math.PI)*.06;
+
+    frontShoulder=
+      lerp(0,-1.05,q);
+
+    frontElbow=
+      lerp(0,-.75,q);
+
+    frontWrist=
+      lerp(0,-.25,q);
+
+    frontKnee=
+      Math.sin(p*Math.PI)*.1;
+
+  }
+
+
+  if(anim.type==="truth"){
+
+    if(p<.45){
+
+      const q=ease(p/.45);
+
+      bodyY=lerp(0,-18,q);
+
+      frontShoulder=lerp(0,-1.25,q);
+      backShoulder=lerp(0,1.25,q);
+
+      frontElbow=lerp(0,-1.0,q);
+      backElbow=lerp(0,1.0,q);
+
+    }else{
+
+      const q=ease((p-.45)/.55);
+
+      bodyY=lerp(-18,0,q);
+
+      frontShoulder=lerp(-1.25,0,q);
+      backShoulder=lerp(1.25,0,q);
+
+      frontElbow=lerp(-1,0,q);
+      backElbow=lerp(1,0,q);
+
+    }
+
+  }
+
+
+  if(anim.type==="burst"){
+
+    if(p<.32){
+
+      const q=ease(p/.32);
+
+      bodyY=lerp(0,12,q);
+      torso=lerp(0,-.06,q);
+
+      frontShoulder=lerp(0,-1.35,q);
+      backShoulder=lerp(0,1.35,q);
+
+      frontElbow=lerp(0,-1.3,q);
+      backElbow=lerp(0,1.3,q);
+
+      frontKnee=lerp(0,.15,q);
+      backKnee=lerp(0,-.15,q);
+
+    }else if(p<.65){
+
+      const q=ease((p-.32)/.33);
+
+      bodyY=lerp(12,-25,q);
+
+      frontShoulder=lerp(-1.35,-.2,q);
+      backShoulder=lerp(1.35,.2,q);
+
+      frontElbow=lerp(-1.3,.15,q);
+      backElbow=lerp(1.3,-.15,q);
+
+      frontKnee=lerp(.15,-.08,q);
+      backKnee=lerp(-.15,.08,q);
+
+    }else{
+
+      const q=ease((p-.65)/.35);
+
+      bodyY=lerp(-25,0,q);
+
+      frontShoulder=lerp(-.2,0,q);
+      backShoulder=lerp(.2,0,q);
+
+      frontElbow=lerp(.15,0,q);
+      backElbow=lerp(-.15,0,q);
+
+    }
+
+  }
+
+
+  if(anim.type==="enemyAttack"){
+
+    if(p<.35){
+
+      const q=ease(p/.35);
+
+      bodyX=lerp(0,18,q);
+      torso=lerp(0,.08,q);
+
+      frontShoulder=lerp(0,1.15,q);
+      frontElbow=lerp(0,-.8,q);
+
+      frontKnee=lerp(0,-.1,q);
+
+    }else if(p<.58){
+
+      const q=ease((p-.35)/.23);
+
+      bodyX=lerp(18,-22,q);
+
+      frontShoulder=lerp(1.15,-1.1,q);
+      frontElbow=lerp(-.8,1,q);
+
+    }else{
+
+      const q=ease((p-.58)/.42);
+
+      bodyX=lerp(-22,0,q);
+
+      frontShoulder=lerp(-1.1,0,q);
+      frontElbow=lerp(1,0,q);
+
+    }
+
+  }
+
+
+  return {
+    bodyX,
+    bodyY,
+    torso,
+    frontShoulder,
+    backShoulder,
+    frontElbow,
+    backElbow,
+    frontWrist,
+    backWrist,
+    frontKnee,
+    backKnee
+  };
+
+}
+
+
+/* =========================================================
+   CHARACTER DRAW
+========================================================= */
+
+function drawCharacter(
+  isEnemy,
+  x,
+  y,
+  scale,
+  pose
+){
+
+  ctx.save();
+
+  ctx.translate(
+    x+camera.x,
+    y+camera.y
+  );
+
+  ctx.scale(
+    isEnemy ? -scale:scale,
+    scale
+  );
+
+  const lv=enemy.level;
+
+  const enemyColor=
+    lv===1 ? "#a51d3d":
+    lv===2 ? "#6f39c4":
+    "#c12d53";
+
+  const armorColor=
+    player.armor==="celestial"
+      ? "#e9fbff"
+      : player.armor==="royal"
+        ? "#d9e7ff"
+        : "#b8cae8";
+
+  const accent=
+    player.armor==="celestial"
+      ? "#65eaff"
+      : player.armor==="royal"
+        ? "#ffd85a"
+        : "#7cc7ff";
+
+
+  /* shadow */
+
+  ctx.save();
+
+  ctx.globalAlpha=.45;
+
+  ctx.fillStyle="#000";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    205,
+    70,
+    15,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.restore();
+
+
+  /* wings */
+
+  if(isEnemy){
+
+    drawWing(-30,-35,-1,enemyColor);
+    drawWing(30,-35,1,enemyColor);
+
+  }
+
+
+  /* body position */
+
+  ctx.save();
+
+  ctx.translate(
+    pose.bodyX,
+    pose.bodyY
+  );
+
+  ctx.rotate(pose.torso);
+
+
+  /* legs */
+
+  drawLeg(
+    -22,
+    78,
+    pose.frontKnee,
+    false,
+    isEnemy,
+    armorColor
+  );
+
+  drawLeg(
+    22,
+    78,
+    pose.backKnee,
+    false,
+    isEnemy,
+    armorColor
+  );
+
+
+  /* torso */
+
+  const torsoG=
+    ctx.createLinearGradient(
+      -38,0,
+      38,0
+    );
+
+  if(isEnemy){
+
+    torsoG.addColorStop(0,"#160813");
+    torsoG.addColorStop(.45,enemyColor);
+    torsoG.addColorStop(.7,"#2a0b25");
+    torsoG.addColorStop(1,"#09050d");
+
+  }else{
+
+    torsoG.addColorStop(0,"#344c78");
+    torsoG.addColorStop(.35,armorColor);
+    torsoG.addColorStop(.5,"#ffffff");
+    torsoG.addColorStop(.7,armorColor);
+    torsoG.addColorStop(1,"#354a73");
+
+  }
+
+  ctx.fillStyle=torsoG;
+
+  roundRect(
+    -39,
+    -65,
+    78,
+    145,
+    25
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle=
+    isEnemy ? enemyColor:"#e8f4ff";
+
+  ctx.lineWidth=3;
+
+  ctx.stroke();
+
+
+  /* shoulder armor */
+
+  ctx.fillStyle=
+    isEnemy ? "#501126":accent;
+
+  ctx.globalAlpha=.95;
+
+  roundRect(
+    -48,
+    -60,
+    28,
+    35,
+    12
+  );
+
+  ctx.fill();
+
+  roundRect(
+    20,
+    -60,
+    28,
+    35,
+    12
+  );
+
+  ctx.fill();
+
+  ctx.globalAlpha=1;
+
+
+  /* chest core */
+
+  const coreColor=
+    isEnemy ? "#ff294f":accent;
+
+  glowCircle(
+    0,
+    -25,
+    38,
+    coreColor,
+    .16
+  );
+
+  ctx.fillStyle=
+    isEnemy ? "#ff304f":"#b8fbff";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    -25,
+    16,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle=
+    isEnemy ? "#ff9baa":"#ffffff";
+
+  ctx.lineWidth=2;
+
+  ctx.stroke();
+
+
+  /* belt */
+
+  ctx.fillStyle=
+    isEnemy ? "#280916":"#7c5c11";
+
+  ctx.fillRect(
+    -40,
+    45,
+    80,
+    13
+  );
+
+  ctx.fillStyle=
+    isEnemy ? "#ff3657":"#ffd64e";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    51,
+    8,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* back arm */
+
+  drawArm(
+    -40,
+    -48,
+    pose.backShoulder,
+    pose.backElbow,
+    pose.backWrist,
+    isEnemy,
+    armorColor,
+    accent
+  );
+
+
+  /* front arm */
+
+  drawArm(
+    40,
+    -48,
+    pose.frontShoulder,
+    pose.frontElbow,
+    pose.frontWrist,
+    isEnemy,
+    armorColor,
+    accent
+  );
+
+
+  /* neck */
+
+  ctx.fillStyle=
+    isEnemy ? "#491326":"#bb8164";
+
+  ctx.fillRect(
+    -11,
+    -80,
+    22,
+    25
+  );
+
+
+  /* head */
+
+  if(isEnemy){
+
+    drawDemonHead(enemyColor);
+
+  }else{
+
+    drawHumanHead();
+
+  }
+
+
+  ctx.restore();
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   LIMBS
+========================================================= */
+
+function drawLeg(
+  hipX,
+  hipY,
+  kneeAngle,
+  enemyMode,
+  isEnemy,
+  armorColor
+){
+
+  const thighLength=55;
+  const shinLength=55;
+
+  const a=
+    hipX<0
+      ? .04+kneeAngle
+      : -.04+kneeAngle;
+
+  const kneeX=
+    hipX+
+    Math.sin(a)*
+    thighLength;
+
+  const kneeY=
+    hipY+
+    Math.cos(a)*
+    thighLength;
+
+  const footAngle=
+    hipX<0 ? -.04:-.04;
+
+  const footX=
+    kneeX+
+    Math.sin(footAngle)*
+    shinLength;
+
+  const footY=
+    kneeY+
+    Math.cos(footAngle)*
+    shinLength;
+
+
+  limb(
+    hipX,
+    hipY,
+    kneeX,
+    kneeY,
+    24,
+    isEnemy
+      ? ["#180914","#6b203c","#130710","#a52b49"]
+      : ["#506b98","#f3f8ff","#627ba4","#dbe9ff"]
+  );
+
+
+  ctx.fillStyle=
+    isEnemy ? "#7b2342":"#c9dbf3";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    kneeX,
+    kneeY,
+    13,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  limb(
+    kneeX,
+    kneeY,
+    footX,
+    footY,
+    22,
+    isEnemy
+      ? ["#150811","#5b1934","#10060e","#922540"]
+      : ["#526e9c","#f7fbff","#5c75a0","#dbe9ff"]
+  );
+
+
+  ctx.fillStyle=
+    isEnemy ? "#12060d":"#142544";
+
+  roundRect(
+    footX-17,
+    footY-3,
+    38,
+    18,
+    8
+  );
+
+  ctx.fill();
+
+}
+
+
+function drawArm(
+  shoulderX,
+  shoulderY,
+  shoulderAngle,
+  elbowAngle,
+  wristAngle,
+  isEnemy,
+  armorColor,
+  accent
+){
+
+  const upper=47;
+  const lower=46;
+
+  const shoulderSide=
+    shoulderX<0 ? -1:1;
+
+  const baseAngle=
+    shoulderX<0 ? .25:-.25;
+
+  const a=
+    baseAngle+
+    shoulderAngle;
+
+  const elbowX=
+    shoulderX+
+    Math.sin(a)*
+    upper;
+
+  const elbowY=
+    shoulderY+
+    Math.cos(a)*
+    upper;
+
+
+  const b=
+    a+
+    elbowAngle;
+
+  const handX=
+    elbowX+
+    Math.sin(b)*
+    lower;
+
+  const handY=
+    elbowY+
+    Math.cos(b)*
+    lower;
+
+
+  limb(
+    shoulderX,
+    shoulderY,
+    elbowX,
+    elbowY,
+    23,
+    isEnemy
+      ? ["#180914","#67213b","#130710","#a42d4b"]
+      : ["#506b98","#f2f7ff","#607aa3","#dcecff"]
+  );
+
+
+  ctx.fillStyle=
+    isEnemy ? "#7e2847":"#d8e8ff";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    elbowX,
+    elbowY,
+    11,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle=
+    isEnemy ? "#a52b49":"#dbe9ff";
+
+  ctx.lineWidth=2;
+
+  ctx.stroke();
+
+
+  limb(
+    elbowX,
+    elbowY,
+    handX,
+    handY,
+    20,
+    isEnemy
+      ? ["#150811","#581a35","#10060e","#932642"]
+      : ["#536f9b","#f6faff","#607ba5","#dbe9ff"]
+  );
+
+
+  /* glove / hand */
+
+  ctx.save();
+
+  ctx.translate(handX,handY);
+
+  ctx.rotate(b+wristAngle);
+
+  ctx.fillStyle=
+    isEnemy ? "#531528":"#b87959";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    0,
+    13,
+    15,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle=
+    isEnemy ? "#a42a48":"#dcecff";
+
+  ctx.lineWidth=2;
+
+  ctx.stroke();
+
+
+  /* fingers */
+
+  ctx.strokeStyle=
+    isEnemy ? "#9b2b4b":"#d99876";
+
+  ctx.lineWidth=3;
+
+  for(let i=-1;i<=1;i++){
+
+    line(
+      i*4,
+      -8,
+      i*4,
+      -17,
+      3,
+      ctx.strokeStyle
+    );
+
+  }
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   HEADS
+========================================================= */
+
+function drawHumanHead(){
+
+  /* hair */
+
+  ctx.fillStyle="#182237";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    -101,
+    31,
+    Math.PI,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  const skin=ctx.createLinearGradient(
+    -25,-125,
+    25,-75
+  );
+
+  skin.addColorStop(0,"#f0c19a");
+  skin.addColorStop(.6,"#c98561");
+  skin.addColorStop(1,"#754531");
+
+  ctx.fillStyle=skin;
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    -101,
+    27,
+    33,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle="#dcecff";
+  ctx.lineWidth=2;
+  ctx.stroke();
+
+
+  /* hair front */
+
+  ctx.fillStyle="#172035";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    -120,
+    28,
+    Math.PI,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* eyes */
+
+  ctx.fillStyle="#18233a";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    -10,
+    -103,
+    4,
+    2.5,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.ellipse(
+    10,
+    -103,
+    4,
+    2.5,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* nose */
+
+  line(
+    0,-101,
+    3,-93,
+    2,
+    "#754735"
+  );
+
+
+  /* mouth */
+
+  line(
+    -7,-87,
+    7,-87,
+    2,
+    "#733d35"
+  );
+
+}
+
+
+function drawDemonHead(color){
+
+  ctx.fillStyle="#120710";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    -102,
+    30,
+    34,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  ctx.strokeStyle=color;
+  ctx.lineWidth=3;
+  ctx.stroke();
+
+
+  /* horns */
+
+  ctx.fillStyle="#421226";
+
+  ctx.beginPath();
+
+  ctx.moveTo(-18,-128);
+  ctx.lineTo(-43,-162);
+  ctx.lineTo(-11,-137);
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  ctx.beginPath();
+
+  ctx.moveTo(18,-128);
+  ctx.lineTo(43,-162);
+  ctx.lineTo(11,-137);
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  /* eyes */
+
+  ctx.shadowColor="#ff3657";
+  ctx.shadowBlur=15;
+
+  ctx.fillStyle="#ff3657";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    -11,
+    -103,
+    6,
+    3,
+    -.15,
+    0,
+    Math.PI*2
+  );
+
+  ctx.ellipse(
+    11,
+    -103,
+    6,
+    3,
+    .15,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.shadowBlur=0;
+
+
+  /* mouth */
+
+  ctx.strokeStyle="#c82e4c";
+  ctx.lineWidth=3;
+
+  ctx.beginPath();
+
+  ctx.moveTo(-12,-86);
+  ctx.quadraticCurveTo(
+    0,-78,
+    12,-86
+  );
+
+  ctx.stroke();
+
+}
+
+
+/* =========================================================
+   WINGS
+========================================================= */
+
+function drawWing(
+  x,
+  y,
+  side,
+  color
+){
+
+  ctx.save();
+
+  ctx.translate(x,y);
+  ctx.scale(side,1);
+
+  ctx.globalAlpha=.9;
+
+  const g=ctx.createLinearGradient(
+    0,0,
+    100,80
+  );
+
+  g.addColorStop(0,"#100812");
+  g.addColorStop(.5,color);
+  g.addColorStop(1,"#0b0610");
+
+  ctx.fillStyle=g;
+
+  ctx.beginPath();
+
+  ctx.moveTo(0,0);
+  ctx.quadraticCurveTo(
+    90,-70,
+    155,-35
+  );
+  ctx.quadraticCurveTo(
+    115,15,
+    160,70
+  );
+  ctx.quadraticCurveTo(
+    90,45,
+    100,125
+  );
+  ctx.quadraticCurveTo(
+    55,70,
+    0,95
+  );
+
+  ctx.closePath();
+
+  ctx.fill();
+
+  ctx.strokeStyle=color;
+  ctx.lineWidth=2;
+  ctx.stroke();
+
+  ctx.globalAlpha=1;
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+function spawnParticles(
+  x,
+  y,
+  color,
+  count=20,
+  power=1
+){
+
+  for(let i=0;i<count;i++){
+
+    const angle=
+      Math.random()*
+      Math.PI*2;
+
+    const speed=
+      (1+Math.random()*4)*
+      power;
+
+    particles.push({
+
+      x,
+      y,
+
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+
+      life:.45+Math.random()*.7,
+      max:.45+Math.random()*.7,
+
+      size:1+Math.random()*4,
+
+      color
+
+    });
+
+  }
+
+}
+
+
+function updateParticles(dt){
+
+  for(let i=particles.length-1;i>=0;i--){
+
+    const p=particles[i];
+
+    p.x+=p.vx;
+    p.y+=p.vy;
+
+    p.vy+=.025;
+
+    p.vx*=.985;
+    p.vy*=.985;
+
+    p.life-=dt;
+
+    if(p.life<=0){
+
+      particles.splice(i,1);
+
+    }
+
+  }
+
+}
+
+
+function drawParticles(){
+
+  for(const p of particles){
+
+    ctx.globalAlpha=
+      Math.max(0,p.life/p.max);
+
+    ctx.fillStyle=p.color;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      p.x,
+      p.y,
+      p.size,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
+
+  ctx.globalAlpha=1;
+
+}
+
+
+/* =========================================================
+   EFFECTS
+========================================================= */
+
+function addEffect(effect){
+
+  effects.push(effect);
+
+}
+
+
+function updateEffects(dt){
+
+  for(let i=effects.length-1;i>=0;i--){
+
+    const e=effects[i];
+
+    e.life-=dt;
+
+    if(e.update){
+      e.update(e,dt);
+    }
+
+    if(e.life<=0){
+
+      effects.splice(i,1);
+
+    }
+
+  }
+
+}
+
+
+function drawEffects(){
+
+  for(const e of effects){
+
+    if(e.draw){
+      e.draw(e);
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   PROJECTILES
+========================================================= */
+
+function fireProjectile(
+  fromX,
+  fromY,
+  toX,
+  toY,
+  color,
+  damage,
+  big=false
+){
+
+  projectiles.push({
+
+    x:fromX,
+    y:fromY,
+
+    startX:fromX,
+    startY:fromY,
+
+    targetX:toX,
+    targetY:toY,
+
+    progress:0,
+    speed:big?.045:.075,
+
+    color,
+    damage,
+    big
+
+  });
+
+}
+
+
+function updateProjectiles(){
+
+  for(let i=projectiles.length-1;i>=0;i--){
+
+    const p=projectiles[i];
+
+    p.progress+=p.speed;
+
+    const q=ease(
+      Math.min(1,p.progress)
+    );
+
+    p.x=lerp(
+      p.startX,
+      p.targetX,
+      q
+    );
+
+    p.y=lerp(
+      p.startY,
+      p.targetY,
+      q
+    );
+
+    if(p.progress>=1){
+
+      spawnParticles(
+        p.targetX,
+        p.targetY,
+        p.color,
+        p.big?70:30,
+        p.big?2:1
+      );
+
+      addImpact(
+        p.targetX,
+        p.targetY,
+        p.color,
+        p.big
+      );
+
+      if(p.damage){
+
+        enemy.hp=
+          Math.max(
+            0,
+            enemy.hp-p.damage
+          );
+
+        updateHUD();
+
+        floatingText.push({
+          x:p.targetX,
+          y:p.targetY-30,
+          text:"-"+p.damage,
+          life:1,
+          color:"#fff"
+        });
+
+      }
+
+      projectiles.splice(i,1);
+
+    }
+
+  }
+
+}
+
+
+function drawProjectiles(){
+
+  for(const p of projectiles){
+
+    const size=
+      p.big ? 22:11;
+
+    glowCircle(
+      p.x,
+      p.y,
+      p.big?70:40,
+      p.color,
+      .4
+    );
+
+    ctx.fillStyle="#fff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      p.x,
+      p.y,
+      size,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.strokeStyle=p.color;
+    ctx.lineWidth=5;
+
+    ctx.stroke();
+
+  }
+
+}
+
+
+/* =========================================================
+   IMPACT
+========================================================= */
+
+function addImpact(
+  x,
+  y,
+  color,
+  big=false
+){
+
+  addEffect({
+
+    x,
+    y,
+
+    life:.65,
+    max:.65,
+
+    draw(e){
+
+      const q=1-e.life/e.max;
+
+      ctx.save();
+
+      ctx.globalAlpha=1-q;
+
+      ctx.strokeStyle=color;
+      ctx.lineWidth=5;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        e.x,
+        e.y,
+        q*(big?100:55),
+        0,
+        Math.PI*2
+      );
+
+      ctx.stroke();
+
+      ctx.restore();
+
+    }
+
+  });
+
+  camera.shake=
+    Math.max(
+      camera.shake,
+      big?14:7
+    );
+
+}
+
+
+/* =========================================================
+   BEAMS
+========================================================= */
+
+function addBeam(
+  x1,
+  y1,
+  x2,
+  y2,
+  color,
+  width=18
+){
+
+  addEffect({
+
+    life:.55,
+    max:.55,
+
+    draw(e){
+
+      const q=
+        Math.min(
+          1,
+          (1-e.life/e.max)*2
+        );
+
+      const alpha=
+        e.life<.15
+          ? e.life/.15
+          : 1;
+
+      ctx.save();
+
+      ctx.globalAlpha=alpha;
+
+      const dx=x2-x1;
+      const dy=y2-y1;
+
+      const len=Math.hypot(dx,dy);
+
+      const angle=Math.atan2(dy,dx);
+
+      ctx.translate(x1,y1);
+      ctx.rotate(angle);
+
+      const g=ctx.createLinearGradient(
+        0,-width,
+        0,width
+      );
+
+      g.addColorStop(0,"transparent");
+      g.addColorStop(.35,color);
+      g.addColorStop(.5,"#fff");
+      g.addColorStop(.65,color);
+      g.addColorStop(1,"transparent");
+
+      ctx.fillStyle=g;
+
+      ctx.fillRect(
+        0,
+        -width*q,
+        len*q,
+        width*2*q
+      );
+
+      ctx.restore();
+
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   FLOATING TEXT
+========================================================= */
+
+function updateFloatingText(dt){
+
+  for(let i=floatingText.length-1;i>=0;i--){
+
+    const f=floatingText[i];
+
+    f.y-=.7;
+    f.life-=dt;
+
+    if(f.life<=0){
+      floatingText.splice(i,1);
+    }
+
+  }
+
+}
+
+
+function drawFloatingText(){
+
+  ctx.save();
+
+  ctx.font="900 24px Arial";
+  ctx.textAlign="center";
+
+  for(const f of floatingText){
+
+    ctx.globalAlpha=
+      Math.max(0,f.life);
+
+    ctx.fillStyle=f.color;
+
+    ctx.shadowColor="#000";
+    ctx.shadowBlur=6;
+
+    ctx.fillText(
+      f.text,
+      f.x,
+      f.y
+    );
+
+  }
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   ANIMATION LOOP
+========================================================= */
+
+let lastTime=performance.now();
+
+function loop(now){
+
+  const dt=
+    Math.min(
+      .05,
+      (now-lastTime)/1000
+    );
+
+  lastTime=now;
+
+  worldTime+=dt*1000;
+
+  updateParticles(dt);
+  updateEffects(dt);
+  updateProjectiles();
+  updateFloatingText(dt);
+
+  camera.x=
+    (Math.random()-.5)*
+    camera.shake;
+
+  camera.y=
+    (Math.random()-.5)*
+    camera.shake;
+
+  camera.shake*=.88;
+
+  ctx.clearRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+  drawBackground();
+
+  const playerPose=
+    getPlayerPose();
+
+  const enemyPose=
+    getEnemyPose();
+
+
+  /* energy behind player */
+
+  glowCircle(
+    W*player.x,
+    H*.57,
+    100,
+    "#3edcff",
+    .055
+  );
+
+
+  /* energy behind enemy */
+
+  glowCircle(
+    W*enemy.x,
+    H*.55,
+    enemy.level===3?170:110,
+    LEVELS[enemy.level].color,
+    .06
+  );
+
+
+  drawCharacter(
+    false,
+    W*player.x,
+    H*.58,
+    Math.min(W/950,1.15),
+    playerPose
+  );
+
+
+  drawCharacter(
+    true,
+    W*enemy.x,
+    H*.57,
+    Math.min(W/950,1.15)*
+      (enemy.level===3?1.35:1),
+    enemyPose
+  );
+
+
+  drawParticles();
+  drawProjectiles();
+  drawEffects();
+  drawFloatingText();
+
+  requestAnimationFrame(loop);
+
+}
+
+requestAnimationFrame(loop);
+
+
+/* =========================================================
+   ANIMATION START
+========================================================= */
+
+function startPlayerAnimation(type,duration){
+
+  playerAnimation={
+    type,
+    start:performance.now(),
+    duration
+  };
+
+}
+
+
+function startEnemyAnimation(type,duration){
+
+  enemyAnimation={
+    type,
+    start:performance.now(),
+    duration
+  };
+
+}
+
+
+/* =========================================================
+   COMBAT
+========================================================= */
+
+function getPlayerHandPosition(){
+
+  const pose=getPlayerPose();
+
+  const scale=
+    Math.min(W/950,1.15);
+
+  return {
+
+    x:W*player.x+
+       pose.bodyX*scale+
+       90*scale,
+
+    y:H*.58+
+       pose.bodyY*scale-
+       40*scale
+
+  };
+
 }
 
 
 async function spiritStrike(){
 
-  if(busy || enemyHP<=0)return;
+  if(busy || !running || enemy.hp<=0)return;
 
   busy=true;
-  buttons(false);
-  clearStates();
+  setButtons(false);
 
-  message("⚡ The warrior plants his back foot...");
+  say(
+    "⚡ The warrior shifts his weight and draws his arm back..."
+  );
 
-  player.classList.add("attackStrike");
+  startPlayerAnimation(
+    "strike",
+    1050
+  );
 
-  await wait(250);
+  spawnParticles(
+    W*player.x,
+    H*.48,
+    "#65eaff",
+    18
+  );
 
-  message("⚡ His shoulder pulls back and his fist charges...");
+  await wait(300);
 
-  const glow=document.getElementById("handGlow");
+  say(
+    "⚡ His hand charges with spiritual energy..."
+  );
 
-  glow.style.left="140px";
-  glow.style.top="200px";
-  glow.style.opacity="1";
+  spawnParticles(
+    W*player.x+55,
+    H*.50,
+    "#bafaff",
+    25
+  );
 
-  await wait(280);
+  await wait(270);
 
-  message("⚡ SPIRIT STRIKE!");
+  say("⚡ SPIRIT STRIKE!");
 
-  glow.style.opacity="0";
+  const hand=
+    getPlayerHandPosition();
 
-  const projectile=document.createElement("div");
-  projectile.className="projectile";
-  projectile.style.left="165px";
-  projectile.style.top="220px";
+  fireProjectile(
+    hand.x,
+    hand.y,
+    W*enemy.x-60,
+    H*.53,
+    "#56ddff",
+    22
+  );
 
-  const trail=document.createElement("div");
-  trail.className="projectileTrail";
-  trail.style.left="70px";
-  trail.style.top="230px";
+  await wait(650);
 
-  arena.appendChild(trail);
-  arena.appendChild(projectile);
+  finishAttack();
 
-  await wait(500);
-
-  projectile.remove();
-  trail.remove();
-
-  const damage=22;
-
-  enemyHP-=damage;
-
-  updateHP();
-  damageText(damage);
-  impact();
-
-  await wait(450);
-
-  clearStates();
-
-  if(enemyHP<=0){
-    winLevel();
-    return;
-  }
-
-  await enemyTurn();
 }
 
 
 async function shieldOfFate(){
 
-  if(busy || enemyHP<=0)return;
+  if(busy || !running || enemy.hp<=0)return;
 
   busy=true;
-  buttons(false);
-  clearStates();
+  setButtons(false);
 
-  message("🛡️ The warrior lowers his stance...");
+  say(
+    "🛡️ The warrior plants his feet and raises his arm..."
+  );
 
-  player.classList.add("attackShield");
+  startPlayerAnimation(
+    "shield",
+    900
+  );
 
-  await wait(300);
+  await wait(380);
 
-  message("🛡️ He swings his arm across his body...");
+  say(
+    "🛡️ SHIELD OF FATE!"
+  );
 
-  await wait(250);
+  player.shield=true;
 
-  message("🛡️ SHIELD OF FATE!");
+  addShieldEffect();
 
-  const s=document.createElement("div");
-  s.className="shield";
-
-  arena.appendChild(s);
-
-  shieldActive=true;
-
-  await wait(800);
-
-  s.remove();
-
-  clearStates();
+  await wait(550);
 
   await enemyTurn();
+
 }
 
 
 async function wordOfTruth(){
 
-  if(busy || enemyHP<=0)return;
+  if(busy || !running || enemy.hp<=0)return;
 
   busy=true;
-  buttons(false);
-  clearStates();
+  setButtons(false);
 
-  message("✋ The warrior raises both arms...");
+  say(
+    "✋ The warrior raises both hands..."
+  );
 
-  player.classList.add("attackTruth");
+  startPlayerAnimation(
+    "truth",
+    1000
+  );
 
-  await wait(350);
+  await wait(420);
 
-  message("✋ His hands draw together...");
+  say(
+    "✋ Light gathers between his hands..."
+  );
 
-  const glow=document.getElementById("handGlow");
+  spawnParticles(
+    W*player.x,
+    H*.43,
+    "#ffffff",
+    45,
+    1.2
+  );
 
-  glow.style.left="120px";
-  glow.style.top="165px";
-  glow.style.opacity="1";
+  await wait(220);
 
-  await wait(250);
+  say("✋ WORD OF TRUTH!");
 
-  message("✋ WORD OF TRUTH!");
+  addBeam(
+    W*player.x+50,
+    H*.48,
+    W*enemy.x-60,
+    H*.48,
+    "#65eaff",
+    25
+  );
 
-  glow.style.opacity="0";
-
-  const beam=document.createElement("div");
-  beam.className="beam";
-
-  arena.appendChild(beam);
-
-  await wait(600);
-
-  beam.remove();
+  await wait(580);
 
   const damage=30;
 
-  enemyHP-=damage;
+  enemy.hp=
+    Math.max(
+      0,
+      enemy.hp-damage
+    );
 
-  updateHP();
-  damageText(damage);
-  impact();
+  updateHUD();
 
-  await wait(400);
+  floatingText.push({
+    x:W*enemy.x,
+    y:H*.43,
+    text:"-"+damage,
+    life:1,
+    color:"#bafaff"
+  });
 
-  clearStates();
+  spawnParticles(
+    W*enemy.x-55,
+    H*.48,
+    "#65eaff",
+    45,
+    1.3
+  );
 
-  if(enemyHP<=0){
-    winLevel();
-    return;
-  }
+  addImpact(
+    W*enemy.x-55,
+    H*.48,
+    "#65eaff",
+    false
+  );
 
-  await enemyTurn();
+  await wait(500);
+
+  finishAttack();
+
 }
 
 
@@ -2007,261 +3489,485 @@ async function lightBurst(){
 
   if(
     busy ||
-    enemyHP<=0 ||
-    !specialUnlocked
+    !running ||
+    enemy.hp<=0 ||
+    player.turns<3
   )return;
 
   busy=true;
-  buttons(false);
-  clearStates();
+  setButtons(false);
 
-  message("☀️ The warrior crouches and gathers power...");
+  say(
+    "☀️ The warrior crouches as his armor begins to glow..."
+  );
 
-  player.classList.add("attackBurst");
+  startPlayerAnimation(
+    "burst",
+    1350
+  );
 
-  await wait(420);
-
-  message("☀️ His arms rise as the armor floods with light...");
-
-  const glow=document.getElementById("handGlow");
-
-  glow.style.left="125px";
-  glow.style.top="135px";
-  glow.style.width="65px";
-  glow.style.height="65px";
-  glow.style.opacity="1";
-
-  await wait(350);
-
-  message("☀️ LIGHT BURST!");
-
-  glow.style.opacity="0";
-
-  const ring=document.createElement("div");
-  ring.className="ring";
-
-  const beam=document.createElement("div");
-  beam.className="bigBeam";
-
-  arena.appendChild(ring);
-  arena.appendChild(beam);
-
-  await wait(750);
-
-  ring.remove();
-  beam.remove();
-
-  const damage=50;
-
-  enemyHP-=damage;
-
-  updateHP();
-
-  damageText(damage);
-  impact();
-
-  const flash=document.createElement("div");
-  flash.className="flash";
-
-  arena.appendChild(flash);
-
-  setTimeout(()=>flash.remove(),300);
+  spawnParticles(
+    W*player.x,
+    H*.52,
+    "#ffe66a",
+    35,
+    1.5
+  );
 
   await wait(450);
 
-  glow.style.width="48px";
-  glow.style.height="48px";
+  say(
+    "☀️ SPIRITUAL POWER IS SURGING!"
+  );
 
-  clearStates();
+  spawnParticles(
+    W*player.x,
+    H*.45,
+    "#ffffff",
+    55,
+    1.8
+  );
 
-  if(enemyHP<=0){
-    winLevel();
-    return;
-  }
+  await wait(330);
 
-  await enemyTurn();
+  say(
+    "☀️ LIGHT BURST!"
+  );
+
+  addBeam(
+    W*player.x+45,
+    H*.45,
+    W*enemy.x-50,
+    H*.45,
+    "#fff",
+    80
+  );
+
+  addBeam(
+    W*player.x+45,
+    H*.45,
+    W*enemy.x-50,
+    H*.45,
+    "#53dfff",
+    42
+  );
+
+  await wait(650);
+
+  const damage=50;
+
+  enemy.hp=
+    Math.max(
+      0,
+      enemy.hp-damage
+    );
+
+  updateHUD();
+
+  floatingText.push({
+    x:W*enemy.x,
+    y:H*.38,
+    text:"-"+damage,
+    life:1.1,
+    color:"#ffe77a"
+  });
+
+  spawnParticles(
+    W*enemy.x,
+    H*.45,
+    "#ffe66a",
+    90,
+    2
+  );
+
+  addImpact(
+    W*enemy.x,
+    H*.45,
+    "#ffe66a",
+    true
+  );
+
+  await wait(550);
+
+  finishAttack();
+
 }
 
+
+function finishAttack(){
+
+  if(enemy.hp<=0){
+
+    winLevel();
+
+    return;
+
+  }
+
+  enemyTurn();
+
+}
+
+
+/* =========================================================
+   ENEMY TURN
+========================================================= */
 
 async function enemyTurn(){
 
-  if(enemyHP<=0)return;
+  await wait(350);
 
-  await wait(400);
+  if(enemy.hp<=0)return;
 
-  message("👹 The enemy shifts its weight...");
+  turnText.textContent="ENEMY TURN";
 
-  enemy.classList.add("enemyAttack");
+  say(
+    `👹 ${enemy.name} prepares an attack...`
+  );
 
-  await wait(300);
+  startEnemyAnimation(
+    "enemyAttack",
+    900
+  );
 
-  message("👹 The Shadow Demon pulls its arm back...");
+  await wait(390);
 
-  await wait(300);
-
-  message("👹 The Shadow Demon attacks!");
+  say(
+    `👹 ${enemy.name} strikes!`
+  );
 
   await wait(250);
 
-  if(shieldActive){
+  if(player.shield){
 
-    shieldActive=false;
+    player.shield=false;
 
-    const s=document.createElement("div");
-    s.className="shield";
+    say(
+      "🛡️ SHIELD OF FATE BLOCKED THE ATTACK!"
+    );
 
-    arena.appendChild(s);
+    addShieldImpact();
 
-    message("🛡️ SHIELD OF FATE BLOCKED THE ATTACK!");
-
-    impact();
-
-    await wait(550);
-
-    s.remove();
+    await wait(500);
 
   }else{
 
-    const damage=8+Math.floor(Math.random()*9);
+    let damage;
 
-    playerHP-=damage;
+    if(enemy.level===1){
+      damage=8+Math.floor(Math.random()*6);
+    }
 
-    updateHP();
+    if(enemy.level===2){
+      damage=11+Math.floor(Math.random()*7);
+    }
 
-    damageText(damage);
-    impact();
+    if(enemy.level===3){
+      damage=14+Math.floor(Math.random()*9);
+    }
 
-    message(
-      "💥 The attack hits! "+
-      damage+
-      " spiritual power lost."
+    player.hp=
+      Math.max(
+        0,
+        player.hp-damage
+      );
+
+    updateHUD();
+
+    floatingText.push({
+      x:W*player.x,
+      y:H*.42,
+      text:"-"+damage,
+      life:1,
+      color:"#ff8b9c"
+    });
+
+    spawnParticles(
+      W*player.x,
+      H*.52,
+      "#ff4664",
+      25
+    );
+
+    addImpact(
+      W*player.x,
+      H*.52,
+      "#ff4664",
+      false
+    );
+
+    say(
+      `💥 ${damage} spiritual power lost.`
     );
 
     await wait(500);
+
   }
 
-  turnsSurvived++;
+  player.turns++;
 
-  clearStates();
+  player.power+=10;
 
-  if(turnsSurvived>=3 && !specialUnlocked){
+  updateHUD();
 
-    specialUnlocked=true;
+  if(
+    player.turns===3
+  ){
 
-    message(
-      "🔥 SPIRITUAL POWER SURGE! LIGHT BURST UNLOCKED!"
+    say(
+      "🔥 SPIRITUAL POWER SURGE — LIGHT BURST UNLOCKED!"
     );
 
     await wait(900);
+
   }
 
-  if(playerHP<=0){
+  if(player.hp<=0){
 
-    message(
-      "The warrior has fallen. Refresh the page to try again."
-    );
-
-    buttons(false);
+    gameOver();
 
     return;
+
   }
 
-  busy=false;
-  buttons(true);
-}
-
-
-function winLevel(){
-
-  message("✨ The enemy has been defeated!");
-
-  buttons(false);
-
-  setTimeout(nextLevel,1200);
-}
-
-
-function nextLevel(){
-
-  level++;
-
-  if(level>3){
-
-    levelText.textContent="VICTORY";
-
-    enemyName.textContent="DEFEATED";
-
-    message(
-      "🏆 VICTORY! The Shadow Colossus has been defeated!"
-    );
-
-    return;
-  }
-
-  enemyHP=100+(level-1)*20;
-  playerHP=100;
-
-  turnsSurvived=0;
-  specialUnlocked=false;
-  shieldActive=false;
-
-  updateHP();
-
-  if(level===2){
-
-    levelText.textContent="LEVEL 2 — DARK ANGEL";
-    enemyName.textContent="DARK ANGEL";
-
-    message(
-      "🌑 A Dark Angel descends into the arena..."
-    );
-
-    verse.textContent=
-      "“The LORD is my rock, and my fortress, and my deliverer.” — Psalm 18:2";
-
-  }else{
-
-    levelText.textContent="LEVEL 3 — SHADOW COLOSSUS";
-    enemyName.textContent="SHADOW COLOSSUS";
-
-    enemy.style.transform="scale(1.18)";
-
-    message(
-      "👹 THE SHADOW COLOSSUS AWAKENS!"
-    );
-
-    verse.textContent=
-      "“Greater is he that is in you, than he that is in the world.” — 1 John 4:4";
-  }
+  turnText.textContent="YOUR TURN";
 
   busy=false;
 
-  buttons(true);
+  setButtons(true);
+
+  saveGame();
+
 }
 
 
-strikeBtn.addEventListener(
+/* =========================================================
+   SHIELD EFFECT
+========================================================= */
+
+function addShieldEffect(){
+
+  addEffect({
+
+    life:.9,
+    max:.9,
+
+    draw(e){
+
+      const q=
+        1-e.life/e.max;
+
+      const x=W*player.x+20;
+      const y=H*.48;
+
+      ctx.save();
+
+      ctx.translate(x,y);
+
+      ctx.scale(
+        1+q*.08,
+        1+q*.08
+      );
+
+      ctx.strokeStyle=
+        "#ffe66a";
+
+      ctx.lineWidth=6;
+
+      ctx.shadowColor="#ffe66a";
+      ctx.shadowBlur=25;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        0,
+        0,
+        58,
+        -Math.PI*.75,
+        Math.PI*.75
+      );
+
+      ctx.stroke();
+
+      ctx.restore();
+
+    }
+
+  });
+
+}
+
+
+function addShieldImpact(){
+
+  addEffect({
+
+    life:.65,
+    max:.65,
+
+    draw(e){
+
+      const q=
+        1-e.life/e.max;
+
+      ctx.save();
+
+      ctx.globalAlpha=1-q;
+
+      ctx.strokeStyle="#ffe66a";
+      ctx.lineWidth=7;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        W*player.x+25,
+        H*.48,
+        45+q*45,
+        0,
+        Math.PI*2
+      );
+
+      ctx.stroke();
+
+      ctx.restore();
+
+    }
+
+  });
+
+  camera.shake=10;
+
+}
+
+
+/* =========================================================
+   WIN / LOSE
+========================================================= */
+
+async function winLevel(){
+
+  busy=true;
+  setButtons(false);
+
+  say(
+    `✨ ${enemy.name} has been defeated!`
+  );
+
+  spawnParticles(
+    W*enemy.x,
+    H*.48,
+    "#ffe66a",
+    120,
+    2
+  );
+
+  await wait(1300);
+
+  if(enemy.level>=3){
+
+    showLevel("VICTORY");
+
+    say(
+      "🏆 THE SHADOWBOUND JOURNEY IS COMPLETE!"
+    );
+
+    turnText.textContent="VICTORY";
+
+    saveGame();
+
+    return;
+
+  }
+
+  const next=enemy.level+1;
+
+  showLevel(
+    `LEVEL ${next}`
+  );
+
+  await wait(600);
+
+  setupLevel(next);
+
+  say(
+    `A new enemy enters the battlefield: ${enemy.name}!`
+  );
+
+  busy=false;
+
+  setButtons(true);
+
+  saveGame();
+
+}
+
+
+function gameOver(){
+
+  busy=true;
+
+  setButtons(false);
+
+  turnText.textContent="DEFEATED";
+
+  say(
+    "The warrior has fallen. Reload your save to continue."
+  );
+
+  saveGame();
+
+}
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function wait(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+
+}
+
+
+/* =========================================================
+   BUTTON EVENTS
+========================================================= */
+
+buttons.strike.addEventListener(
   "click",
   spiritStrike
 );
 
-shieldBtn.addEventListener(
+buttons.shield.addEventListener(
   "click",
   shieldOfFate
 );
 
-truthBtn.addEventListener(
+buttons.truth.addEventListener(
   "click",
   wordOfTruth
 );
 
-burstBtn.addEventListener(
+buttons.burst.addEventListener(
   "click",
   lightBurst
 );
 
-updateHP();
-buttons(true);
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+renderSaveSlots();
+
+setButtons(false);
+
+say(
+  "Choose a save slot to begin your journey."
+);
 
 </script>
 
